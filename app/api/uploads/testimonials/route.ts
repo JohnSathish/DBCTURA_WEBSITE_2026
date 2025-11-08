@@ -1,0 +1,65 @@
+import { NextRequest, NextResponse } from "next/server"
+import { getServerSession } from "next-auth"
+import { authOptions } from "@/lib/auth"
+import fs from "fs/promises"
+import path from "path"
+
+export async function POST(request: NextRequest) {
+  const session = await getServerSession(authOptions)
+
+  if (!session) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
+  }
+
+  try {
+    const formData = await request.formData()
+    const file = formData.get("file") as File
+
+    if (!file) {
+      return NextResponse.json({ error: "No file provided" }, { status: 400 })
+    }
+
+    if (!file.type.startsWith("image/")) {
+      return NextResponse.json(
+        { error: "Invalid file type. Only images are allowed." },
+        { status: 400 }
+      )
+    }
+
+    const maxSize = 5 * 1024 * 1024 // 5MB
+    if (file.size > maxSize) {
+      return NextResponse.json(
+        { error: "File size exceeds 5MB limit" },
+        { status: 400 }
+      )
+    }
+
+    // Create testimonials directory if it doesn't exist
+    const uploadDir = path.join(process.cwd(), "public", "testimonials")
+    await fs.mkdir(uploadDir, { recursive: true })
+
+    const bytes = await file.arrayBuffer()
+    const buffer = Buffer.from(bytes)
+
+    const timestamp = Date.now()
+    const randomStr = Math.random().toString(36).substring(7)
+    const extension = path.extname(file.name)
+    const filename = `${timestamp}-${randomStr}${extension}`
+    const filepath = path.join(uploadDir, filename)
+
+    await fs.writeFile(filepath, buffer)
+
+    const publicPath = `/testimonials/${filename}`
+
+    return NextResponse.json({
+      filePath: publicPath,
+    })
+  } catch (error: any) {
+    console.error("Error uploading file:", error)
+    return NextResponse.json(
+      { error: error.message || "Failed to upload file" },
+      { status: 500 }
+    )
+  }
+}
+

@@ -1,0 +1,226 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client"
+  output   = "../lib/prisma-generated"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  password  String
+  role      String   @default("admin")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  news      News[]
+}
+
+model Page {
+  id             String   @id @default(cuid())
+  title          String
+  slug           String   @unique
+  content        String   @default("")
+  metaTitle      String?
+  metaDescription String?
+  published      Boolean  @default(false)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+}
+
+model News {
+  id          String   @id @default(cuid())
+  title       String
+  slug        String   @unique
+  content     String   @default("")
+  excerpt     String?
+  image       String?
+  publishedAt DateTime?
+  featured    Boolean  @default(false)
+  authorId    String
+  author      User     @relation(fields: [authorId], references: [id])
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model GalleryAlbum {
+  id          String   @id @default(cuid())
+  title       String
+  description String?
+  coverImage  String?
+  parentAlbumId String?
+  parentAlbum GalleryAlbum? @relation("AlbumHierarchy", fields: [parentAlbumId], references: [id], onDelete: Cascade)
+  childAlbums GalleryAlbum[] @relation("AlbumHierarchy")
+  images      GalleryImage[]
+  displayOrder Int     @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model GalleryImage {
+  id          String   @id @default(cuid())
+  title       String?
+  image       String
+  albumId     String
+  album       GalleryAlbum @relation(fields: [albumId], references: [id], onDelete: Cascade)
+  displayOrder Int     @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Download {
+  id          String   @id @default(cuid())
+  title       String
+  description String?
+  file        String
+  category    String?
+  uploadedAt  DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Setting {
+  id        String   @id @default(cuid())
+  key       String   @unique
+  value     String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Testimonial {
+  id          String   @id @default(cuid())
+  name        String
+  designation String
+  testimonial String
+  image       String?
+  displayOrder Int     @default(0)
+  published   Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model NoticeBoardEvent {
+  id          String   @id @default(cuid())
+  title       String
+  description String?
+  eventDate   DateTime
+  displayOrder Int     @default(0)
+  published   Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model FlashNews {
+  id          String   @id @default(cuid())
+  title       String
+  description String?
+  file        String?
+  fileType    String?  // "image" or "pdf"
+  displayOrder Int     @default(0)
+  published   Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model HeroSlide {
+  id          String   @id @default(cuid())
+  image       String
+  caption     String?
+  displayOrder Int     @default(0)
+  published   Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model ShortTermCourse {
+  id          String   @id @default(cuid())
+  title       String
+  code        String?
+  description String?
+  image       String?
+  duration    String?
+  fees        String?
+  displayOrder Int     @default(0)
+  published   Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model PopupBanner {
+  id          String   @id @default(cuid())
+  title       String
+  content     String   // HTML content
+  enabled     Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model StaffProfile {
+  id          String   @id @default(cuid())
+  name        String
+  designation String
+  department  String   // e.g., "Education", "English", "Botany", etc.
+  stream      String?  // Optional for non-teaching staff
+  category    String   @default("teaching") // "teaching" or "non-teaching"
+  photo       String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model NavigationMenu {
+  id        String           @id @default(cuid())
+  title     String
+  href      String?
+  order     Int              @default(0)
+  isVisible Boolean          @default(true)
+  parentId  String?
+  parent    NavigationMenu?  @relation("NavigationMenuChildren", fields: [parentId], references: [id], onDelete: Cascade)
+  children  NavigationMenu[] @relation("NavigationMenuChildren")
+  createdAt DateTime         @default(now())
+  updatedAt DateTime         @updatedAt
+}
+
+model QuestionPaper {
+  id            String   @id @default(cuid())
+  year          Int
+  department    String
+  fileUrl       String
+  originalName  String
+  fileType      String?
+  uploadedAt    DateTime @default(now())
+}
+
+model Grievance {
+  id         String   @id @default(cuid())
+  category   String
+  fullName   String
+  email      String
+  phone      String?
+  message    String
+  createdAt  DateTime @default(now())
+}
+
+model BloodDonor {
+  id                String   @id @default(cuid())
+  fullName          String
+  dateOfBirth       DateTime
+  gender            String?
+  phone             String
+  email             String
+  bloodGroup        String
+  lastDonationDate  DateTime?
+  addressStreet     String?
+  addressCity       String?
+  addressState      String?
+  addressPostalCode String?
+  medicalNotes      String?
+  consent           Boolean  @default(false)
+  preferredContact  String
+  ipAddress         String?
+  userAgent         String?
+  createdAt         DateTime @default(now())
+}
