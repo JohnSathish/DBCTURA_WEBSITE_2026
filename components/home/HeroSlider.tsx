@@ -37,7 +37,7 @@ export default function HeroSlider({
 
   return (
     <div className="relative w-full overflow-hidden bg-slate-900" suppressHydrationWarning>
-      <div className="relative h-[260px] md:h-[420px] lg:h-[520px]">
+      <div className="relative h-[360px] md:h-[580px] lg:h-[720px]">
         <Image
           src={current.src}
           alt={current.alt || current.caption || "Hero"}
