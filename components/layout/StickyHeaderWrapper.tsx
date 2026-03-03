@@ -52,10 +52,10 @@ export default function StickyHeaderWrapper() {
 
   return (
     <>
-      <div id="topbar" className="sticky top-0 z-[60]">
+      <div id="topbar" className="sticky top-0 z-[60]" suppressHydrationWarning>
         <Topbar />
       </div>
-      <div className="sticky z-50" style={{ top: `${topbarHeight}px` }}>
+      <div className="sticky z-50" style={{ top: `${topbarHeight}px` }} suppressHydrationWarning>
         <Header navigationItems={navigationItems} />
       </div>
       <Breadcrumb navigationItems={navigationItems} />

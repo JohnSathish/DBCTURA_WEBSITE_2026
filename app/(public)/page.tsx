@@ -242,12 +242,14 @@ export default async function HomePage() {
                         width={256}
                         height={340}
                         className="object-cover w-full"
+                        style={{ height: "auto" }}
                         priority
                       />
                     </div>
                     <div
                       className="overflow-auto pr-2"
                       dangerouslySetInnerHTML={{ __html: about.content }}
+                      suppressHydrationWarning
                     />
                   </div>
                 ) : (
@@ -259,6 +261,7 @@ export default async function HomePage() {
                         width={256}
                         height={340}
                         className="object-cover w-full"
+                        style={{ height: "auto" }}
                         priority
                       />
                     </div>
@@ -301,6 +304,7 @@ export default async function HomePage() {
                     width={256}
                     height={340}
                     className="object-cover w-full"
+                    style={{ height: "auto" }}
                   />
                 </div>
                 <div>

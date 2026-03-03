@@ -8,9 +8,9 @@ export default function PublicLayout({
   children: React.ReactNode
 }) {
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col" suppressHydrationWarning>
       <StickyHeaderWrapper />
-      <main className="flex-1">{children}</main>
+      <main className="flex-1" suppressHydrationWarning>{children}</main>
       <Footer />
       <PopupBanner />
     </div>

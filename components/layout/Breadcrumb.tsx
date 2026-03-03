@@ -24,7 +24,7 @@ export default function Breadcrumb({ navigationItems = [] }: BreadcrumbProps) {
   }
 
   return (
-    <div className="bg-white border-b border-gray-200 shadow-sm">
+    <div className="bg-white border-b border-gray-200 shadow-sm" suppressHydrationWarning>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <nav className="flex items-center py-2 text-sm">
           <Link href="/" className="text-gray-600 hover:text-indigo-600 transition-colors flex items-center gap-1">
@@ -32,7 +32,7 @@ export default function Breadcrumb({ navigationItems = [] }: BreadcrumbProps) {
             <span>Home</span>
           </Link>
           <ChevronRight className="h-4 w-4 text-gray-400 mx-2" />
-          <span className="text-gray-900 font-medium">{currentItem.label}</span>
+          <span className="text-gray-900 font-medium" suppressHydrationWarning>{currentItem.label}</span>
         </nav>
       </div>
     </div>

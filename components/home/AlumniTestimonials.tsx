@@ -52,6 +52,7 @@ export default function AlumniTestimonials({
           src={backgroundImage}
           alt="Alumni Testimonials Background"
           fill
+          sizes="100vw"
           className="object-cover"
           priority
         />
@@ -77,6 +78,7 @@ export default function AlumniTestimonials({
                     src={currentTestimonial.image}
                     alt={currentTestimonial.name}
                     fill
+                    sizes="(max-width: 768px) 96px, 128px"
                     className="object-cover"
                   />
                 </div>
