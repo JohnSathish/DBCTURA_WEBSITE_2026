@@ -8,8 +8,16 @@ export async function GET(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const prismaAny = prisma as any
+    if (!prismaAny.galleryEvent || typeof prismaAny.galleryEvent.findUnique !== "function") {
+      return NextResponse.json(
+        { error: "GalleryEvent model not initialized. Run 'npx prisma generate' and restart the server." },
+        { status: 503 }
+      )
+    }
+
     const { id } = await params
-    const event = await prisma.galleryEvent.findUnique({
+    const event = await prismaAny.galleryEvent.findUnique({
       where: { id },
       include: {
         album: true,
@@ -36,6 +44,8 @@ export async function PUT(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
+  const prismaAny = prisma as any
+
   const session = await getServerSession(authOptions)
   
   if (!session) {
@@ -43,12 +53,19 @@ export async function PUT(
   }
 
   try {
+    if (!prismaAny.galleryEvent || typeof prismaAny.galleryEvent.update !== "function") {
+      return NextResponse.json(
+        { error: "GalleryEvent model not initialized. Run 'npx prisma generate' and restart the server." },
+        { status: 503 }
+      )
+    }
+
     const { id } = await params
     const data = await request.json()
     const { title, description, eventDate, albumId, displayOrder, images } = data
 
     // Update event
-    const event = await prisma.galleryEvent.update({
+    const event = await prismaAny.galleryEvent.update({
       where: { id },
       data: {
         title,
@@ -61,7 +78,7 @@ export async function PUT(
 
     // Add new images if provided
     if (images && images.length > 0) {
-      await prisma.galleryImage.createMany({
+      await prismaAny.galleryImage.createMany({
         data: images.map((imageUrl: string, index: number) => ({
           image: imageUrl,
           eventId: id,
@@ -70,7 +87,7 @@ export async function PUT(
       })
     }
 
-    const updatedEvent = await prisma.galleryEvent.findUnique({
+    const updatedEvent = await prismaAny.galleryEvent.findUnique({
       where: { id },
       include: {
         images: true,
@@ -90,6 +107,8 @@ export async function DELETE(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
+  const prismaAny = prisma as any
+
   const session = await getServerSession(authOptions)
   
   if (!session) {
@@ -97,8 +116,15 @@ export async function DELETE(
   }
 
   try {
+    if (!prismaAny.galleryEvent || typeof prismaAny.galleryEvent.delete !== "function") {
+      return NextResponse.json(
+        { error: "GalleryEvent model not initialized. Run 'npx prisma generate' and restart the server." },
+        { status: 503 }
+      )
+    }
+
     const { id } = await params
-    await prisma.galleryEvent.delete({
+    await prismaAny.galleryEvent.delete({
       where: { id },
     })
 

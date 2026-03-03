@@ -30,34 +30,24 @@ interface Page {
   updatedAt: Date | string
 }
 
-export default function PagesList({ initialPages }: { initialPages: Page[] }) {
-  const [pages, setPages] = useState<Page[]>(() => {
-    // Ensure we have a valid array
-    if (!initialPages || !Array.isArray(initialPages)) {
-      console.warn('PagesList: initialPages is not a valid array', initialPages)
-      return []
-    }
-    return initialPages.map(page => ({
+export default function PagesList({ initialPages = [] }: { initialPages?: Page[] }) {
+  const [pages, setPages] = useState<Page[]>(() =>
+    initialPages.map((page) => ({
       ...page,
-      updatedAt: new Date(page.updatedAt)
+      updatedAt: page.updatedAt instanceof Date ? page.updatedAt : new Date(page.updatedAt),
     }))
-  })
+  )
   const [searchQuery, setSearchQuery] = useState("")
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
   const [pageToDelete, setPageToDelete] = useState<Page | null>(null)
 
   // Sync with initialPages when it changes
   useEffect(() => {
-    if (initialPages && Array.isArray(initialPages)) {
-      const formattedPages = initialPages.map(page => ({
-        ...page,
-        updatedAt: page.updatedAt instanceof Date ? page.updatedAt : new Date(page.updatedAt)
-      }))
-      setPages(formattedPages)
-    } else if (!initialPages || initialPages.length === 0) {
-      // If initialPages is empty, ensure pages state reflects that
-      setPages([])
-    }
+    const formattedPages = initialPages.map((page) => ({
+      ...page,
+      updatedAt: page.updatedAt instanceof Date ? page.updatedAt : new Date(page.updatedAt),
+    }))
+    setPages(formattedPages)
   }, [initialPages])
 
   // Filter pages based on search query
@@ -110,12 +100,12 @@ export default function PagesList({ initialPages }: { initialPages: Page[] }) {
             className="pl-10"
           />
         </div>
-        {((initialPages && initialPages.length > 0) || (pages && pages.length > 0)) && (
+        {((initialPages.length > 0) || (pages && pages.length > 0)) && (
           <p className="text-sm text-gray-600 mt-2">
             {searchQuery ? (
               <>Found {filteredPages.length} page{filteredPages.length !== 1 ? "s" : ""} matching "{searchQuery}"</>
             ) : (
-              <>Total: {(initialPages && initialPages.length > 0) ? initialPages.length : pages.length} page{((initialPages && initialPages.length > 0) ? initialPages.length : pages.length) !== 1 ? "s" : ""}</>
+              <>Total: {(initialPages.length > 0 ? initialPages.length : pages.length)} page{(initialPages.length > 0 ? initialPages.length : pages.length) !== 1 ? "s" : ""}</>
             )}
           </p>
         )}
@@ -134,7 +124,7 @@ export default function PagesList({ initialPages }: { initialPages: Page[] }) {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {(!initialPages || initialPages.length === 0) && (!pages || pages.length === 0) ? (
+              {(initialPages.length === 0) && (!pages || pages.length === 0) ? (
                 <TableRow>
                   <TableCell colSpan={5} className="text-center py-8 text-gray-500">
                     No pages yet. Create your first page!

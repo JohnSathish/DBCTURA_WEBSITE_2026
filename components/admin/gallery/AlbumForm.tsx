@@ -28,7 +28,7 @@ const albumSchema = z.object({
   displayOrder: z.number().min(0).default(0),
 })
 
-type AlbumFormData = z.infer<typeof albumSchema>
+type AlbumFormData = z.input<typeof albumSchema>
 
 interface GalleryAlbum {
   id: string
@@ -195,6 +195,7 @@ export default function AlbumForm({ album, parentAlbums, defaultParentId }: Albu
         },
         body: JSON.stringify({
           ...data,
+          displayOrder: typeof data.displayOrder === "number" ? data.displayOrder : 0,
           parentAlbumId: data.parentAlbumId || null,
           coverImage: data.coverImage || null,
         }),

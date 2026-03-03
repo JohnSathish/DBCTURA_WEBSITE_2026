@@ -135,7 +135,7 @@ export async function POST(request: NextRequest) {
     const parsed = grievanceSchema.safeParse(json)
 
     if (!parsed.success) {
-      const message = parsed.error.errors.map((err) => err.message).join(", ")
+      const message = parsed.error.issues.map((issue) => issue.message).join(", ")
       return NextResponse.json({ error: message }, { status: 400 })
     }
 

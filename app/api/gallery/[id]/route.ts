@@ -39,15 +39,14 @@ export async function PUT(
   try {
     const { id } = await params
     const data = await request.json()
-    const { title, image, category, displayOrder } = data
+    const { title, image, displayOrder } = data
 
     const galleryImage = await prisma.galleryImage.update({
       where: { id },
       data: {
         title,
         image,
-        category: category || null,
-        displayOrder: displayOrder || 0,
+        displayOrder: typeof displayOrder === "number" ? displayOrder : 0,
       },
     })
 

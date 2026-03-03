@@ -27,7 +27,7 @@ interface NewsItem {
   slug: string
   publishedAt: Date | null
   featured: boolean
-  category: string | null
+  category?: string | null
   updatedAt: Date
 }
 

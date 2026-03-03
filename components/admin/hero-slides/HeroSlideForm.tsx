@@ -20,7 +20,7 @@ const heroSlideSchema = z.object({
   published: z.boolean().default(true),
 })
 
-type HeroSlideFormData = z.infer<typeof heroSlideSchema>
+type HeroSlideFormData = z.input<typeof heroSlideSchema>
 
 interface HeroSlide {
   id: string
@@ -67,7 +67,7 @@ export default function HeroSlideForm({ slide }: HeroSlideFormProps) {
         },
   })
 
-  const published = watch("published")
+  const published = watch("published") ?? true
 
   const handleImageUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0]
@@ -137,6 +137,8 @@ export default function HeroSlideForm({ slide }: HeroSlideFormProps) {
         },
         body: JSON.stringify({
           ...data,
+          displayOrder: typeof data.displayOrder === "number" ? data.displayOrder : 0,
+          published: typeof data.published === "boolean" ? data.published : true,
           caption: data.caption || null,
         }),
       })

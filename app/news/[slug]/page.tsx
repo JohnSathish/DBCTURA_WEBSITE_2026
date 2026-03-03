@@ -46,11 +46,6 @@ export default async function NewsDetailPage({
         <time dateTime={news.publishedAt.toISOString()}>
           {new Date(news.publishedAt).toLocaleDateString()}
         </time>
-        {news.category && (
-          <span className="px-2 py-1 bg-blue-100 text-blue-800 rounded text-sm">
-            {news.category}
-          </span>
-        )}
       </div>
 
       {news.image && (

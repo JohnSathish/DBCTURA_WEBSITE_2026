@@ -20,8 +20,8 @@ interface Popup {
   title: string
   content: string
   enabled: boolean
-  createdAt: string
-  updatedAt: string
+  createdAt: string | Date
+  updatedAt: string | Date
 }
 
 export default function PopupList({ initialPopups }: { initialPopups: Popup[] }) {

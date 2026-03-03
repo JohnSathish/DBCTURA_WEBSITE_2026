@@ -7,6 +7,24 @@ import { getNavigationItems } from "@/lib/navigation-server"
 import { findNavigationItemByPath, findParentNavigationItem } from "@/lib/navigation-helpers"
 import CollapsibleSidebar from "@/components/layout/CollapsibleSidebar"
 
+type SidebarNavItem = {
+  href?: string
+  label: string
+  children?: SidebarNavItem[]
+}
+
+function toSidebarNavItems(items?: NavigationItem[] | null): SidebarNavItem[] {
+  if (!items || items.length === 0) {
+    return []
+  }
+
+  return items.map((item) => ({
+    href: item.href ?? undefined,
+    label: item.label,
+    children: toSidebarNavItems(item.children),
+  }))
+}
+
 // Excluded paths that should be handled by other routes
 // Only exact matches are excluded, nested paths are handled by this route
 const EXCLUDED_PATHS = [
@@ -132,7 +150,7 @@ export default async function NestedPage({
             <div className="lg:hidden mb-4">
               <CollapsibleSidebar
                 title={parentNavItem.label}
-                items={parentNavItem.children}
+                items={toSidebarNavItems(parentNavItem.children)}
                 currentPath={path}
               />
             </div>
@@ -145,10 +163,10 @@ export default async function NestedPage({
                 <div className="sticky top-24 bg-gradient-to-br from-white via-indigo-50/50 to-purple-50/50 border-2 border-indigo-200/50 rounded-lg shadow-lg p-5 backdrop-blur-sm">
                   <h3 className="font-bold text-lg mb-4 bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">{parentNavItem.label}</h3>
                   <nav className="space-y-2">
-                    {parentNavItem.children.map((child) => (
+                  {parentNavItem.children.map((child) => (
                       <Link
-                        key={child.href}
-                        href={child.href}
+                      key={child.href ?? child.label}
+                      href={child.href ?? "#"}
                         className={`block px-4 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 ${
                           path === child.href
                             ? "bg-gradient-to-r from-indigo-500 to-purple-500 text-white shadow-md transform scale-[1.02]"
@@ -188,7 +206,7 @@ export default async function NestedPage({
           <div className="lg:hidden mb-4">
             <CollapsibleSidebar
               title={parentNavItem.label}
-              items={parentNavItem.children}
+              items={toSidebarNavItems(parentNavItem.children)}
               currentPath={path}
             />
           </div>
@@ -203,8 +221,8 @@ export default async function NestedPage({
                 <nav className="space-y-2">
                   {parentNavItem.children.map((child) => (
                     <Link
-                      key={child.href}
-                      href={child.href}
+                      key={child.href ?? child.label}
+                      href={child.href ?? "#"}
                       className={`block px-4 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 ${
                         path === child.href
                           ? "bg-gradient-to-r from-indigo-500 to-purple-500 text-white shadow-md transform scale-[1.02]"
@@ -241,9 +259,9 @@ export default async function NestedPage({
                   <h2 className="text-2xl font-semibold mb-4 text-purple-900">Subpages</h2>
                   <ul className="space-y-2">
                     {navItem.children.map((child) => (
-                      <li key={child.href}>
+                      <li key={child.href ?? child.label}>
                         <Link
-                          href={child.href}
+                          href={child.href ?? "#"}
                           className="inline-flex items-center px-4 py-2 bg-white hover:bg-gradient-to-r hover:from-indigo-100 hover:to-purple-100 text-indigo-700 hover:text-purple-700 rounded-lg transition-all duration-200 shadow-sm hover:shadow-md"
                         >
                           {child.label}

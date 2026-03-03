@@ -23,7 +23,7 @@ const testimonialSchema = z.object({
   published: z.boolean().default(true),
 })
 
-type TestimonialFormData = z.infer<typeof testimonialSchema>
+type TestimonialFormData = z.input<typeof testimonialSchema>
 
 interface Testimonial {
   id: string
@@ -76,7 +76,7 @@ export default function TestimonialForm({ testimonial }: TestimonialFormProps) {
         },
   })
 
-  const published = watch("published")
+  const published = watch("published") ?? true
 
   const handleImageUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0]
@@ -146,6 +146,8 @@ export default function TestimonialForm({ testimonial }: TestimonialFormProps) {
         },
         body: JSON.stringify({
           ...data,
+          displayOrder: typeof data.displayOrder === "number" ? data.displayOrder : 0,
+          published: typeof data.published === "boolean" ? data.published : true,
           image: data.image || null,
         }),
       })

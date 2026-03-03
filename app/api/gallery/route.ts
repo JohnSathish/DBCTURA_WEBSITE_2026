@@ -26,14 +26,34 @@ export async function POST(request: NextRequest) {
 
   try {
     const data = await request.json()
-    const { title, image, category, displayOrder } = data
+    const { title, image, displayOrder, albumId } = data
+
+    let resolvedAlbumId: string | null = typeof albumId === "string" && albumId.trim() ? albumId.trim() : null
+
+    if (!resolvedAlbumId) {
+      const defaultAlbum = await prisma.galleryAlbum.findFirst({
+        select: { id: true },
+        orderBy: { createdAt: "asc" },
+      })
+
+      if (!defaultAlbum) {
+        return NextResponse.json(
+          { error: "No gallery album found. Please create an album before adding images." },
+          { status: 400 }
+        )
+      }
+
+      resolvedAlbumId = defaultAlbum.id
+    }
 
     const galleryImage = await prisma.galleryImage.create({
       data: {
         title,
         image,
-        category: category || null,
-        displayOrder: displayOrder || 0,
+        displayOrder: typeof displayOrder === "number" ? displayOrder : 0,
+        album: {
+          connect: { id: resolvedAlbumId },
+        },
       },
     })
 

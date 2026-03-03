@@ -17,6 +17,10 @@ async function getQuestionPapers() {
 
 export default async function QuestionPapersPage() {
   const papers = await getQuestionPapers()
+  const serializedPapers = papers.map((paper) => ({
+    ...paper,
+    uploadedAt: paper.uploadedAt.toISOString(),
+  }))
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50 py-12">
@@ -30,7 +34,7 @@ export default async function QuestionPapersPage() {
         </header>
 
         <div className="bg-white/90 backdrop-blur rounded-3xl shadow-xl border border-indigo-100 p-6 sm:p-10">
-          <QuestionPaperBrowser initialPapers={papers} />
+          <QuestionPaperBrowser initialPapers={serializedPapers} />
         </div>
       </div>
     </div>

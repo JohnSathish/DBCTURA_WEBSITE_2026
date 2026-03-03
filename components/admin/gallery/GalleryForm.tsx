@@ -19,13 +19,13 @@ const gallerySchema = z.object({
   displayOrder: z.number().min(0).default(0),
 })
 
-type GalleryFormData = z.infer<typeof gallerySchema>
+type GalleryFormData = z.input<typeof gallerySchema>
 
 interface GalleryImage {
   id: string
-  title: string
+  title: string | null
   image: string
-  category: string | null
+  category?: string | null
   displayOrder: number
 }
 
@@ -49,7 +49,7 @@ export default function GalleryForm({ galleryImage }: { galleryImage?: GalleryIm
     resolver: zodResolver(gallerySchema),
     defaultValues: galleryImage
       ? {
-          title: galleryImage.title,
+          title: galleryImage.title ?? "",
           image: galleryImage.image,
           category: galleryImage.category || "",
           displayOrder: galleryImage.displayOrder,

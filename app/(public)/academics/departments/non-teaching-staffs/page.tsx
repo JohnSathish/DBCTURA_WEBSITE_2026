@@ -9,7 +9,9 @@ interface StaffProfile {
   department: string
   category: string
   photo: string | null
-  createdAt: string
+  stream: string | null
+  createdAt: Date
+  updatedAt: Date
 }
 
 async function getNonTeachingStaff() {

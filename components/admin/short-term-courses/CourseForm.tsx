@@ -25,7 +25,7 @@ const courseSchema = z.object({
   published: z.boolean().default(true),
 })
 
-type CourseFormData = z.infer<typeof courseSchema>
+type CourseFormData = z.input<typeof courseSchema>
 
 interface Course {
   id: string
@@ -84,7 +84,7 @@ export default function CourseForm({ course }: CourseFormProps) {
         },
   })
 
-  const published = watch("published")
+  const published = watch("published") ?? true
 
   const handleImageUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0]
@@ -154,6 +154,8 @@ export default function CourseForm({ course }: CourseFormProps) {
         },
         body: JSON.stringify({
           ...data,
+          displayOrder: typeof data.displayOrder === "number" ? data.displayOrder : 0,
+          published: typeof data.published === "boolean" ? data.published : true,
           code: data.code || null,
           description: data.description || null,
           image: data.image || null,

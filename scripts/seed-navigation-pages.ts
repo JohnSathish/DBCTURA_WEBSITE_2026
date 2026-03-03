@@ -6,12 +6,12 @@ import { defaultNavigation } from "@/lib/navigation"
 function getAllPaths(items: typeof defaultNavigation): Array<{ path: string; label: string }> {
   const paths: Array<{ path: string; label: string }> = []
   
-  function traverse(item: typeof items[0]) {
-    // Skip home page
-    if (item.href !== "/") {
+  function traverse(item: typeof items[number]) {
+    // Skip items without href or home page
+    if (item.href && item.href !== "/") {
       paths.push({ path: item.href, label: item.label })
     }
-    if (item.children) {
+    if (item.children && item.children.length > 0) {
       item.children.forEach(traverse)
     }
   }

@@ -12,9 +12,11 @@ async function ensureModel() {
 
 export async function GET(
   _request: NextRequest,
-  { params }: { params: { id: string } }
+  context: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await context.params
+
     const session = await getServerSession(authOptions)
     if (!session) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
@@ -23,7 +25,7 @@ export async function GET(
     await ensureModel()
 
     const donor = await prisma.bloodDonor.findUnique({
-      where: { id: params.id },
+      where: { id },
     })
 
     if (!donor) {
@@ -45,9 +47,11 @@ export async function GET(
 
 export async function DELETE(
   _request: NextRequest,
-  { params }: { params: { id: string } }
+  context: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await context.params
+
     const session = await getServerSession(authOptions)
     if (!session) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
@@ -56,7 +60,7 @@ export async function DELETE(
     await ensureModel()
 
     await prisma.bloodDonor.delete({
-      where: { id: params.id },
+      where: { id },
     })
 
     return NextResponse.json({ success: true })

@@ -13,12 +13,8 @@ export async function GET(request: NextRequest) {
   const albums = await prisma.galleryAlbum.findMany({
     include: {
       childAlbums: true,
-      events: {
-        include: {
-          _count: {
-            select: { images: true }
-          }
-        }
+      _count: {
+        select: { images: true },
       },
     },
     orderBy: { displayOrder: "asc" },

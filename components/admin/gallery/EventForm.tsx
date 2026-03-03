@@ -28,7 +28,7 @@ const eventSchema = z.object({
   displayOrder: z.number().min(0).default(0),
 })
 
-type EventFormData = z.infer<typeof eventSchema>
+type EventFormData = z.input<typeof eventSchema>
 
 interface GalleryEvent {
   id: string
@@ -149,6 +149,7 @@ export default function EventForm({ event, albums, defaultAlbumId }: EventFormPr
         },
         body: JSON.stringify({
           ...data,
+          displayOrder: typeof data.displayOrder === "number" ? data.displayOrder : 0,
           eventDate: data.eventDate || null,
           images: uploadedImages.map((img) => img.url),
         }),
@@ -199,10 +200,7 @@ export default function EventForm({ event, albums, defaultAlbumId }: EventFormPr
 
           <div className="space-y-2">
             <Label htmlFor="albumId">Album *</Label>
-            <Select
-              value={watch("albumId")}
-              onValueChange={(value) => setValue("albumId", value)}
-            >
+            <Select value={watch("albumId") || ""} onValueChange={(value) => setValue("albumId", value)}>
               <SelectTrigger>
                 <SelectValue placeholder="Select album" />
               </SelectTrigger>

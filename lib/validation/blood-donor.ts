@@ -16,9 +16,7 @@ export const bloodDonorSchema = z
       .min(1, "Phone number is required")
       .regex(phoneRegex, "Enter a valid phone number"),
     email: z.string().email("Enter a valid email address"),
-    bloodGroup: z.enum(BLOOD_GROUPS, {
-      errorMap: () => ({ message: "Select a valid blood group" }),
-    }),
+    bloodGroup: z.enum(BLOOD_GROUPS),
     lastDonationDate: z.string().optional().nullable(),
     addressStreet: z.string().max(200, "Street address is too long").optional().nullable(),
     addressCity: z.string().max(120, "City name is too long").optional().nullable(),
@@ -26,9 +24,7 @@ export const bloodDonorSchema = z
     addressPostalCode: z.string().max(20, "Pincode is too long").optional().nullable(),
     medicalNotes: z.string().max(1000, "Notes are too long").optional().nullable(),
     consent: z.boolean(),
-    preferredContact: z.enum(CONTACT_METHODS, {
-      errorMap: () => ({ message: "Select a contact preference" }),
-    }),
+    preferredContact: z.enum(CONTACT_METHODS),
   })
   .superRefine((data, ctx) => {
     if (!data.consent) {

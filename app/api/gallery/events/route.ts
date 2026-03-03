@@ -10,7 +10,16 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
   }
 
-  const events = await prisma.galleryEvent.findMany({
+  const prismaAny = prisma as any
+
+  if (!prismaAny.galleryEvent || typeof prismaAny.galleryEvent.findMany !== "function") {
+    return NextResponse.json(
+      { error: "GalleryEvent model not initialized. Run 'npx prisma generate' and restart the server." },
+      { status: 503 }
+    )
+  }
+
+  const events = await prismaAny.galleryEvent.findMany({
     include: {
       album: true,
       _count: {
@@ -31,10 +40,19 @@ export async function POST(request: NextRequest) {
   }
 
   try {
+    const prismaAny = prisma as any
+
+    if (!prismaAny.galleryEvent || typeof prismaAny.galleryEvent.create !== "function") {
+      return NextResponse.json(
+        { error: "GalleryEvent model not initialized. Run 'npx prisma generate' and restart the server." },
+        { status: 503 }
+      )
+    }
+
     const data = await request.json()
     const { title, description, eventDate, albumId, displayOrder, images } = data
 
-    const event = await prisma.galleryEvent.create({
+    const event = await prismaAny.galleryEvent.create({
       data: {
         title,
         description: description || null,

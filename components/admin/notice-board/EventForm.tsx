@@ -20,7 +20,7 @@ const eventSchema = z.object({
   published: z.boolean().default(true),
 })
 
-type EventFormData = z.infer<typeof eventSchema>
+type EventFormData = z.input<typeof eventSchema>
 
 interface NoticeBoardEvent {
   id: string
@@ -65,7 +65,7 @@ export default function EventForm({ event }: EventFormProps) {
         },
   })
 
-  const published = watch("published")
+  const published = watch("published") ?? true
 
   const onSubmit = async (data: EventFormData) => {
     setLoading(true)
@@ -82,6 +82,8 @@ export default function EventForm({ event }: EventFormProps) {
         },
         body: JSON.stringify({
           ...data,
+          displayOrder: typeof data.displayOrder === "number" ? data.displayOrder : 0,
+          published: typeof data.published === "boolean" ? data.published : true,
           description: data.description || null,
         }),
       })

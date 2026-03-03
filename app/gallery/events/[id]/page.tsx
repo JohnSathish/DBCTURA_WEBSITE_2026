@@ -12,7 +12,13 @@ export default async function EventDetailPage({
 }) {
   const { id } = await params
 
-  const event = await prisma.galleryEvent.findUnique({
+  const prismaAny = prisma as any
+
+  if (!prismaAny.galleryEvent || typeof prismaAny.galleryEvent.findUnique !== "function") {
+    notFound()
+  }
+
+  const event = await prismaAny.galleryEvent.findUnique({
     where: { id },
     include: {
       album: {
@@ -61,13 +67,13 @@ export default async function EventDetailPage({
         )}
       </div>
 
-      {event.images.length === 0 ? (
+      {Array.isArray(event.images) && event.images.length === 0 ? (
         <div className="text-center py-12 text-gray-500">
           <p>No images in this event yet.</p>
         </div>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-          {event.images.map((image) => (
+          {(Array.isArray(event.images) ? (event.images as any[]) : []).map((image: any) => (
             <div
               key={image.id}
               className="relative aspect-square overflow-hidden rounded-lg bg-gray-200 group cursor-pointer"

@@ -23,7 +23,7 @@ const flashNewsSchema = z.object({
   published: z.boolean().default(true),
 })
 
-type FlashNewsFormData = z.infer<typeof flashNewsSchema>
+type FlashNewsFormData = z.input<typeof flashNewsSchema>
 
 interface FlashNews {
   id: string
@@ -76,7 +76,7 @@ export default function FlashNewsForm({ flashNews }: FlashNewsFormProps) {
         },
   })
 
-  const published = watch("published")
+  const published = watch("published") ?? true
 
   const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0]
@@ -137,6 +137,8 @@ export default function FlashNewsForm({ flashNews }: FlashNewsFormProps) {
         },
         body: JSON.stringify({
           ...data,
+          displayOrder: typeof data.displayOrder === "number" ? data.displayOrder : 0,
+          published: typeof data.published === "boolean" ? data.published : true,
           description: data.description || null,
           file: data.file || null,
           fileType: data.file || null ? data.fileType : null,

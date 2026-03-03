@@ -30,7 +30,7 @@ interface News {
   content: string
   excerpt: string | null
   image: string | null
-  category: string | null
+  category?: string | null
   featured: boolean
   publishedAt: Date | null
 }

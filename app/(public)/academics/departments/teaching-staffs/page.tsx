@@ -17,7 +17,8 @@ interface StaffProfile {
   stream: string | null
   category: string
   photo: string | null
-  createdAt: string
+  createdAt: Date
+  updatedAt: Date
 }
 
 async function getStaffProfiles() {
@@ -41,9 +42,7 @@ export default async function TeachingStaffsPage() {
   // Get recent staff (last 30 days)
   const thirtyDaysAgo = new Date()
   thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30)
-  const recentStaff = allStaff.filter(
-    (staff) => new Date(staff.createdAt) >= thirtyDaysAgo
-  )
+  const recentStaff = allStaff.filter((staff) => staff.createdAt >= thirtyDaysAgo)
 
   // Group staff by stream and department
   const groupedStaff: Record<string, Record<string, StaffProfile[]>> = {}

@@ -18,7 +18,13 @@ export default async function EditEventPage({
 
   const { id } = await params
 
-  const event = await prisma.galleryEvent.findUnique({
+  const prismaAny = prisma as any
+
+  if (!prismaAny.galleryEvent || typeof prismaAny.galleryEvent.findUnique !== "function") {
+    redirect("/admin/gallery")
+  }
+
+  const event = await prismaAny.galleryEvent.findUnique({
     where: { id },
   })
 

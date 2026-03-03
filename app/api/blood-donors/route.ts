@@ -12,7 +12,7 @@ function getClientIp(request: NextRequest) {
   if (forwarded) {
     return forwarded.split(",")[0]?.trim() || null
   }
-  return request.headers.get("x-real-ip") || request.ip || null
+  return request.headers.get("x-real-ip") || null
 }
 
 export async function GET(request: NextRequest) {
