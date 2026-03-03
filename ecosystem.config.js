@@ -5,7 +5,7 @@ module.exports = {
     {
       name: "donbosco",
       script: path.join(__dirname, "node_modules/next/dist/bin/next"),
-      args: "start",
+      args: "start -p 3001",
       cwd: __dirname,
       interpreter: "node",
       env: {
