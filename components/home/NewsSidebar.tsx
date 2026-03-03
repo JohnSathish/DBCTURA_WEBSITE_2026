@@ -17,7 +17,7 @@ function CalendarBadge({ date }: { date?: string | Date | null }) {
   const day = d.getDate().toString().padStart(2, "0")
   const month = d.toLocaleString("en-US", { month: "short" }).toUpperCase()
   return (
-    <div className="flex items-center justify-center w-12 h-12 rounded-full bg-gradient-to-br from-purple-100 to-pink-100 border-2 border-purple-300 shadow-md">
+    <div className="flex items-center justify-center w-12 h-12 rounded-full bg-gradient-to-br from-purple-100 to-pink-100 border-2 border-purple-300 shadow-md" suppressHydrationWarning>
       <div className="text-center leading-tight">
         <div className="text-[10px] text-purple-700 font-semibold -mb-0.5">{month}</div>
         <div className="text-sm font-bold text-purple-900">{day}</div>
@@ -71,7 +71,7 @@ export default function NewsSidebar({ items }: { items: NoticeBoardEvent[]; page
   const itemHeight = 95
 
   return (
-    <Card className="flex flex-col w-full border-2 border-purple-200 shadow-lg h-full">
+    <Card className="flex flex-col w-full border-2 border-purple-200 shadow-lg h-full" suppressHydrationWarning>
       {/* Header */}
       <div className="px-4 py-[calc(0.5rem-25px)] border-b bg-gradient-to-r from-purple-500 to-pink-500">
         <div className="flex items-center justify-between">

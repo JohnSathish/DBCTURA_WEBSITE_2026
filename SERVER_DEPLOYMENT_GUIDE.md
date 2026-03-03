@@ -1,5 +1,5 @@
 # Server Deployment Guide – Don Bosco College & Multi-Site VPS
-
+ssh root@82.25.110.120 "cd /var/www/donboscocollege && git checkout -- ecosystem.config.js && git pull && npm install && npm run build && npx prisma generate && npx prisma db push && pm2 restart donbosco"
 This document explains server concepts, commands, and how to deploy and maintain your sites on the VPS. Read it to understand how everything fits together.
 
 ---

@@ -168,13 +168,13 @@ export default function Footer() {
           </div>
         </div>
 
-        <div className="border-t border-white/20 mt-8 pt-8">
+        <div className="border-t border-white/20 mt-8 pt-8" suppressHydrationWarning>
           <div className="flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-white/70">
-            <p>&copy; {new Date().getFullYear()} Don Bosco College, Tura. All rights reserved.</p>
+            <p suppressHydrationWarning>&copy; {new Date().getFullYear()} Don Bosco College, Tura. All rights reserved.</p>
             <div className="flex flex-col md:flex-row md:items-center gap-4 text-xs">
               <div className="flex items-center gap-2">
                 <Users className="h-4 w-4" />
-                <span className="font-medium">
+                <span className="font-medium" suppressHydrationWarning>
                   {visitorCount !== null ? visitorCount.toLocaleString() : error ? "—" : "Counting visitors..."}
                 </span>
               </div>
