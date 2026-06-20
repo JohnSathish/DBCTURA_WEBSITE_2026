@@ -2,7 +2,7 @@
 
 import dynamic from "next/dynamic"
 import Link from "next/link"
-import { useMemo, useRef, useState } from "react"
+import { useMemo, useState } from "react"
 import {
   ArrowLeft,
   Clock,
@@ -24,9 +24,9 @@ const ReCAPTCHA = dynamic(() => import("react-google-recaptcha"), { ssr: false }
 type FormState = "idle" | "submitting" | "success" | "error"
 
 export default function ContactView() {
-  const recaptchaRef = useRef<{ getValue: () => string | null; reset: () => void } | null>(null)
   const [formState, setFormState] = useState<FormState>("idle")
   const [errorMessage, setErrorMessage] = useState("")
+  const [recaptchaToken, setRecaptchaToken] = useState<string | null>(null)
   const [fullName, setFullName] = useState("")
   const [email, setEmail] = useState("")
   const [phone, setPhone] = useState("")
@@ -45,7 +45,7 @@ export default function ContactView() {
     e.preventDefault()
     setErrorMessage("")
 
-    if (requireRecaptcha && !recaptchaRef.current?.getValue()) {
+    if (requireRecaptcha && !recaptchaToken) {
       setErrorMessage("Please complete the reCAPTCHA verification.")
       setFormState("error")
       return
@@ -63,7 +63,7 @@ export default function ContactView() {
           phone: phone || undefined,
           subject,
           message,
-          recaptchaToken: recaptchaRef.current?.getValue() ?? undefined,
+          recaptchaToken: recaptchaToken ?? undefined,
         }),
       })
 
@@ -79,7 +79,7 @@ export default function ContactView() {
       setPhone("")
       setSubject("")
       setMessage("")
-      recaptchaRef.current?.reset()
+      setRecaptchaToken(null)
     } catch (err: unknown) {
       setFormState("error")
       setErrorMessage(err instanceof Error ? err.message : "Something went wrong. Please try again.")
@@ -302,12 +302,15 @@ export default function ContactView() {
                   />
                 </div>
 
-                {requireRecaptcha ? (
+                {recaptchaSiteKey ? (
                   <div className="overflow-hidden rounded-xl">
                     <ReCAPTCHA
-                      ref={recaptchaRef as any}
                       sitekey={recaptchaSiteKey}
-                      onChange={() => setErrorMessage("")}
+                      onChange={(token) => {
+                        setRecaptchaToken(token)
+                        setErrorMessage("")
+                      }}
+                      onExpired={() => setRecaptchaToken(null)}
                     />
                   </div>
                 ) : null}
