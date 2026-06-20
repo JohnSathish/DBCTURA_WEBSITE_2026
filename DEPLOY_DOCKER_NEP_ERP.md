@@ -44,7 +44,7 @@ Minimum `.env`:
 
 ```env
 NODE_ENV=production
-DATABASE_URL="file:./prisma/dev.db"
+DATABASE_URL="file:/app/data/dev.db"
 NEXTAUTH_URL="https://donboscocollege.ac.in"
 NEXT_PUBLIC_SITE_URL="https://donboscocollege.ac.in"
 NEXTAUTH_SECRET="<run: openssl rand -base64 32>"
