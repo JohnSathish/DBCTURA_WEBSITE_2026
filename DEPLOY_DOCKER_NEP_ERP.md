@@ -114,28 +114,44 @@ Alternative if `host.docker.internal` fails: use Docker bridge IP `172.17.0.1:30
 
 ## Step 4 — Add nginx vhost for donboscocollege.ac.in
 
-Copy the sample config from this repo:
+**Symptom:** `donboscocollege.ac.in` shows **BCL OneCampus ERP** instead of the college website.  
+**Cause:** Nginx has no vhost for the college domain, so traffic falls through to the ERP default server (port 3000).
+
+### 4a — HTTP routing first (recommended)
 
 ```bash
-cp /opt/donboscocollege/docker/nginx/donboscocollege.ac.in.conf \
+# College app must respond locally
+curl -I http://127.0.0.1:3002/
+
+cp /opt/donboscocollege/docker/nginx/donboscocollege.ac.in.http-only.conf \
    /opt/nep-erp/nginx/conf.d/donboscocollege.ac.in.conf
-```
 
-Edit paths to match how ERP nginx mounts SSL certs and conf.d.
-
-Test and reload **nginx only**:
-
-```bash
 docker exec nep-erp-nginx-1 nginx -t
 docker exec nep-erp-nginx-1 nginx -s reload
 ```
 
-Get SSL certificate (if not already):
+Open **http://donboscocollege.ac.in** — you should see the Don Bosco College homepage (not ERP).
+
+If upstream fails, edit the conf and replace `host.docker.internal` with `172.17.0.1`.
+
+### 4b — HTTPS (after HTTP works)
 
 ```bash
-# Use same certbot method as ERP — often webroot via nginx
 certbot certonly --webroot -w /var/www/certbot \
   -d donboscocollege.ac.in -d www.donboscocollege.ac.in
+
+cp /opt/donboscocollege/docker/nginx/donboscocollege.ac.in.conf \
+   /opt/nep-erp/nginx/conf.d/donboscocollege.ac.in.conf
+
+docker exec nep-erp-nginx-1 nginx -t
+docker exec nep-erp-nginx-1 nginx -s reload
+```
+
+Verify ERP vhost uses its **own** `server_name` (not `_` / `default_server` for every domain). List configs:
+
+```bash
+docker exec nep-erp-nginx-1 ls -la /etc/nginx/conf.d/
+docker exec nep-erp-nginx-1 grep -r "server_name\|default_server\|proxy_pass" /etc/nginx/conf.d/
 ```
 
 ---
