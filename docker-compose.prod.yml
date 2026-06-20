@@ -1,0 +1,40 @@
+# Don Bosco College website — runs beside NEP ERP without touching ports 3000/3001.
+#
+# ERP (do not change):  nep-erp-web :3000, nep-erp-api :3001, nep-erp-nginx :80/:443
+# This stack:           donboscocollege-web :3002 (host) → :3000 (container)
+#
+# Usage on server:
+#   cd /opt/donboscocollege
+#   cp .env.example .env   # edit secrets
+#   docker compose -f docker-compose.prod.yml up -d --build
+#   curl -I http://127.0.0.1:3002
+#
+# Then add nginx vhost (see docker/nginx/donboscocollege.ac.in.conf and DEPLOY_DOCKER_NEP_ERP.md)
+
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: donboscocollege-web
+    restart: unless-stopped
+    ports:
+      - "3002:3000"
+    env_file:
+      - .env
+    environment:
+      NODE_ENV: production
+      DATABASE_URL: "file:./prisma/dev.db"
+    volumes:
+      - donbosco-prisma:/app/prisma
+      - donbosco-uploads:/app/public/uploads
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://127.0.0.1:3000/').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+volumes:
+  donbosco-prisma:
+  donbosco-uploads:
