@@ -35,6 +35,39 @@ services:
       retries: 3
       start_period: 40s
 
+  # One-shot maintenance (full dev deps). Run after deploy or schema changes:
+  #   docker compose -f docker-compose.prod.yml --profile tools run --rm db-push
+  #   docker compose -f docker-compose.prod.yml --profile tools run --rm -e ADMIN_PASSWORD='...' admin-password
+  db-push:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: builder
+    env_file:
+      - .env
+    environment:
+      DATABASE_URL: "file:/app/data/dev.db"
+    volumes:
+      - donbosco-data:/app/data
+    entrypoint: ["npx", "prisma", "db", "push", "--skip-generate"]
+    profiles:
+      - tools
+
+  admin-password:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: builder
+    env_file:
+      - .env
+    environment:
+      DATABASE_URL: "file:/app/data/dev.db"
+    volumes:
+      - donbosco-data:/app/data
+    entrypoint: ["npx", "tsx", "scripts/set-admin-password.ts"]
+    profiles:
+      - tools
+
 volumes:
   donbosco-data:
   donbosco-uploads:

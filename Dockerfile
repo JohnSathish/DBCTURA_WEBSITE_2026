@@ -29,17 +29,13 @@ RUN addgroup --system --gid 1001 nodejs && adduser --system --uid 1001 nextjs
 COPY --from=builder /app/public ./public
 COPY --from=builder /app/prisma ./prisma
 COPY --from=builder /app/lib/prisma-generated ./lib/prisma-generated
-COPY --from=builder /app/scripts ./scripts
 COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
-COPY --from=builder /app/node_modules/prisma ./node_modules/prisma
-COPY --from=builder /app/node_modules/@prisma ./node_modules/@prisma
-COPY --from=builder /app/node_modules/.bin/prisma ./node_modules/.bin/prisma
 COPY docker/entrypoint.sh /app/docker/entrypoint.sh
 
 RUN mkdir -p prisma public/uploads /app/data /app/.npm && \
     chmod +x /app/docker/entrypoint.sh && \
-    chown -R nextjs:nodejs prisma public/uploads /app/data /app/.npm /app/docker /app/scripts
+    chown -R nextjs:nodejs prisma public/uploads /app/data /app/.npm /app/docker
 
 USER nextjs
 EXPOSE 3000

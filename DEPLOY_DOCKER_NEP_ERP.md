@@ -50,20 +50,19 @@ NEXT_PUBLIC_SITE_URL="https://donboscocollege.ac.in"
 NEXTAUTH_SECRET="<run: openssl rand -base64 32>"
 ```
 
-Set admin password (one-time, after first build):
+Database schema is applied with the **tools** profile (uses full build image with Prisma CLI):
 
 ```bash
-docker compose -f docker-compose.prod.yml exec \
-  -e ADMIN_EMAIL=admin@donboscocollege.ac.in \
-  -e ADMIN_PASSWORD='your-strong-password' \
-  web node --experimental-strip-types scripts/set-admin-password.mjs
+docker compose -f docker-compose.prod.yml --profile tools run --rm db-push
 ```
 
-Database schema is applied automatically on container start (`prisma db push` in entrypoint).
-To run it manually:
+Set admin password:
 
 ```bash
-docker compose -f docker-compose.prod.yml exec web node_modules/.bin/prisma db push --skip-generate
+docker compose -f docker-compose.prod.yml --profile tools run --rm \
+  -e ADMIN_EMAIL=admin@donboscocollege.ac.in \
+  -e ADMIN_PASSWORD='your-strong-password' \
+  admin-password
 ```
 
 ---
