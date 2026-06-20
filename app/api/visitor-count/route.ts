@@ -23,12 +23,13 @@ export async function GET() {
     const record = await ensureSetting()
     const count = parseInt(record.value, 10) || 0
     return NextResponse.json({ count })
-  } catch (error: any) {
-    if (error.message?.includes("Setting model not initialized")) {
-      return NextResponse.json({ error: error.message }, { status: 503 })
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : ""
+    if (message.includes("Setting model not initialized")) {
+      return NextResponse.json({ error: message }, { status: 503 })
     }
     console.error("Failed to fetch visitor count:", error)
-    return NextResponse.json({ error: "Unable to fetch visitor count" }, { status: 500 })
+    return NextResponse.json({ count: 0 })
   }
 }
 
@@ -42,12 +43,13 @@ export async function POST(_request: NextRequest) {
     })
 
     return NextResponse.json({ count: parseInt(updated.value, 10) })
-  } catch (error: any) {
-    if (error.message?.includes("Setting model not initialized")) {
-      return NextResponse.json({ error: error.message }, { status: 503 })
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : ""
+    if (message.includes("Setting model not initialized")) {
+      return NextResponse.json({ error: message }, { status: 503 })
     }
     console.error("Failed to increment visitor count:", error)
-    return NextResponse.json({ error: "Unable to update visitor count" }, { status: 500 })
+    return NextResponse.json({ count: 0 })
   }
 }
 
