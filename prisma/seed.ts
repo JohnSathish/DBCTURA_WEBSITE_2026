@@ -5,20 +5,27 @@ import bcrypt from 'bcryptjs'
 const prisma = new PrismaClient()
 
 async function main() {
-  const hashedPassword = await bcrypt.hash('admin123', 10)
+  const adminEmail = process.env.ADMIN_EMAIL || 'admin@donboscocollege.ac.in'
+  const adminPassword = process.env.ADMIN_PASSWORD || 'admin123'
+  const hashedPassword = await bcrypt.hash(adminPassword, 10)
 
   const admin = await prisma.user.upsert({
-    where: { email: 'admin@donbosco.edu.in' },
-    update: {},
+    where: { email: adminEmail },
+    update: {
+      password: hashedPassword,
+      role: 'admin',
+    },
     create: {
-      email: 'admin@donbosco.edu.in',
+      email: adminEmail,
       password: hashedPassword,
       role: 'admin',
     },
   })
 
-  console.log('Admin user created:', admin.email)
-  console.log('Default password: admin123')
+  console.log('Admin user ready:', admin.email)
+  if (!process.env.ADMIN_PASSWORD) {
+    console.warn('Warning: using default dev password. Set ADMIN_PASSWORD in production.')
+  }
 
   // Seed some dummy news if none exist
   const existingNews = await prisma.news.count()

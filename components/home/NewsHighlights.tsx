@@ -6,7 +6,7 @@ import Image from "next/image"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { Search } from "lucide-react"
+import { ChevronRight, Search } from "lucide-react"
 
 type NewsItem = {
   id: string
@@ -21,111 +21,108 @@ export default function NewsHighlights({ items }: { items: NewsItem[] }) {
   const [searchQuery, setSearchQuery] = useState("")
 
   const filteredItems = useMemo(() => {
-    if (!searchQuery.trim()) {
-      return items
-    }
-
+    if (!searchQuery.trim()) return items
     const query = searchQuery.toLowerCase().trim()
-    return items.filter((item) =>
-      item.title.toLowerCase().includes(query) ||
-      item.excerpt?.toLowerCase().includes(query)
+    return items.filter(
+      (item) =>
+        item.title.toLowerCase().includes(query) || item.excerpt?.toLowerCase().includes(query)
     )
   }, [items, searchQuery])
 
   return (
-    <section className="py-6 md:py-10 bg-gradient-to-br from-purple-50 via-indigo-50 to-blue-50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <Card className="border-2 border-purple-300 shadow-lg">
-          <CardHeader className="pb-4 bg-gradient-to-r from-purple-600 to-indigo-600 text-white rounded-t-lg">
-            <div className="flex items-center justify-between flex-wrap gap-4">
-              <CardTitle className="flex items-center gap-2 text-white">
-                <span className="text-2xl">■</span>
-                <span>News Highlights</span>
-              </CardTitle>
-              {/* Search Bar */}
-              <div className="relative w-full sm:w-auto sm:min-w-[250px]">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-purple-400" />
+    <section className="relative border-y border-slate-200/80 bg-white py-10 md:py-14">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <Card className="overflow-hidden border-slate-200/90 shadow-xl shadow-slate-900/5">
+          <CardHeader className="border-b border-slate-100 bg-gradient-to-r from-[#1E3A8A] to-[#2563EB] px-6 py-5">
+            <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+              <CardTitle className="font-heading text-xl text-white md:text-2xl">News &amp; Events</CardTitle>
+              <div className="relative w-full lg:max-w-sm">
+                <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-white/70" />
                 <Input
                   type="text"
-                  placeholder="Search news by title..."
+                  placeholder="Search news..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="pl-10 bg-white/90 text-gray-900 border-purple-200 focus:bg-white"
+                  className="border-white/25 bg-white/10 pl-10 text-white placeholder:text-white/60 focus-visible:ring-amber-400"
                 />
               </div>
             </div>
           </CardHeader>
-          <CardContent>
+          <CardContent className="p-4 sm:p-6">
             {filteredItems.length > 0 ? (
               <>
-                {searchQuery && (
-                  <p className="text-sm text-gray-600 mb-4">
-                    Found {filteredItems.length} result{filteredItems.length !== 1 ? "s" : ""} for "{searchQuery}"
+                {searchQuery ? (
+                  <p className="mb-4 text-sm text-slate-600">
+                    {filteredItems.length} result{filteredItems.length !== 1 ? "s" : ""} for &ldquo;{searchQuery}&rdquo;
                   </p>
-                )}
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 mb-6">
+                ) : null}
+
+                <div className="flex gap-4 overflow-x-auto pb-2 pt-1 scrollbar-thin [-ms-overflow-style:none] [scrollbar-width:thin] [&::-webkit-scrollbar]:h-2 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-slate-300">
                   {filteredItems.map((item) => {
                     const date = item.publishedAt ? new Date(item.publishedAt) : null
-                    const formattedDate = date
-                      ? date.toLocaleDateString("en-US", {
-                          month: "short",
-                          day: "numeric",
-                          year: "numeric",
-                        })
+                    const day = date ? date.getDate().toString().padStart(2, "0") : ""
+                    const mon = date
+                      ? date.toLocaleDateString("en-US", { month: "short" }).toUpperCase()
                       : ""
 
                     return (
                       <Link
                         key={item.id}
                         href={`/news/${item.slug}`}
-                        className="border-2 border-purple-200 rounded-lg overflow-hidden shadow-md hover:shadow-xl hover:border-purple-400 transition-all bg-white flex flex-col transform hover:-translate-y-1"
+                        className="group relative w-[min(100%,280px)] shrink-0 overflow-hidden rounded-2xl border border-slate-200/90 bg-white shadow-md transition-all hover:-translate-y-1 hover:shadow-xl"
                       >
-                        <div className="relative w-full h-40">
+                        <div className="relative h-40 w-full overflow-hidden bg-slate-100">
                           {item.image ? (
                             <Image
                               src={item.image}
                               alt={item.title}
                               fill
-                              className="object-cover"
+                              className="object-cover transition-transform duration-500 group-hover:scale-105"
+                              sizes="280px"
                             />
                           ) : (
-                            <div className="w-full h-full bg-gray-200 flex items-center justify-center">
-                              <span className="text-gray-400 text-xs">No Image</span>
+                            <div className="flex h-full items-center justify-center text-xs text-slate-400">
+                              No image
                             </div>
                           )}
+                          {date ? (
+                            <div className="absolute left-3 top-3 flex flex-col items-center rounded-lg bg-white/95 px-2.5 py-1.5 text-center shadow-md ring-1 ring-slate-200/80">
+                              <span className="text-[10px] font-bold leading-none text-amber-600">{mon}</span>
+                              <span className="font-heading text-lg font-bold leading-none text-slate-900">{day}</span>
+                            </div>
+                          ) : null}
                         </div>
-                        <div className="p-3 flex flex-col flex-grow">
-                          {formattedDate && (
-                            <p className="text-[10px] text-slate-500 mb-1.5">{formattedDate}</p>
-                          )}
-                          <h3 className="font-bold text-sm text-slate-900 mb-1.5 leading-tight hover:text-blue-700 transition-colors line-clamp-2">
+                        <div className="p-4">
+                          <h3 className="font-heading line-clamp-2 text-sm font-bold text-slate-900 transition-colors group-hover:text-[#1E3A8A]">
                             {item.title}
                           </h3>
-                          {item.excerpt && (
-                            <p className="text-xs text-slate-600 line-clamp-2 flex-grow">
-                              {item.excerpt}
-                            </p>
-                          )}
+                          {item.excerpt ? (
+                            <p className="mt-2 line-clamp-2 text-xs text-slate-600">{item.excerpt}</p>
+                          ) : null}
+                          <div className="mt-3 inline-flex items-center gap-1 text-xs font-semibold text-[#2563EB]">
+                            Read story
+                            <ChevronRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
+                          </div>
                         </div>
                       </Link>
                     )
                   })}
                 </div>
-                {!searchQuery && (
-                  <div className="text-center">
-                    <Button asChild className="bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white px-8 py-6 rounded-lg shadow-lg">
-                      <Link href="/news">Read More</Link>
+
+                {!searchQuery ? (
+                  <div className="mt-8 text-center">
+                    <Button
+                      asChild
+                      className="rounded-xl bg-amber-500 px-8 py-6 text-base font-semibold text-slate-900 hover:bg-amber-400"
+                    >
+                      <Link href="/news">All News &amp; Events</Link>
                     </Button>
                   </div>
-                )}
+                ) : null}
               </>
             ) : (
-              <div className="text-center py-8 text-gray-500">
-                {searchQuery ? (
-                  <p>No news found matching "{searchQuery}"</p>
-                ) : (
-                  <p>No featured news available.</p>
-                )}
+              <div className="py-10 text-center text-slate-500">
+                {searchQuery ? <p>No news found.</p> : <p>No featured news available.</p>}
               </div>
             )}
           </CardContent>
@@ -134,4 +131,3 @@ export default function NewsHighlights({ items }: { items: NewsItem[] }) {
     </section>
   )
 }
-

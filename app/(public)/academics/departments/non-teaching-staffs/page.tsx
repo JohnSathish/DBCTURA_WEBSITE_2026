@@ -44,7 +44,7 @@ export default async function NonTeachingStaffsPage() {
   const departments = Object.keys(grouped).sort((a, b) => a.localeCompare(b))
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-slate-50 to-emerald-50 py-8">
+    <div className="min-h-screen bg-brand-surface py-8">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
         <header className="space-y-3 text-center">
           <h1 className="text-4xl font-bold text-slate-900">Non-Teaching Staff</h1>
@@ -63,7 +63,7 @@ export default async function NonTeachingStaffsPage() {
             <section key={department} className="space-y-6">
               <div>
                 <h2 className="text-2xl font-semibold text-slate-900">{department}</h2>
-                <div className="h-1 w-24 bg-gradient-to-r from-blue-500 to-emerald-500 rounded mt-2" />
+                <div className="h-1 w-24 bg-brand-gold rounded mt-2" />
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                 {grouped[department].map((member) => (
@@ -82,7 +82,7 @@ export default async function NonTeachingStaffsPage() {
                             loading="lazy"
                           />
                         ) : (
-                          <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-blue-100 to-emerald-100">
+                          <div className="w-full h-full flex items-center justify-center bg-slate-100">
                             <span className="text-3xl font-semibold text-emerald-700">
                               {member.name.charAt(0).toUpperCase()}
                             </span>

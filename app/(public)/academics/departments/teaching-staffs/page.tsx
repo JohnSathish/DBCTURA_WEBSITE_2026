@@ -57,7 +57,7 @@ export default async function TeachingStaffsPage() {
   })
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50 py-8">
+    <div className="min-h-screen bg-brand-surface py-8">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="mb-8">
           <h1 className="text-4xl font-bold text-gray-900 mb-2">Teaching Staff</h1>
@@ -82,8 +82,8 @@ export default async function TeachingStaffsPage() {
                           loading="lazy"
                         />
                       ) : (
-                        <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-indigo-100 to-purple-100">
-                          <span className="text-2xl font-semibold text-indigo-600">
+                        <div className="w-full h-full flex items-center justify-center bg-slate-100">
+                          <span className="text-2xl font-semibold text-brand-gold">
                             {staff.name.charAt(0).toUpperCase()}
                           </span>
                         </div>
@@ -95,7 +95,7 @@ export default async function TeachingStaffsPage() {
                     <p className="text-xs text-gray-600 line-clamp-2">
                       {staff.designation}
                     </p>
-                    <p className="text-xs text-indigo-600 mt-1">
+                    <p className="text-xs text-brand-gold mt-1">
                       {staff.department}
                     </p>
                   </CardContent>
@@ -120,16 +120,16 @@ export default async function TeachingStaffsPage() {
             <section key={stream} className="mb-12">
               <div className="mb-6">
                 <h2 className="text-3xl font-bold text-gray-900 mb-2">{stream}</h2>
-                <div className="h-1 w-32 bg-gradient-to-r from-indigo-500 to-purple-500 rounded" />
+                <div className="h-1 w-32 bg-brand-gold rounded" />
               </div>
 
               <Tabs defaultValue={streamDepartments[0].department} className="space-y-6">
-                <TabsList className="flex flex-wrap gap-2 bg-white/90 backdrop-blur border border-indigo-100 rounded-lg p-1 shadow-sm">
+                <TabsList className="flex flex-wrap gap-2 bg-white/90 backdrop-blur border border-brand-gold/20 rounded-lg p-1 shadow-sm">
                   {streamDepartments.map(({ department }) => (
                     <TabsTrigger
                       key={department}
                       value={department}
-                      className="px-4 py-2 text-sm font-semibold text-indigo-700 data-[state=active]:text-white data-[state=active]:bg-indigo-600 data-[state=active]:shadow-inner rounded-md transition-all hover:bg-indigo-50"
+                      className="px-4 py-2 text-sm font-semibold text-brand-text data-[state=active]:text-brand-text data-[state=active]:bg-brand-gold data-[state=active]:shadow-inner rounded-md transition-all hover:bg-brand-gold/15"
                     >
                       {department}
                     </TabsTrigger>
@@ -156,8 +156,8 @@ export default async function TeachingStaffsPage() {
                                   loading="lazy"
                                 />
                               ) : (
-                                <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-indigo-100 to-purple-100">
-                                  <span className="text-2xl font-semibold text-indigo-600">
+                                <div className="w-full h-full flex items-center justify-center bg-slate-100">
+                                  <span className="text-2xl font-semibold text-brand-gold">
                                     {member.name.charAt(0).toUpperCase()}
                                   </span>
                                 </div>

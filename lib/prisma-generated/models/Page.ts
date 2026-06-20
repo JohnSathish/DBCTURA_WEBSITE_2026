@@ -28,6 +28,7 @@ export type PageMinAggregateOutputType = {
   title: string | null
   slug: string | null
   content: string | null
+  featuredImage: string | null
   metaTitle: string | null
   metaDescription: string | null
   published: boolean | null
@@ -40,6 +41,7 @@ export type PageMaxAggregateOutputType = {
   title: string | null
   slug: string | null
   content: string | null
+  featuredImage: string | null
   metaTitle: string | null
   metaDescription: string | null
   published: boolean | null
@@ -52,6 +54,7 @@ export type PageCountAggregateOutputType = {
   title: number
   slug: number
   content: number
+  featuredImage: number
   metaTitle: number
   metaDescription: number
   published: number
@@ -66,6 +69,7 @@ export type PageMinAggregateInputType = {
   title?: true
   slug?: true
   content?: true
+  featuredImage?: true
   metaTitle?: true
   metaDescription?: true
   published?: true
@@ -78,6 +82,7 @@ export type PageMaxAggregateInputType = {
   title?: true
   slug?: true
   content?: true
+  featuredImage?: true
   metaTitle?: true
   metaDescription?: true
   published?: true
@@ -90,6 +95,7 @@ export type PageCountAggregateInputType = {
   title?: true
   slug?: true
   content?: true
+  featuredImage?: true
   metaTitle?: true
   metaDescription?: true
   published?: true
@@ -175,6 +181,7 @@ export type PageGroupByOutputType = {
   title: string
   slug: string
   content: string
+  featuredImage: string | null
   metaTitle: string | null
   metaDescription: string | null
   published: boolean
@@ -208,6 +215,7 @@ export type PageWhereInput = {
   title?: Prisma.StringFilter<"Page"> | string
   slug?: Prisma.StringFilter<"Page"> | string
   content?: Prisma.StringFilter<"Page"> | string
+  featuredImage?: Prisma.StringNullableFilter<"Page"> | string | null
   metaTitle?: Prisma.StringNullableFilter<"Page"> | string | null
   metaDescription?: Prisma.StringNullableFilter<"Page"> | string | null
   published?: Prisma.BoolFilter<"Page"> | boolean
@@ -220,6 +228,7 @@ export type PageOrderByWithRelationInput = {
   title?: Prisma.SortOrder
   slug?: Prisma.SortOrder
   content?: Prisma.SortOrder
+  featuredImage?: Prisma.SortOrderInput | Prisma.SortOrder
   metaTitle?: Prisma.SortOrderInput | Prisma.SortOrder
   metaDescription?: Prisma.SortOrderInput | Prisma.SortOrder
   published?: Prisma.SortOrder
@@ -235,6 +244,7 @@ export type PageWhereUniqueInput = Prisma.AtLeast<{
   NOT?: Prisma.PageWhereInput | Prisma.PageWhereInput[]
   title?: Prisma.StringFilter<"Page"> | string
   content?: Prisma.StringFilter<"Page"> | string
+  featuredImage?: Prisma.StringNullableFilter<"Page"> | string | null
   metaTitle?: Prisma.StringNullableFilter<"Page"> | string | null
   metaDescription?: Prisma.StringNullableFilter<"Page"> | string | null
   published?: Prisma.BoolFilter<"Page"> | boolean
@@ -247,6 +257,7 @@ export type PageOrderByWithAggregationInput = {
   title?: Prisma.SortOrder
   slug?: Prisma.SortOrder
   content?: Prisma.SortOrder
+  featuredImage?: Prisma.SortOrderInput | Prisma.SortOrder
   metaTitle?: Prisma.SortOrderInput | Prisma.SortOrder
   metaDescription?: Prisma.SortOrderInput | Prisma.SortOrder
   published?: Prisma.SortOrder
@@ -265,6 +276,7 @@ export type PageScalarWhereWithAggregatesInput = {
   title?: Prisma.StringWithAggregatesFilter<"Page"> | string
   slug?: Prisma.StringWithAggregatesFilter<"Page"> | string
   content?: Prisma.StringWithAggregatesFilter<"Page"> | string
+  featuredImage?: Prisma.StringNullableWithAggregatesFilter<"Page"> | string | null
   metaTitle?: Prisma.StringNullableWithAggregatesFilter<"Page"> | string | null
   metaDescription?: Prisma.StringNullableWithAggregatesFilter<"Page"> | string | null
   published?: Prisma.BoolWithAggregatesFilter<"Page"> | boolean
@@ -277,6 +289,7 @@ export type PageCreateInput = {
   title: string
   slug: string
   content?: string
+  featuredImage?: string | null
   metaTitle?: string | null
   metaDescription?: string | null
   published?: boolean
@@ -289,6 +302,7 @@ export type PageUncheckedCreateInput = {
   title: string
   slug: string
   content?: string
+  featuredImage?: string | null
   metaTitle?: string | null
   metaDescription?: string | null
   published?: boolean
@@ -301,6 +315,7 @@ export type PageUpdateInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   content?: Prisma.StringFieldUpdateOperationsInput | string
+  featuredImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   metaTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   metaDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   published?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -313,6 +328,7 @@ export type PageUncheckedUpdateInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   content?: Prisma.StringFieldUpdateOperationsInput | string
+  featuredImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   metaTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   metaDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   published?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -325,6 +341,7 @@ export type PageCreateManyInput = {
   title: string
   slug: string
   content?: string
+  featuredImage?: string | null
   metaTitle?: string | null
   metaDescription?: string | null
   published?: boolean
@@ -337,6 +354,7 @@ export type PageUpdateManyMutationInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   content?: Prisma.StringFieldUpdateOperationsInput | string
+  featuredImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   metaTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   metaDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   published?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -349,6 +367,7 @@ export type PageUncheckedUpdateManyInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   content?: Prisma.StringFieldUpdateOperationsInput | string
+  featuredImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   metaTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   metaDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   published?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -361,6 +380,7 @@ export type PageCountOrderByAggregateInput = {
   title?: Prisma.SortOrder
   slug?: Prisma.SortOrder
   content?: Prisma.SortOrder
+  featuredImage?: Prisma.SortOrder
   metaTitle?: Prisma.SortOrder
   metaDescription?: Prisma.SortOrder
   published?: Prisma.SortOrder
@@ -373,6 +393,7 @@ export type PageMaxOrderByAggregateInput = {
   title?: Prisma.SortOrder
   slug?: Prisma.SortOrder
   content?: Prisma.SortOrder
+  featuredImage?: Prisma.SortOrder
   metaTitle?: Prisma.SortOrder
   metaDescription?: Prisma.SortOrder
   published?: Prisma.SortOrder
@@ -385,6 +406,7 @@ export type PageMinOrderByAggregateInput = {
   title?: Prisma.SortOrder
   slug?: Prisma.SortOrder
   content?: Prisma.SortOrder
+  featuredImage?: Prisma.SortOrder
   metaTitle?: Prisma.SortOrder
   metaDescription?: Prisma.SortOrder
   published?: Prisma.SortOrder
@@ -407,6 +429,7 @@ export type PageSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   title?: boolean
   slug?: boolean
   content?: boolean
+  featuredImage?: boolean
   metaTitle?: boolean
   metaDescription?: boolean
   published?: boolean
@@ -419,6 +442,7 @@ export type PageSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   title?: boolean
   slug?: boolean
   content?: boolean
+  featuredImage?: boolean
   metaTitle?: boolean
   metaDescription?: boolean
   published?: boolean
@@ -431,6 +455,7 @@ export type PageSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   title?: boolean
   slug?: boolean
   content?: boolean
+  featuredImage?: boolean
   metaTitle?: boolean
   metaDescription?: boolean
   published?: boolean
@@ -443,6 +468,7 @@ export type PageSelectScalar = {
   title?: boolean
   slug?: boolean
   content?: boolean
+  featuredImage?: boolean
   metaTitle?: boolean
   metaDescription?: boolean
   published?: boolean
@@ -450,7 +476,7 @@ export type PageSelectScalar = {
   updatedAt?: boolean
 }
 
-export type PageOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "title" | "slug" | "content" | "metaTitle" | "metaDescription" | "published" | "createdAt" | "updatedAt", ExtArgs["result"]["page"]>
+export type PageOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "title" | "slug" | "content" | "featuredImage" | "metaTitle" | "metaDescription" | "published" | "createdAt" | "updatedAt", ExtArgs["result"]["page"]>
 
 export type $PagePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Page"
@@ -460,6 +486,10 @@ export type $PagePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     title: string
     slug: string
     content: string
+    /**
+     * Optional hero/portrait image URL or site path (e.g. /uploads/...). Used for Principal’s Message when slug is principal-message.
+     */
+    featuredImage: string | null
     metaTitle: string | null
     metaDescription: string | null
     published: boolean
@@ -892,6 +922,7 @@ export interface PageFieldRefs {
   readonly title: Prisma.FieldRef<"Page", 'String'>
   readonly slug: Prisma.FieldRef<"Page", 'String'>
   readonly content: Prisma.FieldRef<"Page", 'String'>
+  readonly featuredImage: Prisma.FieldRef<"Page", 'String'>
   readonly metaTitle: Prisma.FieldRef<"Page", 'String'>
   readonly metaDescription: Prisma.FieldRef<"Page", 'String'>
   readonly published: Prisma.FieldRef<"Page", 'Boolean'>

@@ -6,11 +6,53 @@ import { NavigationItem } from "@/lib/navigation"
 import { getNavigationItems } from "@/lib/navigation-server"
 import { findNavigationItemByPath, findParentNavigationItem } from "@/lib/navigation-helpers"
 import CollapsibleSidebar from "@/components/layout/CollapsibleSidebar"
+import {
+  ArrowLeft,
+  ChevronRight,
+  Sparkles,
+  Target,
+  BadgeCheck,
+  Link2,
+  BookOpen,
+  Settings,
+  History,
+  Users,
+  UserSquare2,
+} from "lucide-react"
 
 type SidebarNavItem = {
   href?: string
   label: string
   children?: SidebarNavItem[]
+}
+
+function iconForAboutHref(href?: string) {
+  switch (href) {
+    case "/about/founder":
+      return <Sparkles className="h-4 w-4 shrink-0" />
+    case "/about/rector-major":
+      return <UserSquare2 className="h-4 w-4 shrink-0" />
+    case "/about/vision-mission":
+      return <Target className="h-4 w-4 shrink-0" />
+    case "/about/objectives":
+      return <BadgeCheck className="h-4 w-4 shrink-0" />
+    case "/about/affiliation":
+      return <Link2 className="h-4 w-4 shrink-0" />
+    case "/about/philosophy":
+      return <BookOpen className="h-4 w-4 shrink-0" />
+    case "/about/management":
+      return <Settings className="h-4 w-4 shrink-0" />
+    case "/about/history":
+      return <History className="h-4 w-4 shrink-0" />
+    case "/about/former-principals":
+      return <Users className="h-4 w-4 shrink-0" />
+    case "/about/former-vice-principals":
+      return <Users className="h-4 w-4 shrink-0" />
+    case "/about/db-higher-education":
+      return <BookOpen className="h-4 w-4 shrink-0" />
+    default:
+      return null
+  }
 }
 
 function toSidebarNavItems(items?: NavigationItem[] | null): SidebarNavItem[] {
@@ -143,8 +185,40 @@ export default async function NestedPage({
   // If page exists and is published, show it
   if (page && page.published) {
     return (
-      <div className="bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50 min-h-screen">
+      <div className="bg-brand-surface min-h-screen">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+          {/* Header row */}
+          <div className="mb-6">
+            {parentNavItem?.href ? (
+              <div className="mb-3">
+                <Link
+                  href={parentNavItem.href}
+                  className="inline-flex items-center gap-2 text-sm text-brand-text/70 hover:text-brand-hover transition-colors"
+                >
+                  <ArrowLeft className="h-4 w-4" />
+                  Back to {parentNavItem.label}
+                </Link>
+              </div>
+            ) : null}
+
+            {/* Compact breadcrumb-style path (in addition to the global breadcrumb) */}
+            <div className="flex flex-wrap items-center gap-x-2 gap-y-1 text-xs text-slate-500">
+              <Link href="/" className="hover:text-brand-hover transition-colors">
+                Home
+              </Link>
+              <ChevronRight className="h-3.5 w-3.5 text-slate-400" />
+              {parentNavItem?.href ? (
+                <>
+                  <Link href={parentNavItem.href} className="hover:text-brand-hover transition-colors">
+                    {parentNavItem.label}
+                  </Link>
+                  <ChevronRight className="h-3.5 w-3.5 text-slate-400" />
+                </>
+              ) : null}
+              <span className="text-slate-700 font-medium">{page.title}</span>
+            </div>
+          </div>
+
           {/* Mobile Toggle Button - Outside grid */}
           {parentNavItem && parentNavItem.children && parentNavItem.children.length > 0 && (
             <div className="lg:hidden mb-4">
@@ -160,19 +234,24 @@ export default async function NestedPage({
             {/* Sidebar with child menus */}
             {parentNavItem && parentNavItem.children && parentNavItem.children.length > 0 && (
               <div className="hidden lg:block lg:col-span-1">
-                <div className="sticky top-24 bg-gradient-to-br from-white via-indigo-50/50 to-purple-50/50 border-2 border-indigo-200/50 rounded-lg shadow-lg p-5 backdrop-blur-sm">
-                  <h3 className="font-bold text-lg mb-4 bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">{parentNavItem.label}</h3>
+                <div className="sticky top-24 bg-white/85 backdrop-blur border border-slate-200 rounded-2xl shadow-sm p-5">
+                  <h3 className="font-bold text-lg mb-4 text-brand-text border-b border-slate-200 pb-3">
+                    {parentNavItem.label}
+                  </h3>
                   <nav className="space-y-2">
                   {parentNavItem.children.map((child) => (
                       <Link
                       key={child.href ?? child.label}
                       href={child.href ?? "#"}
-                        className={`block px-4 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 ${
+                        className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 ${
                           path === child.href
-                            ? "bg-gradient-to-r from-indigo-500 to-purple-500 text-white shadow-md transform scale-[1.02]"
-                            : "text-gray-700 hover:bg-gradient-to-r hover:from-indigo-100 hover:to-purple-100 hover:text-indigo-700 hover:shadow-sm"
+                            ? "bg-brand-gold/90 text-brand-text shadow-sm ring-1 ring-brand-gold border-l-4 border-brand-hover"
+                            : "text-slate-700 hover:bg-slate-100 hover:text-brand-hover"
                         }`}
                       >
+                        <span className={`${path === child.href ? "text-brand-maroon" : "text-slate-500"} transition-colors`}>
+                          {parentNavItem?.href === "/about" ? iconForAboutHref(child.href ?? undefined) : null}
+                        </span>
                         {child.label}
                       </Link>
                     ))}
@@ -183,12 +262,34 @@ export default async function NestedPage({
 
             {/* Main Content */}
             <article className={parentNavItem && parentNavItem.children && parentNavItem.children.length > 0 ? "lg:col-span-3" : "lg:col-span-4 max-w-4xl mx-auto"}>
-              <div className="bg-white/80 backdrop-blur-sm rounded-xl shadow-lg border border-white/50 p-8">
-                <h1 className="text-4xl font-bold mb-6 bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 bg-clip-text text-transparent">{page.title}</h1>
+              <div className="relative overflow-hidden bg-white/85 backdrop-blur-sm rounded-2xl shadow-lg border border-white/60">
+                <div className="pointer-events-none absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-brand-gold via-brand-sun to-brand-gold" />
+                <div className="p-6 sm:p-8">
+                  <div className="mb-6">
+                    {parentNavItem ? (
+                      <div className="inline-flex items-center rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-700">
+                        {parentNavItem.label}
+                      </div>
+                    ) : null}
+                    <h1 className="mt-3 text-3xl sm:text-4xl font-bold text-brand-text tracking-tight">{page.title}</h1>
+                    <p className="mt-2 text-sm sm:text-base text-slate-500">
+                      Updated content from the official college website.
+                    </p>
+                  </div>
+
                 <div
-                  className="prose prose-lg max-w-none prose-headings:text-gray-900 prose-p:text-gray-700 prose-a:text-indigo-600 hover:prose-a:text-purple-600"
+                  className="prose prose-slate max-w-none prose-headings:text-slate-900 prose-headings:tracking-tight
+                    prose-p:text-slate-700 prose-p:leading-relaxed
+                    prose-a:text-brand-hover hover:prose-a:text-brand-text prose-a:underline underline-offset-2
+                    prose-strong:text-slate-900
+                    prose-blockquote:border-l-brand-gold prose-blockquote:bg-slate-50 prose-blockquote:py-1 prose-blockquote:px-4 prose-blockquote:rounded-r-xl
+                    prose-ul:my-4 prose-ol:my-4
+                    prose-li:my-1
+                    [&_h2]:mt-8 [&_h2]:mb-3 [&_h2]:text-2xl
+                    [&_h3]:mt-6 [&_h3]:mb-2 [&_h3]:text-xl"
                   dangerouslySetInnerHTML={{ __html: page.content }}
                 />
+                </div>
               </div>
             </article>
           </div>
@@ -199,7 +300,7 @@ export default async function NestedPage({
 
   // Show placeholder if page doesn't exist or isn't published
   return (
-    <div className="bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50 min-h-screen">
+    <div className="bg-brand-surface min-h-screen">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         {/* Mobile Toggle Button - Outside grid */}
         {parentNavItem && parentNavItem.children && parentNavItem.children.length > 0 && (
@@ -216,8 +317,8 @@ export default async function NestedPage({
           {/* Sidebar with child menus */}
           {parentNavItem && parentNavItem.children && parentNavItem.children.length > 0 && (
             <div className="hidden lg:block lg:col-span-1">
-              <div className="sticky top-24 bg-gradient-to-br from-white via-indigo-50/50 to-purple-50/50 border-2 border-indigo-200/50 rounded-lg shadow-lg p-5 backdrop-blur-sm">
-                <h3 className="font-bold text-lg mb-4 bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">{parentNavItem.label}</h3>
+              <div className="sticky top-24 bg-white border border-slate-200 rounded-lg shadow-sm p-5">
+                <h3 className="font-bold text-lg mb-4 text-brand-text border-b border-slate-200 pb-2">{parentNavItem.label}</h3>
                 <nav className="space-y-2">
                   {parentNavItem.children.map((child) => (
                     <Link
@@ -225,8 +326,8 @@ export default async function NestedPage({
                       href={child.href ?? "#"}
                       className={`block px-4 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 ${
                         path === child.href
-                          ? "bg-gradient-to-r from-indigo-500 to-purple-500 text-white shadow-md transform scale-[1.02]"
-                          : "text-gray-700 hover:bg-gradient-to-r hover:from-indigo-100 hover:to-purple-100 hover:text-indigo-700 hover:shadow-sm"
+                          ? "bg-brand-gold text-brand-text shadow-sm border-l-4 border-brand-hover"
+                          : "text-slate-700 hover:bg-slate-100 hover:text-brand-hover"
                       }`}
                     >
                       {child.label}
@@ -240,29 +341,29 @@ export default async function NestedPage({
           {/* Main Content */}
           <article className={parentNavItem && parentNavItem.children && parentNavItem.children.length > 0 ? "lg:col-span-3" : "lg:col-span-4 max-w-4xl mx-auto"}>
             <div className="bg-white/80 backdrop-blur-sm rounded-xl shadow-lg border border-white/50 p-8">
-              <h1 className="text-4xl font-bold mb-6 bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 bg-clip-text text-transparent">{navItem.label}</h1>
+              <h1 className="text-4xl font-bold mb-6 text-brand-text">{navItem.label}</h1>
               
               {page && !page.published ? (
-                <div className="bg-gradient-to-r from-yellow-50 to-orange-50 border-l-4 border-yellow-400 p-4 mb-6 rounded-r-lg shadow-sm">
+                <div className="bg-amber-50 border-l-4 border-amber-400 p-4 mb-6 rounded-r-md">
                   <p className="text-yellow-800 font-medium">This page is currently unpublished.</p>
                 </div>
               ) : (
-                <div className="bg-gradient-to-r from-blue-50 to-indigo-50 border-l-4 border-blue-400 p-4 mb-6 rounded-r-lg shadow-sm">
-                  <p className="text-blue-800 font-medium">
+                <div className="bg-slate-100 border-l-4 border-brand-gold p-4 mb-6 rounded-r-md">
+                  <p className="text-brand-text font-medium">
                     This page hasn't been created yet. Please create it from the admin panel.
                   </p>
                 </div>
               )}
 
               {navItem.children && navItem.children.length > 0 && (
-                <div className="mt-8 bg-gradient-to-br from-purple-50 to-pink-50 rounded-lg p-6 border border-purple-200">
-                  <h2 className="text-2xl font-semibold mb-4 text-purple-900">Subpages</h2>
+                <div className="mt-8 bg-brand-surface rounded-lg p-6 border border-slate-200">
+                  <h2 className="text-2xl font-semibold mb-4 text-brand-text">Subpages</h2>
                   <ul className="space-y-2">
                     {navItem.children.map((child) => (
                       <li key={child.href ?? child.label}>
                         <Link
                           href={child.href ?? "#"}
-                          className="inline-flex items-center px-4 py-2 bg-white hover:bg-gradient-to-r hover:from-indigo-100 hover:to-purple-100 text-indigo-700 hover:text-purple-700 rounded-lg transition-all duration-200 shadow-sm hover:shadow-md"
+                          className="inline-flex items-center px-4 py-2 bg-white border border-slate-200 text-brand-text hover:text-brand-hover hover:bg-brand-surface rounded-md transition-colors"
                         >
                           {child.label}
                         </Link>
@@ -273,13 +374,13 @@ export default async function NestedPage({
               )}
 
               {!page && (
-                <div className="mt-8 p-6 bg-gradient-to-br from-gray-50 to-gray-100 rounded-lg border-2 border-gray-200 shadow-sm">
+                <div className="mt-8 p-6 bg-brand-surface rounded-lg border border-slate-200">
                   <p className="text-gray-700 mb-4">
-                    To add content to this page, please visit the admin panel and create a new page with the slug: <code className="bg-white px-2 py-1 rounded border border-gray-300 text-indigo-600 font-mono text-sm">{path}</code>
+                    To add content to this page, please visit the admin panel and create a new page with the slug: <code className="bg-white px-2 py-1 rounded border border-gray-300 text-brand-text font-mono text-sm">{path}</code>
                   </p>
                   <Link
                     href="/admin/pages/new"
-                    className="inline-block bg-gradient-to-r from-indigo-600 to-purple-600 text-white px-6 py-3 rounded-lg hover:from-indigo-700 hover:to-purple-700 transition-all duration-200 shadow-md hover:shadow-lg font-medium"
+                    className="inline-block bg-brand-gold text-brand-text px-6 py-3 rounded-md hover:bg-brand-gold/90 transition-colors font-semibold border border-brand-gold"
                   >
                     Create This Page
                   </Link>

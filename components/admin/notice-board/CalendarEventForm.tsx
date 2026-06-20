@@ -197,8 +197,8 @@ export default function CalendarEventForm() {
                     className={cn(
                       "aspect-square border rounded-md text-sm transition-colors",
                       isPast && "opacity-50 cursor-not-allowed bg-gray-100",
-                      !isPast && "hover:bg-purple-50 cursor-pointer",
-                      isSelected && "bg-purple-100 border-purple-400 ring-2 ring-purple-300",
+                      !isPast && "hover:bg-brand-hover/10 cursor-pointer",
+                      isSelected && "bg-brand-hover/15 border-brand-hover ring-2 ring-brand-hover/40",
                       date.getDate() === today.getDate() &&
                         date.getMonth() === today.getMonth() &&
                         date.getFullYear() === today.getFullYear() &&
@@ -208,7 +208,7 @@ export default function CalendarEventForm() {
                     <div className="flex flex-col items-center justify-center h-full">
                       <span>{date.getDate()}</span>
                       {isSelected && event?.title && (
-                        <span className="text-[8px] text-purple-600 truncate w-full px-1">
+                        <span className="text-[8px] text-brand-hover truncate w-full px-1">
                           {event.title}
                         </span>
                       )}
@@ -235,8 +235,8 @@ export default function CalendarEventForm() {
                     <Card key={dateStr} className="p-4">
                       <div className="space-y-3">
                         <div className="flex items-center gap-2">
-                          <Calendar className="h-4 w-4 text-purple-600" />
-                          <span className="font-medium text-purple-900">
+                          <Calendar className="h-4 w-4 text-brand-hover" />
+                          <span className="font-medium text-brand-text">
                             {new Date(dateStr).toLocaleDateString("en-US", {
                               weekday: "long",
                               year: "numeric",

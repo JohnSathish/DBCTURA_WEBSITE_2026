@@ -6,7 +6,7 @@ import AdminLayout from "@/components/admin/AdminLayout"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Plus, Edit, Calendar } from "lucide-react"
+import { Plus, Edit, Calendar, FileText } from "lucide-react"
 import {
   Table,
   TableBody,
@@ -40,6 +40,12 @@ export default async function NoticeBoardPage() {
             <p className="text-gray-600 mt-2">Manage upcoming events for the notice board</p>
           </div>
           <div className="flex gap-2">
+            <Link href="/admin/notice-board/notices">
+              <Button variant="outline">
+                <FileText className="h-4 w-4 mr-2" />
+                Notices
+              </Button>
+            </Link>
             <Link href="/admin/notice-board/calendar">
               <Button variant="outline">
                 <Calendar className="h-4 w-4 mr-2" />

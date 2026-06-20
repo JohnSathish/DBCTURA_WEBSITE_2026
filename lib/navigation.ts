@@ -301,6 +301,7 @@ export const defaultNavigation: NavigationItem[] = [
   },
   { href: "/downloads", label: "Downloads" },
   { href: "/gallery", label: "Gallery" },
+  { href: "/alumni", label: "Alumni" },
+  { href: "/contact", label: "Contact Us" },
 ]
-
 

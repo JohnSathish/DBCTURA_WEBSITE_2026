@@ -21,10 +21,10 @@ export default async function DashboardPage() {
   ])
 
   const stats = [
-    { label: "Pages", value: pagesCount, icon: FileText, color: "bg-blue-500" },
-    { label: "News", value: newsCount, icon: Newspaper, color: "bg-green-500" },
-    { label: "Gallery Images", value: galleryCount, icon: Image, color: "bg-purple-500" },
-    { label: "Downloads", value: downloadsCount, icon: Download, color: "bg-orange-500" },
+    { label: "Pages", value: pagesCount, icon: FileText, color: "bg-brand-navy", iconClass: "text-white" },
+    { label: "News", value: newsCount, icon: Newspaper, color: "bg-brand-gold", iconClass: "text-brand-text" },
+    { label: "Gallery Images", value: galleryCount, icon: Image, color: "bg-brand-navy", iconClass: "text-white" },
+    { label: "Downloads", value: downloadsCount, icon: Download, color: "bg-brand-green", iconClass: "text-white" },
   ]
 
   return (
@@ -45,7 +45,7 @@ export default async function DashboardPage() {
                     {stat.label}
                   </CardTitle>
                   <div className={`${stat.color} p-2 rounded-lg`}>
-                    <Icon className="h-4 w-4 text-white" />
+                    <Icon className={`h-4 w-4 ${stat.iconClass}`} />
                   </div>
                 </CardHeader>
                 <CardContent>

@@ -26,6 +26,8 @@ model Page {
   title          String
   slug           String   @unique
   content        String   @default("")
+  /// Optional hero/portrait image URL or site path (e.g. /uploads/...). Used for Principal’s Message when slug is principal-message.
+  featuredImage  String?
   metaTitle      String?
   metaDescription String?
   published      Boolean  @default(false)
@@ -112,6 +114,41 @@ model NoticeBoardEvent {
   published   Boolean  @default(true)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+}
+
+model NoticeBoardNotice {
+  id          String   @id @default(cuid())
+  title       String
+  content     String?  // for Text notices (or extra description)
+  noticeType  String   // "document" | "image" | "text"
+  pdfUrl      String?  // required when noticeType == "document"
+  imageUrl    String?  // optional when noticeType == "image"
+  publishDate DateTime @default(now())
+  expiryDate  DateTime?
+  active      Boolean  @default(true)
+  important   Boolean  @default(false)
+  pinned      Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model CourseApplication {
+  id             String   @id @default(cuid())
+  applicationNo  String   @unique
+  studentName    String
+  mobile         String
+  email          String
+  courseCode     String
+  courseName     String
+  batchYear      Int      @default(0)
+  batchNo        Int      @default(1) // 1 | 2 | 3
+  department     String?
+  qualification  String?
+  mode           String   // "online" | "offline"
+  message        String?
+  status         String   @default("Pending") // Pending | Approved | Rejected
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
 }
 
 model FlashNews {
@@ -223,4 +260,50 @@ model BloodDonor {
   ipAddress         String?
   userAgent         String?
   createdAt         DateTime @default(now())
+}
+
+/// Public alumni registration submissions (exportable by admin).
+model AlumniRegistration {
+  id        String @id @default(cuid())
+  createdAt DateTime @default(now())
+
+  fullName   String
+  gender     String
+  dateOfBirth DateTime
+  profilePhoto String?
+
+  email              String
+  mobileNumber       String
+  alternatePhone     String?
+  currentAddress     String
+  cityStateCountry   String
+
+  courseProgram         String
+  department            String
+  yearOfAdmission       Int
+  yearOfGraduation      Int
+  enrollmentRollNumber  String
+
+  currentOccupation        String
+  companyOrganizationName  String?
+  jobTitle                 String?
+  workLocation             String?
+  yearsOfExperience        String?
+
+  linkedInProfile       String?
+  socialMedia           String?
+  personalWebsite     String?
+
+  willingToMentor       Boolean @default(false)
+  interestedInEvents    Boolean @default(false)
+  areasOfInterest       String?
+
+  achievementsAwards    String?
+  suggestionsFeedback   String?
+  messageToInstitution  String?
+
+  declarationAccepted Boolean @default(false)
+
+  ipAddress  String?
+  userAgent  String?
 }

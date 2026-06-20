@@ -30,7 +30,7 @@ If the project is **not on GitHub/GitLab yet**: create a repo, push your code fr
 
 | Item | Example | Your value |
 |------|---------|------------|
-| **Domain name** (optional) | `donbosco.yourdomain.com` or `yourdomain.com` | `https://donboscocollegetura.cloud` ✅ |
+| **Domain name** (optional) | `donbosco.yourdomain.com` or `yourdomain.com` | `https://donboscocollege.ac.in` ✅ |
 | **Or use IP only** | `http://82.25.110.120` | Works for testing |
 
 - **NEXTAUTH_URL** on the server must match how you open the site (e.g. `https://yourdomain.com` or `http://82.25.110.120`).

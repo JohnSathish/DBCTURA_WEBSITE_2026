@@ -36,7 +36,7 @@ export default function HeroSlider({
   }
 
   return (
-    <div className="relative w-full overflow-hidden bg-slate-900" suppressHydrationWarning>
+    <div className="relative w-full overflow-hidden bg-brand-navy-deep" suppressHydrationWarning>
       <div className="relative h-[360px] md:h-[580px] lg:h-[720px]">
         <Image
           src={current.src}
@@ -47,8 +47,7 @@ export default function HeroSlider({
           suppressHydrationWarning
         />
 
-        {/* Overlay gradient for text readability */}
-        <div className="absolute inset-0 bg-gradient-to-t from-slate-900/60 via-slate-900/20 to-transparent" />
+        {/* Overlay removed: keep hero image true-to-color */}
 
         {/* Controls */}
         {slides.length > 1 && (
@@ -79,7 +78,7 @@ export default function HeroSlider({
           <div className="absolute inset-0 flex items-end md:items-center justify-center z-20">
             <div className="px-4 sm:px-6 lg:px-8 w-full">
               <div className="flex justify-center pb-16 md:pb-0">
-                <span className="inline-block bg-slate-900/70 text-white px-4 md:px-6 py-2 md:py-3 rounded text-sm md:text-xl font-medium tracking-wide">
+                <span className="inline-block bg-brand-navy-deep/88 text-white border border-brand-sun/40 px-4 md:px-6 py-2 md:py-3 rounded text-sm md:text-xl font-medium tracking-wide shadow-lg">
                   {current.caption}
                 </span>
               </div>

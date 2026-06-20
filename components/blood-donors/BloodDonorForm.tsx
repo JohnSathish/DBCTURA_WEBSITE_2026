@@ -277,12 +277,12 @@ export default function BloodDonorForm() {
           {errors.medicalNotes ? <p className="text-sm text-rose-600">{errors.medicalNotes.message}</p> : null}
         </section>
 
-        <section className="rounded-xl border border-slate-200 bg-slate-50/70 p-4 space-y-3">
+        <section className="rounded-xl border border-slate-200 bg-brand-surface/70 p-4 space-y-3">
           <div className="flex items-start gap-3">
             <input
               id="consent"
               type="checkbox"
-              className="mt-1 h-4 w-4 shrink-0 rounded border-slate-300 text-indigo-600 focus:ring-indigo-500"
+              className="mt-1 h-4 w-4 shrink-0 rounded border-slate-300 text-brand-hover focus:ring-brand-hover"
               {...register("consent")}
             />
             <label htmlFor="consent" className={cn("text-sm text-slate-700", errors.consent && "text-rose-600")}>
@@ -310,7 +310,7 @@ export default function BloodDonorForm() {
       </form>
 
       {successInfo ? (
-        <div className="rounded-2xl border border-emerald-200 bg-emerald-50 px-6 py-5 shadow-sm">
+        <div className="rounded-2xl border border-brand-green/35 bg-brand-green/10 px-6 py-5 shadow-sm">
           <h2 className="text-lg font-semibold text-emerald-900">Thank you for registering!</h2>
           <p className="text-sm text-emerald-700 mt-1">
             Your donor ID is <span className="font-mono font-semibold">{successInfo.id}</span>. Submitted on{" "}

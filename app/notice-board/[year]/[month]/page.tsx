@@ -4,15 +4,16 @@ import { Button } from "@/components/ui/button"
 import Link from "next/link"
 import { Calendar } from "lucide-react"
 import { notFound } from "next/navigation"
+import BreadcrumbTitleSetter from "@/components/layout/BreadcrumbTitleSetter"
 
 function CalendarBadge({ date }: { date: Date }) {
   const day = date.getDate().toString().padStart(2, "0")
   const month = date.toLocaleString("en-US", { month: "short" }).toUpperCase()
   return (
-    <div className="flex items-center justify-center w-14 h-14 rounded-full bg-gradient-to-br from-purple-100 to-pink-100 border-2 border-purple-300 shadow-md">
+    <div className="flex items-center justify-center w-14 h-14 rounded-full bg-slate-100 border border-slate-300">
       <div className="text-center leading-tight">
-        <div className="text-[10px] text-purple-700 font-semibold -mb-0.5">{month}</div>
-        <div className="text-sm font-bold text-purple-900">{day}</div>
+        <div className="text-[10px] text-slate-500 font-semibold -mb-0.5">{month}</div>
+        <div className="text-sm font-bold text-brand-text">{day}</div>
       </div>
     </div>
   )
@@ -58,13 +59,14 @@ export default async function EventsByMonthPage({
   const monthName = startDate.toLocaleString("en-US", { month: "long", year: "numeric" })
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-indigo-50 to-blue-50 py-8 md:py-12">
+    <div className="min-h-screen bg-brand-surface py-8 md:py-12">
+      <BreadcrumbTitleSetter title={monthName} />
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="mb-8">
-          <Link href="/" className="text-purple-600 hover:text-purple-700 mb-4 inline-block">
+          <Link href="/" className="text-brand-text hover:text-brand-hover mb-4 inline-block">
             ← Back to Home
           </Link>
-          <h1 className="text-3xl md:text-4xl font-bold text-purple-900 mb-2">
+          <h1 className="text-3xl md:text-4xl font-bold text-brand-text mb-2">
             Notice Board Events
           </h1>
           <p className="text-lg text-gray-600">{monthName}</p>
@@ -81,14 +83,14 @@ export default async function EventsByMonthPage({
             {events.map((event) => {
               const eventDate = new Date(event.eventDate)
               return (
-                <Card key={event.id} className="border-2 border-purple-200 shadow-md hover:shadow-lg transition-shadow">
+                <Card key={event.id} className="border-2 border-brand-hover/20 shadow-md hover:shadow-lg transition-shadow">
                   <CardContent className="p-6">
                     <div className="flex gap-4">
                       <div className="shrink-0">
                         <CalendarBadge date={eventDate} />
                       </div>
                       <div className="flex-1">
-                        <h3 className="text-xl font-bold text-purple-900 mb-2">
+                        <h3 className="text-xl font-bold text-brand-text mb-2">
                           {event.title}
                         </h3>
                         {event.description && (

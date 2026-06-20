@@ -298,7 +298,7 @@ export default function QuestionBankManager() {
                       </TableCell>
                       <TableCell>{paper.department}</TableCell>
                       <TableCell>
-                        <a href={paper.fileUrl} target="_blank" rel="noopener noreferrer" className="text-indigo-600 hover:underline">
+                        <a href={paper.fileUrl} target="_blank" rel="noopener noreferrer" className="text-brand-hover hover:underline">
                           {paper.originalName}
                         </a>
                       </TableCell>

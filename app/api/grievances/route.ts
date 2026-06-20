@@ -159,7 +159,7 @@ export async function POST(request: NextRequest) {
 
     try {
       await sendMail({
-        to: process.env.GRIEVANCE_FORWARD_TO || "johnsathish16@gmail.com",
+        to: process.env.GRIEVANCE_FORWARD_TO || "principal@donboscocollege.ac.in",
         subject: `New grievance submitted by ${payload.fullName}`,
         text: [
           `Category: ${payload.category}`,

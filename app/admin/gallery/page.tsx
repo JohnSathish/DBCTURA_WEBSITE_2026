@@ -60,7 +60,7 @@ export default async function GalleryPage() {
                         className="object-cover"
                       />
                     ) : (
-                      <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-blue-100 to-purple-100">
+                      <div className="w-full h-full flex items-center justify-center bg-slate-100">
                         <FolderOpen className="h-16 w-16 text-blue-500" />
                       </div>
                     )}

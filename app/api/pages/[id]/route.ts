@@ -39,7 +39,7 @@ export async function PUT(
   try {
     const { id } = await params
     const data = await request.json()
-    const { title, slug, content, metaTitle, metaDescription, published } = data
+    const { title, slug, content, metaTitle, metaDescription, published, featuredImage } = data
 
     const page = await prisma.page.update({
       where: { id },
@@ -47,6 +47,7 @@ export async function PUT(
         title,
         slug,
         content,
+        featuredImage: featuredImage?.trim() ? featuredImage.trim() : null,
         metaTitle,
         metaDescription,
         published,

@@ -1,32 +1,16 @@
 "use client"
 
-import { useEffect, useState } from "react"
 import Topbar from "@/components/layout/Topbar"
 import Header from "@/components/layout/Header"
 import Breadcrumb from "@/components/layout/Breadcrumb"
 import { defaultNavigation, type NavigationItem } from "@/lib/navigation"
+import { ensurePublicNavItems } from "@/lib/navigation-merge"
+import { useEffect, useState } from "react"
 
 export default function StickyHeaderWrapper() {
-  const [topbarHeight, setTopbarHeight] = useState(50)
-  const [navigationItems, setNavigationItems] = useState<NavigationItem[]>(defaultNavigation)
-
-  useEffect(() => {
-    const updateHeight = () => {
-      const topbar = document.getElementById("topbar")
-      if (topbar) {
-        setTopbarHeight(topbar.offsetHeight)
-      }
-    }
-
-    updateHeight()
-    window.addEventListener("resize", updateHeight)
-    const timeout = setTimeout(updateHeight, 100)
-
-    return () => {
-      window.removeEventListener("resize", updateHeight)
-      clearTimeout(timeout)
-    }
-  }, [])
+  const [navigationItems, setNavigationItems] = useState<NavigationItem[]>(() =>
+    ensurePublicNavItems(defaultNavigation)
+  )
 
   useEffect(() => {
     let cancelled = false
@@ -36,7 +20,7 @@ export default function StickyHeaderWrapper() {
         const response = await fetch("/api/navigation", { cache: "no-store" })
         const data = await response.json()
         if (!cancelled && Array.isArray(data.items) && data.items.length > 0) {
-          setNavigationItems(data.items)
+          setNavigationItems(ensurePublicNavItems(data.items))
         }
       } catch (error) {
         console.error("Failed to load navigation menus:", error)
@@ -52,12 +36,8 @@ export default function StickyHeaderWrapper() {
 
   return (
     <>
-      <div id="topbar" className="sticky top-0 z-[60]" suppressHydrationWarning>
-        <Topbar />
-      </div>
-      <div className="sticky z-50" style={{ top: `${topbarHeight}px` }} suppressHydrationWarning>
-        <Header navigationItems={navigationItems} />
-      </div>
+      <Topbar />
+      <Header navigationItems={navigationItems} />
       <Breadcrumb navigationItems={navigationItems} />
     </>
   )

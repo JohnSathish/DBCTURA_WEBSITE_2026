@@ -398,6 +398,8 @@ export const ModelName = {
   Setting: 'Setting',
   Testimonial: 'Testimonial',
   NoticeBoardEvent: 'NoticeBoardEvent',
+  NoticeBoardNotice: 'NoticeBoardNotice',
+  CourseApplication: 'CourseApplication',
   FlashNews: 'FlashNews',
   HeroSlide: 'HeroSlide',
   ShortTermCourse: 'ShortTermCourse',
@@ -406,7 +408,8 @@ export const ModelName = {
   NavigationMenu: 'NavigationMenu',
   QuestionPaper: 'QuestionPaper',
   Grievance: 'Grievance',
-  BloodDonor: 'BloodDonor'
+  BloodDonor: 'BloodDonor',
+  AlumniRegistration: 'AlumniRegistration'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -422,7 +425,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "page" | "news" | "galleryAlbum" | "galleryImage" | "download" | "setting" | "testimonial" | "noticeBoardEvent" | "flashNews" | "heroSlide" | "shortTermCourse" | "popupBanner" | "staffProfile" | "navigationMenu" | "questionPaper" | "grievance" | "bloodDonor"
+    modelProps: "user" | "page" | "news" | "galleryAlbum" | "galleryImage" | "download" | "setting" | "testimonial" | "noticeBoardEvent" | "noticeBoardNotice" | "courseApplication" | "flashNews" | "heroSlide" | "shortTermCourse" | "popupBanner" | "staffProfile" | "navigationMenu" | "questionPaper" | "grievance" | "bloodDonor" | "alumniRegistration"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1092,6 +1095,154 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    NoticeBoardNotice: {
+      payload: Prisma.$NoticeBoardNoticePayload<ExtArgs>
+      fields: Prisma.NoticeBoardNoticeFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.NoticeBoardNoticeFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NoticeBoardNoticePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.NoticeBoardNoticeFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NoticeBoardNoticePayload>
+        }
+        findFirst: {
+          args: Prisma.NoticeBoardNoticeFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NoticeBoardNoticePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.NoticeBoardNoticeFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NoticeBoardNoticePayload>
+        }
+        findMany: {
+          args: Prisma.NoticeBoardNoticeFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NoticeBoardNoticePayload>[]
+        }
+        create: {
+          args: Prisma.NoticeBoardNoticeCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NoticeBoardNoticePayload>
+        }
+        createMany: {
+          args: Prisma.NoticeBoardNoticeCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.NoticeBoardNoticeCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NoticeBoardNoticePayload>[]
+        }
+        delete: {
+          args: Prisma.NoticeBoardNoticeDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NoticeBoardNoticePayload>
+        }
+        update: {
+          args: Prisma.NoticeBoardNoticeUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NoticeBoardNoticePayload>
+        }
+        deleteMany: {
+          args: Prisma.NoticeBoardNoticeDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.NoticeBoardNoticeUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.NoticeBoardNoticeUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NoticeBoardNoticePayload>[]
+        }
+        upsert: {
+          args: Prisma.NoticeBoardNoticeUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NoticeBoardNoticePayload>
+        }
+        aggregate: {
+          args: Prisma.NoticeBoardNoticeAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateNoticeBoardNotice>
+        }
+        groupBy: {
+          args: Prisma.NoticeBoardNoticeGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.NoticeBoardNoticeGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.NoticeBoardNoticeCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.NoticeBoardNoticeCountAggregateOutputType> | number
+        }
+      }
+    }
+    CourseApplication: {
+      payload: Prisma.$CourseApplicationPayload<ExtArgs>
+      fields: Prisma.CourseApplicationFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.CourseApplicationFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CourseApplicationPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.CourseApplicationFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CourseApplicationPayload>
+        }
+        findFirst: {
+          args: Prisma.CourseApplicationFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CourseApplicationPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.CourseApplicationFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CourseApplicationPayload>
+        }
+        findMany: {
+          args: Prisma.CourseApplicationFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CourseApplicationPayload>[]
+        }
+        create: {
+          args: Prisma.CourseApplicationCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CourseApplicationPayload>
+        }
+        createMany: {
+          args: Prisma.CourseApplicationCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.CourseApplicationCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CourseApplicationPayload>[]
+        }
+        delete: {
+          args: Prisma.CourseApplicationDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CourseApplicationPayload>
+        }
+        update: {
+          args: Prisma.CourseApplicationUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CourseApplicationPayload>
+        }
+        deleteMany: {
+          args: Prisma.CourseApplicationDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.CourseApplicationUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.CourseApplicationUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CourseApplicationPayload>[]
+        }
+        upsert: {
+          args: Prisma.CourseApplicationUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CourseApplicationPayload>
+        }
+        aggregate: {
+          args: Prisma.CourseApplicationAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateCourseApplication>
+        }
+        groupBy: {
+          args: Prisma.CourseApplicationGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.CourseApplicationGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.CourseApplicationCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.CourseApplicationCountAggregateOutputType> | number
+        }
+      }
+    }
     FlashNews: {
       payload: Prisma.$FlashNewsPayload<ExtArgs>
       fields: Prisma.FlashNewsFieldRefs
@@ -1758,6 +1909,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    AlumniRegistration: {
+      payload: Prisma.$AlumniRegistrationPayload<ExtArgs>
+      fields: Prisma.AlumniRegistrationFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.AlumniRegistrationFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AlumniRegistrationPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.AlumniRegistrationFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AlumniRegistrationPayload>
+        }
+        findFirst: {
+          args: Prisma.AlumniRegistrationFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AlumniRegistrationPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.AlumniRegistrationFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AlumniRegistrationPayload>
+        }
+        findMany: {
+          args: Prisma.AlumniRegistrationFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AlumniRegistrationPayload>[]
+        }
+        create: {
+          args: Prisma.AlumniRegistrationCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AlumniRegistrationPayload>
+        }
+        createMany: {
+          args: Prisma.AlumniRegistrationCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.AlumniRegistrationCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AlumniRegistrationPayload>[]
+        }
+        delete: {
+          args: Prisma.AlumniRegistrationDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AlumniRegistrationPayload>
+        }
+        update: {
+          args: Prisma.AlumniRegistrationUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AlumniRegistrationPayload>
+        }
+        deleteMany: {
+          args: Prisma.AlumniRegistrationDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.AlumniRegistrationUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.AlumniRegistrationUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AlumniRegistrationPayload>[]
+        }
+        upsert: {
+          args: Prisma.AlumniRegistrationUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AlumniRegistrationPayload>
+        }
+        aggregate: {
+          args: Prisma.AlumniRegistrationAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateAlumniRegistration>
+        }
+        groupBy: {
+          args: Prisma.AlumniRegistrationGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AlumniRegistrationGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.AlumniRegistrationCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AlumniRegistrationCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -1811,6 +2036,7 @@ export const PageScalarFieldEnum = {
   title: 'title',
   slug: 'slug',
   content: 'content',
+  featuredImage: 'featuredImage',
   metaTitle: 'metaTitle',
   metaDescription: 'metaDescription',
   published: 'published',
@@ -1916,6 +2142,47 @@ export const NoticeBoardEventScalarFieldEnum = {
 } as const
 
 export type NoticeBoardEventScalarFieldEnum = (typeof NoticeBoardEventScalarFieldEnum)[keyof typeof NoticeBoardEventScalarFieldEnum]
+
+
+export const NoticeBoardNoticeScalarFieldEnum = {
+  id: 'id',
+  title: 'title',
+  content: 'content',
+  noticeType: 'noticeType',
+  pdfUrl: 'pdfUrl',
+  imageUrl: 'imageUrl',
+  publishDate: 'publishDate',
+  expiryDate: 'expiryDate',
+  active: 'active',
+  important: 'important',
+  pinned: 'pinned',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type NoticeBoardNoticeScalarFieldEnum = (typeof NoticeBoardNoticeScalarFieldEnum)[keyof typeof NoticeBoardNoticeScalarFieldEnum]
+
+
+export const CourseApplicationScalarFieldEnum = {
+  id: 'id',
+  applicationNo: 'applicationNo',
+  studentName: 'studentName',
+  mobile: 'mobile',
+  email: 'email',
+  courseCode: 'courseCode',
+  courseName: 'courseName',
+  batchYear: 'batchYear',
+  batchNo: 'batchNo',
+  department: 'department',
+  qualification: 'qualification',
+  mode: 'mode',
+  message: 'message',
+  status: 'status',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type CourseApplicationScalarFieldEnum = (typeof CourseApplicationScalarFieldEnum)[keyof typeof CourseApplicationScalarFieldEnum]
 
 
 export const FlashNewsScalarFieldEnum = {
@@ -2052,6 +2319,45 @@ export const BloodDonorScalarFieldEnum = {
 } as const
 
 export type BloodDonorScalarFieldEnum = (typeof BloodDonorScalarFieldEnum)[keyof typeof BloodDonorScalarFieldEnum]
+
+
+export const AlumniRegistrationScalarFieldEnum = {
+  id: 'id',
+  createdAt: 'createdAt',
+  fullName: 'fullName',
+  gender: 'gender',
+  dateOfBirth: 'dateOfBirth',
+  profilePhoto: 'profilePhoto',
+  email: 'email',
+  mobileNumber: 'mobileNumber',
+  alternatePhone: 'alternatePhone',
+  currentAddress: 'currentAddress',
+  cityStateCountry: 'cityStateCountry',
+  courseProgram: 'courseProgram',
+  department: 'department',
+  yearOfAdmission: 'yearOfAdmission',
+  yearOfGraduation: 'yearOfGraduation',
+  enrollmentRollNumber: 'enrollmentRollNumber',
+  currentOccupation: 'currentOccupation',
+  companyOrganizationName: 'companyOrganizationName',
+  jobTitle: 'jobTitle',
+  workLocation: 'workLocation',
+  yearsOfExperience: 'yearsOfExperience',
+  linkedInProfile: 'linkedInProfile',
+  socialMedia: 'socialMedia',
+  personalWebsite: 'personalWebsite',
+  willingToMentor: 'willingToMentor',
+  interestedInEvents: 'interestedInEvents',
+  areasOfInterest: 'areasOfInterest',
+  achievementsAwards: 'achievementsAwards',
+  suggestionsFeedback: 'suggestionsFeedback',
+  messageToInstitution: 'messageToInstitution',
+  declarationAccepted: 'declarationAccepted',
+  ipAddress: 'ipAddress',
+  userAgent: 'userAgent'
+} as const
+
+export type AlumniRegistrationScalarFieldEnum = (typeof AlumniRegistrationScalarFieldEnum)[keyof typeof AlumniRegistrationScalarFieldEnum]
 
 
 export const SortOrder = {
@@ -2206,6 +2512,8 @@ export type GlobalOmitConfig = {
   setting?: Prisma.SettingOmit
   testimonial?: Prisma.TestimonialOmit
   noticeBoardEvent?: Prisma.NoticeBoardEventOmit
+  noticeBoardNotice?: Prisma.NoticeBoardNoticeOmit
+  courseApplication?: Prisma.CourseApplicationOmit
   flashNews?: Prisma.FlashNewsOmit
   heroSlide?: Prisma.HeroSlideOmit
   shortTermCourse?: Prisma.ShortTermCourseOmit
@@ -2215,6 +2523,7 @@ export type GlobalOmitConfig = {
   questionPaper?: Prisma.QuestionPaperOmit
   grievance?: Prisma.GrievanceOmit
   bloodDonor?: Prisma.BloodDonorOmit
+  alumniRegistration?: Prisma.AlumniRegistrationOmit
 }
 
 /* Types for Logging */

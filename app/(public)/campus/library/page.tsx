@@ -45,7 +45,7 @@ const tabs = [
 
 function Placeholder({ title }: { title: string }) {
   return (
-    <div className="p-8 bg-white/60 border border-dashed border-indigo-200 rounded-xl text-center text-indigo-700 font-medium">
+    <div className="p-8 bg-white/60 border border-dashed border-slate-300 rounded-xl text-center text-brand-text font-medium">
       {title} content will be added here.
     </div>
   )
@@ -56,8 +56,8 @@ function QuestionPaperTiles() {
     {
       id: "question-papers",
       label: "Question Papers",
-      color: "from-teal-500 to-cyan-600",
-      accent: "bg-cyan-700/70",
+      color: "bg-brand-navy",
+      accent: "bg-brand-gold text-brand-text",
       icon: "📄",
       cta: "Show All",
       href: "/question-papers",
@@ -65,8 +65,8 @@ function QuestionPaperTiles() {
     {
       id: "syllabus",
       label: "Syllabus",
-      color: "from-emerald-500 to-green-600",
-      accent: "bg-emerald-700/70",
+      color: "bg-brand-green",
+      accent: "bg-[#1b5e20] text-white",
       icon: "📚",
       cta: "Show All",
       href: "/syllabus",
@@ -87,7 +87,7 @@ function QuestionPaperTiles() {
               "text-white"
             )}
           >
-            <div className={cn("p-6 md:p-8 bg-gradient-to-r", card.color)}>
+            <div className={cn("p-6 md:p-8", card.color)}>
               <div className="flex items-start justify-between">
                 <div>
                   <p className="mt-2 text-xl font-bold uppercase tracking-wide">
@@ -116,11 +116,11 @@ export default function CampusLibraryPage() {
   const activeContent = tabs.find((tab) => tab.id === activeTab)?.content
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50 py-12">
+    <div className="min-h-screen bg-brand-surface py-12">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="bg-white/90 backdrop-blur-lg rounded-3xl shadow-xl border border-indigo-100 overflow-hidden">
+        <div className="bg-white/90 backdrop-blur-lg rounded-3xl shadow-xl border border-slate-200 overflow-hidden">
           <div className="grid grid-cols-1 lg:grid-cols-5">
-            <aside className="bg-gradient-to-b from-indigo-600 to-purple-700 text-white p-6 lg:p-8">
+            <aside className="bg-brand-navy text-white p-6 lg:p-8">
               <h1 className="text-3xl font-semibold mb-6">Campus Library</h1>
               <nav className="space-y-2">
                 {tabs.map((tab) => (
@@ -130,7 +130,7 @@ export default function CampusLibraryPage() {
                     className={cn(
                       "w-full text-left px-4 py-3 rounded-lg transition-all duration-200",
                       activeTab === tab.id
-                        ? "bg-white text-indigo-700 font-semibold shadow"
+                        ? "bg-brand-gold text-brand-text font-semibold shadow"
                         : "bg-white/10 text-white/80 hover:bg-white/20"
                     )}
                   >
@@ -141,10 +141,10 @@ export default function CampusLibraryPage() {
             </aside>
 
             <main className="lg:col-span-4 p-6 lg:p-10 space-y-6">
-              <h2 className="text-2xl font-semibold text-indigo-900 capitalize">
+              <h2 className="text-2xl font-semibold text-brand-text capitalize">
                 {tabs.find((tab) => tab.id === activeTab)?.label}
               </h2>
-              <div className="prose prose-indigo max-w-none text-slate-700">
+              <div className="prose max-w-none text-slate-700 prose-a:text-brand-hover">
                 {activeContent}
               </div>
             </main>

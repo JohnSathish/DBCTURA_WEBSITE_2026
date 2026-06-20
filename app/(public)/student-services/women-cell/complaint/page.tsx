@@ -83,7 +83,7 @@ export default function ComplaintPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-amber-50 via-white to-rose-50 py-12">
+    <div className="min-h-screen bg-brand-surface py-12">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
         <header className="text-center space-y-4">
           <h1 className="text-4xl font-bold text-gray-900">Grievance Form</h1>

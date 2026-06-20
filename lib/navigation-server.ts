@@ -1,7 +1,8 @@
 import { prisma } from "@/lib/prisma"
 import { defaultNavigation, NavigationItem } from "./navigation"
+import { ensurePublicNavItems } from "./navigation-merge"
 
-type NavigationMenuRecord = {
+export type NavigationMenuRecord = {
   id: string
   title: string
   href: string | null
@@ -14,7 +15,8 @@ interface GetNavigationOptions {
   includeHidden?: boolean
 }
 
-function buildTree(records: NavigationMenuRecord[]): NavigationItem[] {
+/** Build nav tree from DB rows (used by public nav + admin API). */
+export function buildTree(records: NavigationMenuRecord[]): NavigationItem[] {
   const map = new Map<string, NavigationItem & { children: NavigationItem[] }>()
   const roots: (NavigationItem & { children: NavigationItem[] })[] = []
 
@@ -67,6 +69,8 @@ function buildTree(records: NavigationMenuRecord[]): NavigationItem[] {
   }))
 }
 
+export { ensureAlumniMenuItem, ensureContactMenuItem, ensurePublicNavItems } from "./navigation-merge"
+
 export async function getNavigationItems(options: GetNavigationOptions = {}): Promise<NavigationItem[]> {
   const { includeHidden = false } = options
 
@@ -85,7 +89,7 @@ export async function getNavigationItems(options: GetNavigationOptions = {}): Pr
       return defaultNavigation
     }
 
-    return buildTree(records)
+    return ensurePublicNavItems(buildTree(records))
   } catch (error) {
     console.error("Failed to fetch navigation items:", error)
     return defaultNavigation

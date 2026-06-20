@@ -18,7 +18,8 @@ import {
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Badge } from "@/components/ui/badge"
 import { Pencil, Trash2, Plus } from "lucide-react"
-import { defaultNavigation, type NavigationItem } from "@/lib/navigation"
+import { type NavigationItem } from "@/lib/navigation"
+import { NAV_NO_PARENT } from "@/lib/navigation-admin"
 
 type NavigationTreeItem = NavigationItem & {
   id: string
@@ -74,6 +75,7 @@ export default function NavigationManager() {
   const [editingItem, setEditingItem] = useState<NavigationTreeItem | null>(null)
   const [editingState, setEditingState] = useState<NavigationFormState | null>(null)
   const [editSaving, setEditSaving] = useState(false)
+  const [seeding, setSeeding] = useState(false)
 
   const flatNavigation: FlatNavigationItem[] = useMemo(() => {
     return (function flatten(items: NavigationTreeItem[], depth = 0): FlatNavigationItem[] {
@@ -123,15 +125,20 @@ export default function NavigationManager() {
       const response = await fetch("/api/navigation?includeHidden=true", { cache: "no-store" })
       const data = await response.json()
       if (response.ok && Array.isArray(data.items)) {
-        setNavigation(convertDefaultNavigation(data.items as NavigationItem[], null, "db"))
+        // API returns real DB ids (includeHidden=true). Do not use defaultNavigation here — it has no ids
+        // and convertDefaultNavigation would invent "db-0-*" keys, breaking PUT /api/navigation/:id.
+        setNavigation(
+          data.items.length
+            ? convertDefaultNavigation(data.items as NavigationItem[], null, "db")
+            : []
+        )
       } else {
         throw new Error(data?.error || "Failed to load navigation menus")
       }
     } catch (err: any) {
       console.error("Failed to load navigation menus:", err)
       setError(err?.message || "Failed to load navigation menus")
-      // Fallback to default navigation if API fails
-      setNavigation(convertDefaultNavigation(defaultNavigation))
+      setNavigation([])
     } finally {
       setLoading(false)
     }
@@ -150,13 +157,21 @@ export default function NavigationManager() {
     setSaving(true)
     setError(null)
     try {
+      const validIds = new Set(flatNavigation.map((n) => n.id))
+      let parentId: string | null = formState.parentId
+      if (!parentId || parentId === "none" || parentId === NAV_NO_PARENT) {
+        parentId = null
+      } else if (!validIds.has(parentId)) {
+        parentId = null
+      }
+
       const response = await fetch("/api/navigation", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           title: formState.title,
           href: formState.href || null,
-          parentId: formState.parentId,
+          parentId,
           order: Number.isInteger(formState.order) ? formState.order : 0,
           isVisible: formState.isVisible,
         }),
@@ -176,11 +191,16 @@ export default function NavigationManager() {
   }
 
   const handleEditOpen = (item: NavigationTreeItem) => {
+    const validIds = new Set(flatNavigation.map((n) => n.id))
+    let parentId: string | null = item.parentId || null
+    if (parentId && !validIds.has(parentId)) {
+      parentId = null
+    }
     setEditingItem(item)
     setEditingState({
       title: item.label,
       href: item.href || "",
-      parentId: item.parentId || null,
+      parentId,
       order: item.order ?? 0,
       isVisible: item.isVisible ?? true,
     })
@@ -195,13 +215,21 @@ export default function NavigationManager() {
     setEditSaving(true)
     setError(null)
     try {
+      const validIds = new Set(flatNavigation.map((n) => n.id))
+      let parentId: string | null = editingState.parentId
+      if (!parentId || parentId === "none" || parentId === NAV_NO_PARENT) {
+        parentId = null
+      } else if (!validIds.has(parentId)) {
+        parentId = null
+      }
+
       const response = await fetch(`/api/navigation/${editingItem.id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           title: editingState.title,
           href: editingState.href || null,
-          parentId: editingState.parentId,
+          parentId,
           order: Number.isInteger(editingState.order) ? editingState.order : 0,
           isVisible: editingState.isVisible,
         }),
@@ -242,6 +270,27 @@ export default function NavigationManager() {
     }
   }
 
+  const handleSeedDefault = async () => {
+    if (!confirm("Import the full default site menu into the database? You can edit or remove items afterward.")) {
+      return
+    }
+    setSeeding(true)
+    setError(null)
+    try {
+      const response = await fetch("/api/navigation/seed-default", { method: "POST" })
+      const data = await response.json().catch(() => ({}))
+      if (!response.ok) {
+        throw new Error(data?.error || "Import failed")
+      }
+      await loadNavigation()
+    } catch (err: any) {
+      console.error("Seed default navigation:", err)
+      setError(err?.message || "Failed to import default navigation")
+    } finally {
+      setSeeding(false)
+    }
+  }
+
   const handleToggleVisibility = async (item: NavigationTreeItem) => {
     try {
       const response = await fetch(`/api/navigation/${item.id}`, {
@@ -272,6 +321,19 @@ export default function NavigationManager() {
           </p>
         </div>
       </div>
+
+      {!loading && navigation.length === 0 ? (
+        <div className="rounded-xl border border-blue-200 bg-blue-50 px-4 py-4 text-sm text-blue-950 shadow-sm">
+          <p className="font-semibold">No navigation rows in the database yet</p>
+          <p className="mt-1.5 text-blue-900/90">
+            This screen only lists <span className="font-medium">saved</span> menu items. Until you import or add them
+            here, the table stays empty — the live site may still show the built-in menu from code.
+          </p>
+          <Button type="button" className="mt-4" onClick={handleSeedDefault} disabled={seeding}>
+            {seeding ? "Importing…" : "Import default navigation"}
+          </Button>
+        </div>
+      ) : null}
 
       <Card>
         <CardHeader>
@@ -310,11 +372,11 @@ export default function NavigationManager() {
             <div>
               <Label>Parent Menu</Label>
               <Select
-                value={formState.parentId ?? "none"}
+                value={formState.parentId ?? NAV_NO_PARENT}
                 onValueChange={(value) =>
                   setFormState((prev) => ({
                     ...prev,
-                    parentId: value === "none" ? null : value,
+                    parentId: value === NAV_NO_PARENT ? null : value,
                   }))
                 }
               >
@@ -322,7 +384,7 @@ export default function NavigationManager() {
                   <SelectValue placeholder="Top-level (no parent)" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="none">Top-level (no parent)</SelectItem>
+                  <SelectItem value={NAV_NO_PARENT}>Top-level (no parent)</SelectItem>
                   {parentOptions.map((option, index) => (
                     <SelectItem key={`${option.value}-${index}`} value={option.value}>
                       {option.label}
@@ -366,7 +428,8 @@ export default function NavigationManager() {
             <div className="py-10 text-center text-gray-500">Loading navigation menus...</div>
           ) : navigation.length === 0 ? (
             <div className="py-10 text-center text-gray-500">
-              No navigation menus found. Create a menu item to get started.
+              No rows yet. Use <span className="font-medium text-gray-700">Import default navigation</span> above, or
+              add a menu item with the form.
             </div>
           ) : (
             <div className="overflow-x-auto">
@@ -481,13 +544,13 @@ export default function NavigationManager() {
                                       excluded.add(item.id)
                                       return (
                                         <Select
-                                          value={editingState.parentId ?? "none"}
+                                          value={editingState.parentId ?? NAV_NO_PARENT}
                                           onValueChange={(value) =>
                                             setEditingState((prev) =>
                                               prev
                                                 ? {
                                                     ...prev,
-                                                    parentId: value === "none" ? null : value,
+                                                    parentId: value === NAV_NO_PARENT ? null : value,
                                                   }
                                                 : prev
                                             )
@@ -497,7 +560,7 @@ export default function NavigationManager() {
                                             <SelectValue placeholder="Top-level (no parent)" />
                                           </SelectTrigger>
                                           <SelectContent>
-                                            <SelectItem value="none">Top-level (no parent)</SelectItem>
+                                            <SelectItem value={NAV_NO_PARENT}>Top-level (no parent)</SelectItem>
                                             {parentOptions
                                               .filter((option) => !excluded.has(option.value))
                                               .map((option, index) => (

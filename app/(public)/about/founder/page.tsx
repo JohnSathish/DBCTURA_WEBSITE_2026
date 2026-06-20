@@ -1,5 +1,4 @@
-const founderImage =
-  "https://donboscocollege.ac.in/storage/file-manager/page/content/cfb95f76-dc5c-4553-ad3c-e7102b887cb3.jpg"
+const founderImage = "/about/founder-john-bosco.jpg"
 
 const paragraphs = [
   "Saint John Bosco, popularly known as Don Bosco, was a priest of the Catholic Church, who came to the rescue of the poor, disadvantaged youth of his time with his innovative method of educating them through total immersion in their world, with personal involvement in their lives and aspirations, with a dedication that was total.",
@@ -9,18 +8,18 @@ const paragraphs = [
 
 export default function FounderPage() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50 py-12">
+    <div className="min-h-screen bg-brand-surface py-12">
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
         <header className="text-center space-y-3">
-          <p className="text-sm uppercase tracking-[0.35em] text-indigo-500">His Vision …… Our Inspiration</p>
-          <h1 className="text-4xl font-bold text-indigo-900">Founder: St. John Bosco</h1>
-          <p className="text-base text-indigo-700">1815 – 1888</p>
+          <p className="text-sm uppercase tracking-[0.35em] text-brand-gold">His Vision …… Our Inspiration</p>
+          <h1 className="text-4xl font-bold text-brand-text">Founder: St. John Bosco</h1>
+          <p className="text-base text-brand-gold">1815 – 1888</p>
         </header>
 
-        <div className="bg-white/90 backdrop-blur rounded-3xl shadow-xl border border-indigo-100 overflow-hidden">
+        <div className="bg-white/90 backdrop-blur rounded-3xl shadow-xl border border-brand-gold/25 overflow-hidden">
           <div className="grid gap-8 p-6 sm:p-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.3fr)] lg:items-start">
             <figure className="flex flex-col items-center gap-4">
-              <div className="overflow-hidden rounded-2xl border border-indigo-100 shadow-md w-full max-w-sm">
+              <div className="overflow-hidden rounded-2xl border border-brand-gold/25 shadow-md w-full max-w-sm">
                 <img
                   src={founderImage}
                   alt="Portrait of St. John Bosco"

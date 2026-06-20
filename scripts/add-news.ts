@@ -3,7 +3,7 @@ import { PrismaClient } from '../lib/prisma-generated/client'
 const prisma = new PrismaClient()
 
 async function main() {
-  const admin = await prisma.user.findFirst({ where: { email: 'admin@donbosco.edu.in' } })
+  const admin = await prisma.user.findFirst({ where: { email: 'admin@donboscocollege.ac.in' } })
   if (!admin) throw new Error('Admin user not found. Seed first.')
 
   const newsItems = [

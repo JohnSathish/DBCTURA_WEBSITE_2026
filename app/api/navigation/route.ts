@@ -3,7 +3,8 @@ import { getServerSession } from "next-auth"
 
 import { prisma } from "@/lib/prisma"
 import { authOptions } from "@/lib/auth"
-import { getNavigationItems } from "@/lib/navigation-server"
+import { buildTree, getNavigationItems } from "@/lib/navigation-server"
+import { normalizeNavigationParentIdInput } from "@/lib/navigation-admin"
 
 function validateTitle(title: unknown) {
   if (typeof title !== "string" || title.trim().length === 0) {
@@ -31,7 +32,26 @@ function validateHref(href: unknown) {
 
 export async function GET(request: NextRequest) {
   const includeHidden = request.nextUrl.searchParams.get("includeHidden") === "true"
-  const items = await getNavigationItems({ includeHidden })
+
+  // Admin panel must only receive real DB ids. When the DB is empty, getNavigationItems()
+  // falls back to defaultNavigation (no ids) → client invents "db-0-*" ids and PUT returns 404.
+  if (includeHidden) {
+    try {
+      if (!(prisma as any).navigationMenu) {
+        return NextResponse.json({ items: [] })
+      }
+      const records = await prisma.navigationMenu.findMany({
+        orderBy: [{ order: "asc" }, { title: "asc" }],
+      })
+      const items = records.length ? buildTree(records) : []
+      return NextResponse.json({ items })
+    } catch (error) {
+      console.error("Admin navigation GET failed:", error)
+      return NextResponse.json({ items: [], error: "Failed to load navigation" }, { status: 500 })
+    }
+  }
+
+  const items = await getNavigationItems({ includeHidden: false })
   return NextResponse.json({ items })
 }
 
@@ -54,12 +74,13 @@ export async function POST(request: NextRequest) {
     const href = validateHref(body.href)
     const order = validateOrder(body.order)
     const isVisible = typeof body.isVisible === "boolean" ? body.isVisible : true
-    const parentId = body.parentId ? String(body.parentId) : null
+    const parentId = normalizeNavigationParentIdInput(body.parentId) ?? null
 
-    if (parentId) {
-      const parent = await prisma.navigationMenu.findUnique({ where: { id: parentId } })
+    let resolvedParentId = parentId
+    if (resolvedParentId) {
+      const parent = await prisma.navigationMenu.findUnique({ where: { id: resolvedParentId } })
       if (!parent) {
-        return NextResponse.json({ error: "Parent menu not found" }, { status: 404 })
+        resolvedParentId = null
       }
     }
 
@@ -69,7 +90,7 @@ export async function POST(request: NextRequest) {
         href,
         order,
         isVisible,
-        parentId,
+        parentId: resolvedParentId,
       },
     })
 

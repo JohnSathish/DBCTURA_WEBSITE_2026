@@ -16,6 +16,23 @@ const pageSchema = z.object({
   title: z.string().min(1, "Title is required"),
   slug: z.string().min(1, "Slug is required"),
   content: z.string(),
+  featuredImage: z
+    .string()
+    .optional()
+    .refine(
+      (val) => {
+        const s = (val ?? "").trim()
+        if (!s) return true
+        if (s.startsWith("/")) return true
+        try {
+          const u = new URL(s)
+          return u.protocol === "http:" || u.protocol === "https:"
+        } catch {
+          return false
+        }
+      },
+      { message: "Use a full URL (https://...) or a site path starting with /" }
+    ),
   metaTitle: z.string().optional(),
   metaDescription: z.string().optional(),
   published: z.boolean(),
@@ -28,6 +45,7 @@ interface Page {
   title: string
   slug: string
   content: string
+  featuredImage: string | null
   metaTitle: string | null
   metaDescription: string | null
   published: boolean
@@ -51,6 +69,7 @@ export default function PageForm({ page }: { page?: Page }) {
           title: page.title,
           slug: page.slug,
           content: page.content,
+          featuredImage: page.featuredImage || "",
           metaTitle: page.metaTitle || "",
           metaDescription: page.metaDescription || "",
           published: page.published,
@@ -59,6 +78,7 @@ export default function PageForm({ page }: { page?: Page }) {
           title: "",
           slug: "",
           content: "",
+          featuredImage: "",
           metaTitle: "",
           metaDescription: "",
           published: false,
@@ -148,10 +168,29 @@ export default function PageForm({ page }: { page?: Page }) {
           </div>
 
           <div className="space-y-2">
+            <Label htmlFor="featuredImage">Featured image (optional)</Label>
+            <Input
+              id="featuredImage"
+              {...register("featuredImage")}
+              placeholder="https://… or /uploads/your-photo.jpg"
+            />
+            {errors.featuredImage && (
+              <p className="text-sm text-red-600">{errors.featuredImage.message as string}</p>
+            )}
+            <p className="text-sm text-gray-500">
+              For the page with slug <span className="font-mono">principal-message</span>, this image is shown as the
+              principal portrait on the homepage and on <span className="font-mono">/principal-message</span>. Leave
+              blank to use the default site image.
+            </p>
+          </div>
+
+          <div className="space-y-2">
             <Label htmlFor="content">Content *</Label>
             <RichTextEditor
               content={content}
               onChange={(newContent) => setValue("content", newContent)}
+              fileUploadEndpoint="/api/uploads/download"
+              allowFileAttachments
             />
             {errors.content && (
               <p className="text-sm text-red-600">{errors.content.message}</p>

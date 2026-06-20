@@ -5,7 +5,7 @@ export const runtime = "nodejs"
 
 export default async function BloodDonorsPage() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-rose-50 via-white to-amber-50 py-12">
+    <div className="min-h-screen bg-brand-surface py-12">
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
         <header className="space-y-4 text-center">
           <h1 className="text-4xl font-bold text-rose-900">Blood Donor Registration</h1>

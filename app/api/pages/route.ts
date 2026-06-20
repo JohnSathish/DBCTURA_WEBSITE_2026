@@ -26,13 +26,14 @@ export async function POST(request: NextRequest) {
 
   try {
     const data = await request.json()
-    const { title, slug, content, metaTitle, metaDescription, published } = data
+    const { title, slug, content, metaTitle, metaDescription, published, featuredImage } = data
 
     const page = await prisma.page.create({
       data: {
         title,
         slug,
         content,
+        featuredImage: featuredImage?.trim() ? featuredImage.trim() : null,
         metaTitle,
         metaDescription,
         published: published ?? false,

@@ -88,10 +88,10 @@ const governingBodyMembers = [
 
 export default function GoverningBodyPage() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50 py-8">
+    <div className="min-h-screen bg-brand-surface py-8">
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
-        <Card className="border-2 border-indigo-100/70 shadow-lg">
-          <CardHeader className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-t-xl">
+        <Card className="border-2 border-brand-gold/25 shadow-lg">
+          <CardHeader className="bg-brand-navy text-white rounded-t-xl">
             <CardTitle className="text-3xl font-semibold">Governing Body</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4 pt-6">
@@ -104,23 +104,23 @@ export default function GoverningBodyPage() {
           </CardContent>
         </Card>
 
-        <Card className="border border-indigo-200/60 bg-white/80 backdrop-blur shadow-lg">
+        <Card className="border border-brand-gold/30 bg-white/80 backdrop-blur shadow-lg">
           <CardHeader>
-            <CardTitle className="text-2xl text-indigo-900">Members</CardTitle>
+            <CardTitle className="text-2xl text-brand-text">Members</CardTitle>
           </CardHeader>
           <CardContent className="overflow-x-auto">
             <Table>
               <TableHeader>
-                <TableRow className="bg-indigo-100/80">
-                  <TableHead className="w-20 text-indigo-900">Sl. No.</TableHead>
-                  <TableHead className="text-indigo-900">Name / Role</TableHead>
-                  <TableHead className="text-indigo-900">Address</TableHead>
+                <TableRow className="bg-brand-gold/15">
+                  <TableHead className="w-20 text-brand-text">Sl. No.</TableHead>
+                  <TableHead className="text-brand-text">Name / Role</TableHead>
+                  <TableHead className="text-brand-text">Address</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
                 {governingBodyMembers.map((member) => (
-                  <TableRow key={member.slNo} className="hover:bg-indigo-50/60">
-                    <TableCell className="font-semibold text-indigo-700">{member.slNo}</TableCell>
+                  <TableRow key={member.slNo} className="hover:bg-brand-gold/8">
+                    <TableCell className="font-semibold text-brand-gold">{member.slNo}</TableCell>
                     <TableCell className="font-medium text-slate-800">{member.name}</TableCell>
                     <TableCell className="text-slate-700">{member.address}</TableCell>
                   </TableRow>

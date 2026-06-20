@@ -62,6 +62,16 @@ export type Testimonial = Prisma.TestimonialModel
  */
 export type NoticeBoardEvent = Prisma.NoticeBoardEventModel
 /**
+ * Model NoticeBoardNotice
+ * 
+ */
+export type NoticeBoardNotice = Prisma.NoticeBoardNoticeModel
+/**
+ * Model CourseApplication
+ * 
+ */
+export type CourseApplication = Prisma.CourseApplicationModel
+/**
  * Model FlashNews
  * 
  */
@@ -106,3 +116,8 @@ export type Grievance = Prisma.GrievanceModel
  * 
  */
 export type BloodDonor = Prisma.BloodDonorModel
+/**
+ * Model AlumniRegistration
+ * Public alumni registration submissions (exportable by admin).
+ */
+export type AlumniRegistration = Prisma.AlumniRegistrationModel

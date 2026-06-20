@@ -23,7 +23,7 @@ export default async function ShortTermCoursesPage() {
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
       <div className="mb-8">
-        <h1 className="text-4xl font-bold mb-4 bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 bg-clip-text text-transparent">
+        <h1 className="text-4xl font-bold mb-4 text-brand-text">
           Short-Term Courses
         </h1>
         <p className="text-gray-600 text-lg">
@@ -34,7 +34,8 @@ export default async function ShortTermCoursesPage() {
       {courses.length > 0 ? (
         <div className={`grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 ${courses.length > 5 ? 'overflow-x-auto' : ''}`}>
           {courses.map((course) => (
-            <Card key={course.id} className="overflow-hidden hover:shadow-lg transition-shadow">
+            <Link key={course.id} href={`/short-term-courses/${course.id}`} className="block">
+              <Card className="overflow-hidden hover:shadow-lg transition-shadow h-full">
               {course.image && (
                 <div className="relative w-full h-48">
                   <Image
@@ -47,7 +48,7 @@ export default async function ShortTermCoursesPage() {
               )}
               <CardContent className="p-6">
                 {course.code && (
-                  <span className="inline-block px-2 py-1 bg-indigo-100 text-indigo-700 text-xs font-semibold rounded mb-2">
+                  <span className="inline-block px-2 py-1 bg-brand-hover/10 text-brand-hover text-xs font-semibold rounded mb-2">
                     {course.code}
                   </span>
                 )}
@@ -70,7 +71,8 @@ export default async function ShortTermCoursesPage() {
                   )}
                 </div>
               </CardContent>
-            </Card>
+              </Card>
+            </Link>
           ))}
         </div>
       ) : (

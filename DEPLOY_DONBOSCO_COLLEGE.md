@@ -1,8 +1,11 @@
 # Deploy Don Bosco College to your server
 
 **Repo:** [https://github.com/JohnSathish/donboscocollege](https://github.com/JohnSathish/donboscocollege)  
-**Domain:** https://donboscocollegetura.cloud  
-**Server:** Ubuntu 24.04 + OpenLiteSpeed + Node.js (IP: 82.25.110.120)
+**Domain (production):** https://donboscocollege.ac.in  
+**Staging (optional):** https://donboscocollegetura.cloud  
+**Server:** Ubuntu 24.04 + Nginx/OpenLiteSpeed + Node.js (IP: 82.25.110.120)
+
+> **Existing ERP on same server?** Read **[DEPLOY_SAFE_WITH_ERP.md](./DEPLOY_SAFE_WITH_ERP.md)** first. Run `bash scripts/server-audit-before-deploy.sh` on the VPS before deploying. Don Bosco uses port **3001** only — do not touch port **3000** or the ERP PM2/Nginx config.
 
 ---
 
@@ -28,16 +31,16 @@ If the repo is **private**, use a Personal Access Token instead of password: Git
 
 ## Step 1: Point your domain to the server
 
-In your **domain DNS** (where donboscocollegetura.cloud is managed):
+In your **domain DNS** (where **donboscocollege.ac.in** is managed):
 
 - Add an **A record**:  
-  **Name:** `@` (or `donboscocollegetura`)  
-  **Value:** `82.25.110.120`  
+  **Name:** `@`  
+  **Value:** your server IP (e.g. `82.25.110.120`)  
   **TTL:** 300 or 3600  
 
-- Optional: add **www**  
+- Add **www** (optional):  
   **Name:** `www`  
-  **Value:** `82.25.110.120`
+  **Value:** same server IP
 
 Wait a few minutes for DNS to propagate.
 
@@ -92,17 +95,26 @@ git clone https://YOUR_GITHUB_TOKEN@github.com/JohnSathish/donboscocollege.git d
 nano /var/www/donboscocollege/.env
 ```
 
-Paste this and **edit** the secret and keys:
+Paste from `.env.example` and **edit** secrets and SMTP. Minimum for production:
 
 ```env
 DATABASE_URL="file:./prisma/dev.db"
 NODE_ENV=production
 
-NEXTAUTH_URL="https://donboscocollegetura.cloud"
+NEXTAUTH_URL="https://donboscocollege.ac.in"
+NEXT_PUBLIC_SITE_URL="https://donboscocollege.ac.in"
 NEXTAUTH_SECRET="REPLACE_WITH_LONG_RANDOM_STRING_AT_LEAST_32_CHARS"
 
-NEXT_PUBLIC_RECAPTCHA_SITE_KEY=6LeIJgYsAAAAAJs_65ZtGwVc6ic3DI0iNnXS5okt
-RECAPTCHA_SECRET_KEY=6LeIJgYsAAAAAC5jRGoLZfAge8zosnNikl43cEJ4
+# reCAPTCHA — register keys for donboscocollege.ac.in
+NEXT_PUBLIC_RECAPTCHA_SITE_KEY=
+RECAPTCHA_SECRET_KEY=
+
+# SMTP (grievances, blood donors, notice alerts)
+SMTP_HOST=
+SMTP_PORT=587
+SMTP_USER=
+SMTP_PASS=
+SMTP_FROM="principal@donboscocollege.ac.in"
 ```
 
 Generate a strong secret on the server:
@@ -122,6 +134,21 @@ Save: `Ctrl+O`, Enter, `Ctrl+X`.
 cd /var/www/donboscocollege
 npx prisma generate
 npx prisma db push
+```
+
+### Set admin login (production)
+
+Do **not** use the default dev password. Set a strong password via environment variables:
+
+```bash
+export ADMIN_EMAIL="admin@donboscocollege.ac.in"
+export ADMIN_PASSWORD='YOUR_STRONG_PASSWORD_HERE'
+npm run admin:set-password
+```
+
+Then start the app:
+
+```bash
 pm2 start ecosystem.config.js
 pm2 save
 pm2 startup
@@ -135,9 +162,9 @@ Run the command that `pm2 startup` prints (so the app restarts after reboot).
 
 Your server uses **OpenLiteSpeed** (not Nginx). You need to:
 
-1. **Add a virtual host** for `donboscocollegetura.cloud` (or use the OpenLiteSpeed admin panel).
-2. **Set up a reverse proxy** so that requests to `donboscocollegetura.cloud` are forwarded to `http://127.0.0.1:3000` (where Next.js runs under PM2).
-3. **Enable SSL** for `https://donboscocollegetura.cloud` (e.g. Let’s Encrypt via the panel or certbot).
+1. **Add a virtual host** for `donboscocollege.ac.in` (or use the OpenLiteSpeed admin panel).
+2. **Set up a reverse proxy** so requests are forwarded to `http://127.0.0.1:3001` (PM2 runs Next.js on port **3001** per `ecosystem.config.js`).
+3. **Enable SSL** for `https://donboscocollege.ac.in` (Let’s Encrypt via the panel or certbot).
 
 ### Option A: Using OpenLiteSpeed Web Admin panel
 
@@ -145,7 +172,7 @@ Your server uses **OpenLiteSpeed** (not Nginx). You need to:
 - Create a new **virtual host** with **document root** for your domain (e.g. a placeholder or the app path).
 - In that vhost, add a **context** or **proxy** so:
   - **URI** or **location:** `/`
-  - **Backend / proxy:** `http://127.0.0.1:3000`
+  - **Backend / proxy:** `http://127.0.0.1:3001`
 - Enable **SSL** for this vhost (use the panel’s SSL / Let’s Encrypt option if available).
 
 ### Option B: Using config files (if you have shell access to OLS config)
@@ -154,15 +181,15 @@ Proxy is usually configured in the vhost config. Example idea (exact path may va
 
 ```apache
 # Proxy all requests to Next.js
-proxy / http://127.0.0.1:3000/
+proxy / http://127.0.0.1:3001/
 ```
 
 Then reload OpenLiteSpeed and request an SSL certificate (e.g. certbot for OpenLiteSpeed or the panel’s SSL feature).
 
 ### DNS and SSL
 
-- Ensure the **A record** for `donboscocollegetura.cloud` points to `82.25.110.120`.
-- After the proxy works, set **NEXTAUTH_URL** in `.env` to `https://donboscocollegetura.cloud` (already in Step 5) and restart:
+- Ensure the **A record** for `donboscocollege.ac.in` points to your server IP.
+- Set **NEXTAUTH_URL** and **NEXT_PUBLIC_SITE_URL** in `.env` to `https://donboscocollege.ac.in`, then restart:
 
 ```bash
 pm2 restart donbosco
@@ -194,10 +221,11 @@ ssh root@82.25.110.120 "cd /var/www/donboscocollege && git pull && npm install &
 | Item | Value |
 |------|--------|
 | **Repo** | https://github.com/JohnSathish/donboscocollege.git |
-| **Domain** | https://donboscocollegetura.cloud |
+| **Domain** | https://donboscocollege.ac.in |
 | **Server IP** | 82.25.110.120 |
 | **App path on server** | /var/www/donboscocollege |
-| **NEXTAUTH_URL** | https://donboscocollegetura.cloud |
+| **NEXTAUTH_URL** | https://donboscocollege.ac.in |
+| **NEXT_PUBLIC_SITE_URL** | https://donboscocollege.ac.in |
 | **PM2 app name** | donbosco (from ecosystem.config.js) |
 
 Do **Step 0** first so the server can clone the repo. If you tell me which OpenLiteSpeed panel or config you have (Hostinger panel name or “Web Admin Console”), I can give exact clicks or config lines for the proxy and SSL.

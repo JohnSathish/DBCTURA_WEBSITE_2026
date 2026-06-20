@@ -77,8 +77,8 @@ npm run db:seed
 ```
 
 The default admin credentials are:
-- Email: `admin@donbosco.edu.in`
-- Password: `admin123`
+- Email: `admin@donboscocollege.ac.in`
+- Password: `admin123` (or set `ADMIN_PASSWORD` when seeding)
 
 **⚠️ Important**: Change the default password immediately after first login!
 

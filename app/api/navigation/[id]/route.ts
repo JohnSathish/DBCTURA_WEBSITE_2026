@@ -3,6 +3,7 @@ import { getServerSession } from "next-auth"
 
 import { prisma } from "@/lib/prisma"
 import { authOptions } from "@/lib/auth"
+import { normalizeNavigationParentIdInput } from "@/lib/navigation-admin"
 
 function validateTitle(title: unknown) {
   if (title === undefined) return undefined
@@ -49,6 +50,11 @@ export async function PUT(
     const { id } = await params
     const body = await request.json()
 
+    const existing = await prisma.navigationMenu.findUnique({ where: { id } })
+    if (!existing) {
+      return NextResponse.json({ error: "Menu item not found" }, { status: 404 })
+    }
+
     const data: any = {}
 
     if (body.title !== undefined) {
@@ -63,19 +69,32 @@ export async function PUT(
     if (body.isVisible !== undefined) {
       data.isVisible = Boolean(body.isVisible)
     }
+
+    // Resolve parent after deletes/recreates: never fail the whole update because parentId is stale.
+    let nextParentId: string | null = existing.parentId
+
     if (body.parentId !== undefined) {
-      data.parentId = body.parentId ? String(body.parentId) : null
+      nextParentId = normalizeNavigationParentIdInput(body.parentId) ?? null
+    } else if (existing.parentId) {
+      const parentStillThere = await prisma.navigationMenu.findUnique({ where: { id: existing.parentId } })
+      if (!parentStillThere) {
+        nextParentId = null
+      }
     }
 
-    if (data.parentId === id) {
+    if (nextParentId === id) {
       return NextResponse.json({ error: "A menu cannot be its own parent" }, { status: 400 })
     }
 
-    if (data.parentId) {
-      const parent = await prisma.navigationMenu.findUnique({ where: { id: data.parentId } })
+    if (nextParentId) {
+      const parent = await prisma.navigationMenu.findUnique({ where: { id: nextParentId } })
       if (!parent) {
-        return NextResponse.json({ error: "Parent menu not found" }, { status: 404 })
+        nextParentId = null
       }
+    }
+
+    if (nextParentId !== existing.parentId) {
+      data.parentId = nextParentId
     }
 
     const menu = await prisma.navigationMenu.update({

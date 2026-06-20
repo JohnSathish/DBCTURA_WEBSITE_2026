@@ -57,6 +57,8 @@ export const ModelName = {
   Setting: 'Setting',
   Testimonial: 'Testimonial',
   NoticeBoardEvent: 'NoticeBoardEvent',
+  NoticeBoardNotice: 'NoticeBoardNotice',
+  CourseApplication: 'CourseApplication',
   FlashNews: 'FlashNews',
   HeroSlide: 'HeroSlide',
   ShortTermCourse: 'ShortTermCourse',
@@ -65,7 +67,8 @@ export const ModelName = {
   NavigationMenu: 'NavigationMenu',
   QuestionPaper: 'QuestionPaper',
   Grievance: 'Grievance',
-  BloodDonor: 'BloodDonor'
+  BloodDonor: 'BloodDonor',
+  AlumniRegistration: 'AlumniRegistration'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -98,6 +101,7 @@ export const PageScalarFieldEnum = {
   title: 'title',
   slug: 'slug',
   content: 'content',
+  featuredImage: 'featuredImage',
   metaTitle: 'metaTitle',
   metaDescription: 'metaDescription',
   published: 'published',
@@ -203,6 +207,47 @@ export const NoticeBoardEventScalarFieldEnum = {
 } as const
 
 export type NoticeBoardEventScalarFieldEnum = (typeof NoticeBoardEventScalarFieldEnum)[keyof typeof NoticeBoardEventScalarFieldEnum]
+
+
+export const NoticeBoardNoticeScalarFieldEnum = {
+  id: 'id',
+  title: 'title',
+  content: 'content',
+  noticeType: 'noticeType',
+  pdfUrl: 'pdfUrl',
+  imageUrl: 'imageUrl',
+  publishDate: 'publishDate',
+  expiryDate: 'expiryDate',
+  active: 'active',
+  important: 'important',
+  pinned: 'pinned',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type NoticeBoardNoticeScalarFieldEnum = (typeof NoticeBoardNoticeScalarFieldEnum)[keyof typeof NoticeBoardNoticeScalarFieldEnum]
+
+
+export const CourseApplicationScalarFieldEnum = {
+  id: 'id',
+  applicationNo: 'applicationNo',
+  studentName: 'studentName',
+  mobile: 'mobile',
+  email: 'email',
+  courseCode: 'courseCode',
+  courseName: 'courseName',
+  batchYear: 'batchYear',
+  batchNo: 'batchNo',
+  department: 'department',
+  qualification: 'qualification',
+  mode: 'mode',
+  message: 'message',
+  status: 'status',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type CourseApplicationScalarFieldEnum = (typeof CourseApplicationScalarFieldEnum)[keyof typeof CourseApplicationScalarFieldEnum]
 
 
 export const FlashNewsScalarFieldEnum = {
@@ -339,6 +384,45 @@ export const BloodDonorScalarFieldEnum = {
 } as const
 
 export type BloodDonorScalarFieldEnum = (typeof BloodDonorScalarFieldEnum)[keyof typeof BloodDonorScalarFieldEnum]
+
+
+export const AlumniRegistrationScalarFieldEnum = {
+  id: 'id',
+  createdAt: 'createdAt',
+  fullName: 'fullName',
+  gender: 'gender',
+  dateOfBirth: 'dateOfBirth',
+  profilePhoto: 'profilePhoto',
+  email: 'email',
+  mobileNumber: 'mobileNumber',
+  alternatePhone: 'alternatePhone',
+  currentAddress: 'currentAddress',
+  cityStateCountry: 'cityStateCountry',
+  courseProgram: 'courseProgram',
+  department: 'department',
+  yearOfAdmission: 'yearOfAdmission',
+  yearOfGraduation: 'yearOfGraduation',
+  enrollmentRollNumber: 'enrollmentRollNumber',
+  currentOccupation: 'currentOccupation',
+  companyOrganizationName: 'companyOrganizationName',
+  jobTitle: 'jobTitle',
+  workLocation: 'workLocation',
+  yearsOfExperience: 'yearsOfExperience',
+  linkedInProfile: 'linkedInProfile',
+  socialMedia: 'socialMedia',
+  personalWebsite: 'personalWebsite',
+  willingToMentor: 'willingToMentor',
+  interestedInEvents: 'interestedInEvents',
+  areasOfInterest: 'areasOfInterest',
+  achievementsAwards: 'achievementsAwards',
+  suggestionsFeedback: 'suggestionsFeedback',
+  messageToInstitution: 'messageToInstitution',
+  declarationAccepted: 'declarationAccepted',
+  ipAddress: 'ipAddress',
+  userAgent: 'userAgent'
+} as const
+
+export type AlumniRegistrationScalarFieldEnum = (typeof AlumniRegistrationScalarFieldEnum)[keyof typeof AlumniRegistrationScalarFieldEnum]
 
 
 export const SortOrder = {

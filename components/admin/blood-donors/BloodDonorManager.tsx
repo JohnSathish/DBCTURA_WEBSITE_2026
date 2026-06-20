@@ -357,7 +357,7 @@ export default function BloodDonorManager() {
                 />
                 <div>
                   <p className="text-xs uppercase text-slate-500">Medical notes</p>
-                  <div className="mt-2 rounded-lg border border-slate-200 bg-slate-50/70 p-3 text-sm text-slate-700">
+                  <div className="mt-2 rounded-lg border border-slate-200 bg-brand-surface/70 p-3 text-sm text-slate-700">
                     {selectedDonor.medicalNotes || "None"}
                   </div>
                 </div>

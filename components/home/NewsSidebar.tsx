@@ -1,146 +1,232 @@
 "use client"
 
-import { useMemo, useState, useEffect } from "react"
+import { useMemo, useState } from "react"
 import Link from "next/link"
 import { Card } from "@/components/ui/card"
+import { Badge } from "@/components/ui/badge"
+import { Button } from "@/components/ui/button"
+import { cn } from "@/lib/utils"
+import { Bell, Download, Eye, FileText, Megaphone, Pin } from "lucide-react"
 
-export type NoticeBoardEvent = {
+export type NoticeBoardNotice = {
   id: string
   title: string
-  description?: string | null
-  eventDate: string | Date
+  noticeType: "document" | "image" | "text" | string
+  pdfUrl?: string | null
+  imageUrl?: string | null
+  publishDate?: string | Date
+  important?: boolean
+  pinned?: boolean
 }
 
-function CalendarBadge({ date }: { date?: string | Date | null }) {
-  if (!date) return null
-  const d = new Date(date)
-  const day = d.getDate().toString().padStart(2, "0")
-  const month = d.toLocaleString("en-US", { month: "short" }).toUpperCase()
-  return (
-    <div className="flex items-center justify-center w-12 h-12 rounded-full bg-gradient-to-br from-purple-100 to-pink-100 border-2 border-purple-300 shadow-md" suppressHydrationWarning>
-      <div className="text-center leading-tight">
-        <div className="text-[10px] text-purple-700 font-semibold -mb-0.5">{month}</div>
-        <div className="text-sm font-bold text-purple-900">{day}</div>
-      </div>
-    </div>
-  )
+function isNewNotice(publishDate?: string | Date) {
+  if (!publishDate) return false
+  const pub = new Date(publishDate).getTime()
+  const now = Date.now()
+  const diff = now - pub
+  return diff >= 0 && diff <= 3 * 24 * 60 * 60 * 1000
 }
 
-export default function NewsSidebar({ items }: { items: NoticeBoardEvent[]; pageSize?: number }) {
-  const [isHovered, setIsHovered] = useState(false)
-  const [currentIndex, setCurrentIndex] = useState(0)
+function iconMeta(n: NoticeBoardNotice) {
+  const type = String(n.noticeType || "text").toLowerCase()
 
-  // Get current month/year for the Read More link
-  const currentDate = new Date()
-  const currentMonth = currentDate.getMonth() + 1
-  const currentYear = currentDate.getFullYear()
+  // Priority: pinned > important > document > default
+  if (n.pinned) {
+    return {
+      Icon: Pin,
+      label: "Pinned",
+      iconClass: "text-indigo-700",
+      wrapClass: "bg-indigo-50 ring-indigo-100",
+    }
+  }
+  if (n.important) {
+    return {
+      Icon: Megaphone,
+      label: "Important",
+      iconClass: "text-red-700",
+      wrapClass: "bg-red-50 ring-red-100",
+    }
+  }
+  if (type === "document") {
+    return {
+      Icon: FileText,
+      label: "Document",
+      iconClass: "text-emerald-700",
+      wrapClass: "bg-emerald-50 ring-emerald-100",
+    }
+  }
+  return {
+    Icon: Bell,
+    label: "Notice",
+    iconClass: "text-blue-700",
+    wrapClass: "bg-blue-50 ring-blue-100",
+  }
+}
 
-  // Filter and limit to first 5 events
+export default function NewsSidebar({ items }: { items: NoticeBoardNotice[]; pageSize?: number }) {
+  // Limit to first 5 notices
   const displayItems = useMemo(() => {
     if (!items || items.length === 0) {
       return []
     }
-    
-    const today = new Date()
-    today.setHours(0, 0, 0, 0)
-    
-    const filtered = items
-      .filter(event => {
-        if (!event || !event.eventDate) return false
-        const eventDate = new Date(event.eventDate)
-        eventDate.setHours(0, 0, 0, 0)
-        return eventDate >= today
-      })
-      .slice(0, 5)
-    
-    return filtered
+
+    return items.slice(0, 5)
   }, [items])
 
-  // Auto-scroll through items vertically with smooth upward animation
-  useEffect(() => {
-    if (displayItems.length === 0 || isHovered || displayItems.length <= 1) return
-
-    const interval = setInterval(() => {
-      setCurrentIndex((prev) => (prev + 1) % displayItems.length)
-    }, 5000) // Change event every 5 seconds
-
-    return () => clearInterval(interval)
-  }, [displayItems.length, isHovered])
-
-  // Calculate item height for smooth scrolling (approximately 95px per item)
-  const itemHeight = 95
+  const [hovered, setHovered] = useState(false)
+  const itemHeight = 108
+  const durationSec = Math.max(14, displayItems.length * 4)
 
   return (
-    <Card className="flex flex-col w-full border-2 border-purple-200 shadow-lg h-full" suppressHydrationWarning>
+    <Card className="flex h-full flex-col w-full border border-brand-gold/35 shadow-md bg-card" suppressHydrationWarning>
       {/* Header */}
-      <div className="px-4 py-[calc(0.5rem-25px)] border-b bg-gradient-to-r from-purple-500 to-pink-500">
+      <div className="px-4 py-[calc(0.5rem-25px)] border-b border-brand-sun/50 bg-brand-navy text-white">
         <div className="flex items-center justify-between">
-          <h3 className="font-semibold text-white">
+          <h3 className="font-semibold text-white tracking-wide">
             Notice Board
           </h3>
         </div>
-        <div className="mt-1 h-1 w-28 bg-cyan-300" />
+        <div className="mt-1 h-1 w-28 bg-brand-sun rounded-sm" />
       </div>
       
-      {/* Scrolling Content */}
-      <div 
-        className="overflow-hidden relative flex-1"
-        onMouseEnter={() => setIsHovered(true)}
-        onMouseLeave={() => setIsHovered(false)}
+      {/* Auto-scroll inside fixed height (does not change card height) */}
+      <div
+        className="relative flex-1 overflow-hidden"
+        onMouseEnter={() => setHovered(true)}
+        onMouseLeave={() => setHovered(false)}
       >
+        <div aria-hidden="true" className="pointer-events-none absolute inset-x-0 top-0 z-10 h-6 bg-gradient-to-b from-white to-transparent" />
+        <div aria-hidden="true" className="pointer-events-none absolute inset-x-0 bottom-0 z-10 h-8 bg-gradient-to-t from-white to-transparent" />
         {displayItems.length === 0 ? (
           <div className="px-4 py-4 text-sm text-slate-500 text-center w-full h-full flex items-center justify-center">
-            No events available.
+            No notices available.
           </div>
         ) : (
-          <div 
-            className="transition-transform duration-1000 ease-in-out"
-            style={{
-              transform: `translateY(-${currentIndex * itemHeight}px)`,
-            }}
+          <div
+            className={cn("h-full", hovered || displayItems.length <= 1 ? "dbc-marquee paused" : "dbc-marquee")}
+            style={
+              {
+                ["--dbc-duration" as any]: `${durationSec}s`,
+                ["--dbc-distance" as any]: `${displayItems.length * itemHeight}px`,
+              } as any
+            }
           >
-            {displayItems.map((event, idx) => {
-              const eventDate = new Date(event.eventDate)
-              const month = eventDate.getMonth() + 1
-              const year = eventDate.getFullYear()
+            <div className="dbc-marquee-track divide-y divide-slate-100">
+              {[...displayItems, ...displayItems].map((notice, idx) => {
+              const meta = iconMeta(notice)
+              const isNew = isNewNotice(notice.publishDate)
+              const pub = notice.publishDate ? new Date(notice.publishDate) : null
+              const key = `${notice.id}-${idx < displayItems.length ? "a" : "b"}`
+
               return (
                 <div
-                  key={event.id}
-                  className="px-4 py-1.5 border-b border-gray-100 last:border-b-0"
-                  style={{ minHeight: `${itemHeight - 5}px`, display: 'flex', alignItems: 'center' }}
+                  key={key}
+                  className="px-4 py-3"
+                  style={{ height: `${itemHeight}px`, display: "flex", alignItems: "center" }}
                 >
-                  <Link href={`/notice-board/${year}/${month}`} className="block group w-full">
-                    <div className="flex gap-3">
-                      <div className="shrink-0">
-                        <CalendarBadge date={event.eventDate} />
-                      </div>
-                      <div className="min-w-0 flex-1">
-                        <div className="text-[13px] font-semibold text-purple-900 leading-snug group-hover:text-purple-600 transition-colors">
-                          {event.title}
+                  <div className="flex items-start gap-3 w-full">
+                    <span
+                      className={cn(
+                        "mt-0.5 inline-flex h-10 w-10 items-center justify-center rounded-xl ring-1 shadow-sm",
+                        meta.wrapClass
+                      )}
+                      title={meta.label}
+                      aria-hidden
+                    >
+                      <meta.Icon className={cn("h-5 w-5", meta.iconClass)} />
+                    </span>
+
+                    <div className="min-w-0 flex-1">
+                      <div className="flex items-start justify-between gap-3">
+                        <div className="min-w-0">
+                          <Link
+                            href={`/notice-board/notices/${notice.id}`}
+                            className="block text-[13px] font-semibold text-brand-text leading-snug hover:text-brand-hover transition-colors line-clamp-2"
+                          >
+                            {notice.title}
+                          </Link>
+
+                          <div className="mt-1 flex flex-wrap items-center gap-2">
+                            {notice.important ? (
+                              <Badge className="bg-red-50 text-red-700 border-red-100">Important</Badge>
+                            ) : null}
+                            {isNew ? (
+                              <Badge className="bg-emerald-50 text-emerald-700 border-emerald-100">New</Badge>
+                            ) : null}
+                            {notice.pinned ? (
+                              <Badge className="bg-indigo-50 text-indigo-700 border-indigo-100">Pinned</Badge>
+                            ) : null}
+                          </div>
                         </div>
-                        {event.description && (
-                          <p className="mt-1 text-[11px] text-gray-600 leading-relaxed line-clamp-2">
-                            {event.description}
-                          </p>
-                        )}
+
+                        <div className="shrink-0 text-right">
+                          <div className="text-[11px] font-semibold text-slate-500">
+                            {pub ? pub.toLocaleDateString() : ""}
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="mt-2 flex flex-wrap gap-2">
+                        <Link href={`/notice-board/notices/${notice.id}`}>
+                          <Button variant="outline" className="h-8 rounded-xl px-2.5 text-xs">
+                            <Eye className="h-3.5 w-3.5 mr-1.5" />
+                            View
+                          </Button>
+                        </Link>
+                        {notice.pdfUrl ? (
+                          <Link href={notice.pdfUrl} target="_blank" rel="noreferrer">
+                            <Button className="h-8 rounded-xl bg-blue-600 hover:bg-blue-700 px-2.5 text-xs shadow-sm shadow-blue-600/20">
+                              <Download className="h-3.5 w-3.5 mr-1.5" />
+                              Download
+                            </Button>
+                          </Link>
+                        ) : null}
                       </div>
                     </div>
-                  </Link>
+                  </div>
                 </div>
               )
-            })}
+              })}
+            </div>
           </div>
         )}
       </div>
       
-      <div className="px-4 py-[calc(0.75rem-35px)] border-t bg-gradient-to-r from-purple-50 to-pink-50 text-center">
+      <div className="px-4 py-[calc(0.75rem-35px)] border-t bg-slate-100 text-center">
         <Link 
-          href={`/notice-board/${currentYear}/${currentMonth}`} 
-          className="text-sm font-medium text-purple-700 hover:text-purple-600 font-semibold transition-colors"
+          href="/notice-board"
+          className="text-sm font-medium text-brand-text hover:text-brand-hover font-semibold transition-colors"
         >
           Read More
         </Link>
       </div>
+      <style jsx>{`
+        .dbc-marquee {
+          height: 100%;
+        }
+        .dbc-marquee-track {
+          animation: dbc-marquee var(--dbc-duration) linear infinite;
+          will-change: transform;
+        }
+        .dbc-marquee.paused .dbc-marquee-track {
+          animation-play-state: paused;
+        }
+        @keyframes dbc-marquee {
+          from {
+            transform: translateY(0);
+          }
+          to {
+            transform: translateY(calc(-1 * var(--dbc-distance)));
+          }
+        }
+        @media (prefers-reduced-motion: reduce) {
+          .dbc-marquee-track {
+            animation: none !important;
+            transform: none !important;
+          }
+        }
+      `}</style>
     </Card>
   )
 }
+

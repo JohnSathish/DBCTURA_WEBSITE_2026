@@ -42,17 +42,17 @@ export default function CTASection() {
               href={item.href}
               className={`group rounded-xl p-6 shadow-[0_10px_30px_rgba(0,0,0,0.25)] border transition-transform hover:-translate-y-0.5 ${
                 item.theme === "navy"
-                  ? "bg-[#061e3a] border-white/10 text-white"
-                  : "bg-[#f59e0b] border-[#f59e0b]/40 text-white"
+                  ? "bg-brand-navy border-white/10 text-white"
+                  : "bg-brand-gold border-brand-gold/50 text-brand-text"
               }`}
             >
               <div className="text-xl md:text-2xl font-semibold mb-3 tracking-wide">
                 {item.title}
               </div>
-              <p className="text-sm md:text-base opacity-90 leading-relaxed">
+              <p className="text-sm md:text-base opacity-80 leading-relaxed">
                 {item.description}
               </p>
-              <div className="mt-5 inline-flex items-center gap-2 text-white font-medium">
+              <div className="mt-5 inline-flex items-center gap-2 text-brand-text font-medium">
                 Read More
                 <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
               </div>

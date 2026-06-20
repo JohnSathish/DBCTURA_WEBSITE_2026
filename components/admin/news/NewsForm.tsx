@@ -175,7 +175,7 @@ export default function NewsForm({ news }: { news?: News }) {
           <div className="space-y-2">
             <Label>Featured Image</Label>
             <div className="flex flex-col sm:flex-row gap-4">
-              <div className="sm:w-48 sm:h-48 w-full aspect-square rounded-lg border border-dashed border-indigo-200 flex items-center justify-center bg-white/60 overflow-hidden">
+              <div className="sm:w-48 sm:h-48 w-full aspect-square rounded-lg border border-dashed border-brand-gold/25 flex items-center justify-center bg-white/60 overflow-hidden">
                 {imagePreview ? (
                   <div className="relative w-full h-full">
                     <Image src={imagePreview} alt="Featured image" fill className="object-cover" />

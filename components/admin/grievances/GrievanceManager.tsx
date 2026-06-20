@@ -329,7 +329,7 @@ export default function GrievanceManager() {
                 </div>
                 <div>
                   <p className="text-xs uppercase text-slate-500">Message</p>
-                  <div className="mt-2 whitespace-pre-line rounded-lg border border-slate-200 bg-slate-50/70 p-4 text-sm text-slate-700">
+                  <div className="mt-2 whitespace-pre-line rounded-lg border border-slate-200 bg-brand-surface/70 p-4 text-sm text-slate-700">
                     {selectedGrievance.message}
                   </div>
                 </div>

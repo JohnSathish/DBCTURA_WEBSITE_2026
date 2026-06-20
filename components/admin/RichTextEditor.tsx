@@ -13,16 +13,46 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-import { Bold, Italic, List, ListOrdered, Link as LinkIcon, Image as ImageIcon, AlignLeft, AlignCenter, AlignRight, AlignJustify } from "lucide-react"
-import { useState } from "react"
+import {
+  Bold,
+  Italic,
+  List,
+  ListOrdered,
+  Link as LinkIcon,
+  Image as ImageIcon,
+  Paperclip,
+  AlignLeft,
+  AlignCenter,
+  AlignRight,
+  AlignJustify,
+} from "lucide-react"
+import { useEffect, useState } from "react"
 
 interface RichTextEditorProps {
   content: string
   onChange: (content: string) => void
+  imageUploadEndpoint?: string
+  fileUploadEndpoint?: string
+  allowFileAttachments?: boolean
 }
 
-export default function RichTextEditor({ content, onChange }: RichTextEditorProps) {
-  const [uploading, setUploading] = useState(false)
+function getUploadedUrl(payload: any) {
+  return String(payload?.url || payload?.filePath || "")
+}
+
+export default function RichTextEditor({
+  content,
+  onChange,
+  imageUploadEndpoint = "/api/uploads/news-images",
+  fileUploadEndpoint = "/api/uploads/download",
+  allowFileAttachments = false,
+}: RichTextEditorProps) {
+  const [uploading, setUploading] = useState<null | "image" | "file">(null)
+  const [mounted, setMounted] = useState(false)
+
+  useEffect(() => {
+    setMounted(true)
+  }, [])
 
   const editor = useEditor({
     extensions: [
@@ -53,12 +83,12 @@ export default function RichTextEditor({ content, onChange }: RichTextEditorProp
       const file = (e.target as HTMLInputElement).files?.[0]
       if (!file) return
 
-      setUploading(true)
+      setUploading("image")
       try {
         const formData = new FormData()
         formData.append("file", file)
 
-        const response = await fetch("/api/uploads/news-images", {
+        const response = await fetch(imageUploadEndpoint, {
           method: "POST",
           body: formData,
         })
@@ -68,18 +98,64 @@ export default function RichTextEditor({ content, onChange }: RichTextEditorProp
         }
 
         const data = await response.json()
-        editor?.chain().focus().setImage({ src: data.url }).run()
+        const url = getUploadedUrl(data)
+        if (!url) throw new Error("Upload failed")
+        editor?.chain().focus().setImage({ src: url }).run()
       } catch (error) {
         alert("Failed to upload image. Please try again.")
         console.error("Image upload error:", error)
       } finally {
-        setUploading(false)
+        setUploading(null)
       }
     }
     input.click()
   }
 
-  if (!editor) {
+  const handleFileUpload = () => {
+    const input = document.createElement("input")
+    input.type = "file"
+    input.accept =
+      ".pdf,.doc,.docx,.ppt,.pptx,.xls,.xlsx,.txt,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/vnd.ms-powerpoint,application/vnd.openxmlformats-officedocument.presentationml.presentation,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,image/*"
+    input.onchange = async (e) => {
+      const file = (e.target as HTMLInputElement).files?.[0]
+      if (!file) return
+
+      setUploading("file")
+      try {
+        const formData = new FormData()
+        formData.append("file", file)
+        const response = await fetch(fileUploadEndpoint, { method: "POST", body: formData })
+        const data = await response.json()
+        if (!response.ok) throw new Error(data?.error || "Failed to upload file")
+
+        const url = getUploadedUrl(data)
+        if (!url) throw new Error("Upload failed")
+
+        // If user uploads an image here, embed it; otherwise insert a link.
+        if (file.type.startsWith("image/")) {
+          editor?.chain().focus().setImage({ src: url }).run()
+          return
+        }
+
+        const safeName = (file.name || "attachment").replace(/</g, "&lt;").replace(/>/g, "&gt;")
+        editor
+          ?.chain()
+          .focus()
+          .insertContent(
+            `<p><a href="${url}" target="_blank" rel="noreferrer noopener">${safeName}</a></p>`
+          )
+          .run()
+      } catch (error: any) {
+        alert(error?.message || "Failed to upload file. Please try again.")
+        console.error("File upload error:", error)
+      } finally {
+        setUploading(null)
+      }
+    }
+    input.click()
+  }
+
+  if (!editor || !mounted) {
     return null
   }
 
@@ -228,15 +304,29 @@ export default function RichTextEditor({ content, onChange }: RichTextEditorProp
           variant="ghost"
           size="icon"
           onClick={handleImageUpload}
-          disabled={uploading}
+          disabled={uploading !== null}
           className={editor.isActive("image") ? "bg-gray-200" : ""}
           title="Upload Image"
         >
           <ImageIcon className="h-4 w-4" />
         </Button>
+
+        {allowFileAttachments ? (
+          <Button
+            type="button"
+            variant="ghost"
+            size="icon"
+            onClick={handleFileUpload}
+            disabled={uploading !== null}
+            title="Attach file (PDF/PPT/Word/Image)"
+          >
+            <Paperclip className="h-4 w-4" />
+          </Button>
+        ) : null}
       </div>
       <EditorContent
         editor={editor}
+        suppressHydrationWarning
         className="prose prose-sm sm:prose lg:prose-lg xl:prose-2xl mx-auto focus:outline-none min-h-[300px] p-4"
       />
     </div>
