@@ -24,7 +24,9 @@ ENV HOSTNAME=0.0.0.0
 ENV HOME=/app
 ENV NPM_CONFIG_CACHE=/app/.npm
 
-RUN addgroup --system --gid 1001 nodejs && adduser --system --uid 1001 nextjs
+RUN apt-get update && apt-get install -y gosu && rm -rf /var/lib/apt/lists/* \
+    && addgroup --system --gid 1001 nodejs \
+    && adduser --system --uid 1001 nextjs
 
 COPY --from=builder /app/public ./public
 COPY --from=builder /app/prisma ./prisma
@@ -37,7 +39,6 @@ RUN mkdir -p prisma public/uploads /app/data /app/.npm && \
     chmod +x /app/docker/entrypoint.sh && \
     chown -R nextjs:nodejs prisma public/uploads /app/data /app/.npm /app/docker
 
-USER nextjs
 EXPOSE 3000
 
 ENTRYPOINT ["/app/docker/entrypoint.sh"]
