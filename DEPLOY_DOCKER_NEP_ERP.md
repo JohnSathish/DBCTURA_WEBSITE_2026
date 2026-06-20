@@ -53,13 +53,17 @@ NEXTAUTH_SECRET="<run: openssl rand -base64 32>"
 Set admin password (one-time, after first build):
 
 ```bash
-docker compose -f docker-compose.prod.yml run --rm web node -e "
-console.log('Run admin:set-password on host with Node, or seed via prisma after first up')
-"
-# Easier: install node on host temporarily, or exec after container is up:
-docker compose -f docker-compose.prod.yml up -d --build
-docker compose -f docker-compose.prod.yml exec web npx prisma db push
-# On host with node: ADMIN_EMAIL=... ADMIN_PASSWORD=... npm run admin:set-password
+docker compose -f docker-compose.prod.yml exec \
+  -e ADMIN_EMAIL=admin@donboscocollege.ac.in \
+  -e ADMIN_PASSWORD='your-strong-password' \
+  web node --experimental-strip-types scripts/set-admin-password.mjs
+```
+
+Database schema is applied automatically on container start (`prisma db push` in entrypoint).
+To run it manually:
+
+```bash
+docker compose -f docker-compose.prod.yml exec web node_modules/.bin/prisma db push --skip-generate
 ```
 
 ---

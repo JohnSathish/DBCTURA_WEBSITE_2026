@@ -21,18 +21,27 @@ ENV NODE_ENV=production
 ENV NEXT_TELEMETRY_DISABLED=1
 ENV PORT=3000
 ENV HOSTNAME=0.0.0.0
+ENV HOME=/app
+ENV NPM_CONFIG_CACHE=/app/.npm
 
 RUN addgroup --system --gid 1001 nodejs && adduser --system --uid 1001 nextjs
 
 COPY --from=builder /app/public ./public
 COPY --from=builder /app/prisma ./prisma
 COPY --from=builder /app/lib/prisma-generated ./lib/prisma-generated
+COPY --from=builder /app/scripts ./scripts
 COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
+COPY --from=builder /app/node_modules/prisma ./node_modules/prisma
+COPY --from=builder /app/node_modules/@prisma ./node_modules/@prisma
+COPY --from=builder /app/node_modules/.bin/prisma ./node_modules/.bin/prisma
+COPY docker/entrypoint.sh /app/docker/entrypoint.sh
 
-RUN mkdir -p prisma public/uploads && chown -R nextjs:nodejs prisma public/uploads
+RUN mkdir -p prisma public/uploads /app/.npm && \
+    chmod +x /app/docker/entrypoint.sh && \
+    chown -R nextjs:nodejs prisma public/uploads /app/.npm /app/docker /app/scripts
 
 USER nextjs
 EXPOSE 3000
 
-CMD ["node", "server.js"]
+ENTRYPOINT ["/app/docker/entrypoint.sh"]
