@@ -223,12 +223,28 @@ model NavigationMenu {
 
 model QuestionPaper {
   id            String   @id @default(cuid())
-  year          Int
+  academicYear  String
   department    String
+  programme     String   @default("B.A.")
+  semester      Int      @default(1)
+  courseName    String
+  courseCode    String
+  examType      String
+  examMonth     String?
+  examYear      Int
+  description   String?
   fileUrl       String
   originalName  String
   fileType      String?
-  uploadedAt    DateTime @default(now())
+  fileSize      Int?
+  downloadCount Int      @default(0)
+  published     Boolean  @default(false)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@unique([academicYear, department, programme, semester, courseCode, examType, examYear])
+  @@index([department, examYear, published])
+  @@index([published, academicYear])
 }
 
 model Syllabus {

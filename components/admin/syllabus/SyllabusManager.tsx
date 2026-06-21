@@ -18,7 +18,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog"
 import {
-  ACADEMIC_YEARS,
+  getAcademicYears,
   DEPARTMENTS,
   PROGRAMMES,
   SEMESTERS,
@@ -58,7 +58,7 @@ export type SyllabusRecord = {
 const emptyForm = {
   department: DEPARTMENTS[0],
   programme: PROGRAMMES[0],
-  academicYear: ACADEMIC_YEARS[0],
+  academicYear: getAcademicYears()[0],
   curriculumVersion: "",
   semester: 1,
   courseCode: "",
@@ -347,7 +347,7 @@ export default function SyllabusManager() {
                   <Field label="Academic Year">
                     <Select value={form.academicYear} onValueChange={(v) => setForm({ ...form, academicYear: v })}>
                       <SelectTrigger><SelectValue /></SelectTrigger>
-                      <SelectContent>{ACADEMIC_YEARS.map((y) => <SelectItem key={y} value={y}>{y}</SelectItem>)}</SelectContent>
+                      <SelectContent>{getAcademicYears().map((y) => <SelectItem key={y} value={y}>{y}</SelectItem>)}</SelectContent>
                     </Select>
                   </Field>
                   <Field label="Course Code">
@@ -433,7 +433,7 @@ export default function SyllabusManager() {
                 <FilterSelect label="Dept" value={filterDepartment} onChange={setFilterDepartment} options={DEPARTMENTS} />
                 <FilterSelect label="Programme" value={filterProgramme} onChange={setFilterProgramme} options={[...PROGRAMMES]} />
                 <FilterSelect label="Semester" value={filterSemester} onChange={setFilterSemester} options={SEMESTERS.map(String)} labels={SEMESTERS.map((s) => `Sem ${s}`)} />
-                <FilterSelect label="Year" value={filterYear} onChange={setFilterYear} options={ACADEMIC_YEARS} />
+                <FilterSelect label="Year" value={filterYear} onChange={setFilterYear} options={getAcademicYears()} />
                 <Select value={filterStatus} onValueChange={setFilterStatus}>
                   <SelectTrigger><SelectValue placeholder="Status" /></SelectTrigger>
                   <SelectContent>

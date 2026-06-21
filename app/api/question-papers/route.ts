@@ -2,122 +2,125 @@ import { NextRequest, NextResponse } from "next/server"
 import { getServerSession } from "next-auth"
 import { authOptions } from "@/lib/auth"
 import { prisma } from "@/lib/prisma"
+import { Prisma } from "@/lib/prisma-generated/client"
+import { PERMISSIONS, requirePermission } from "@/lib/permissions"
+import { normalizeCourseCode, validateQuestionPaperFields } from "@/lib/question-paper-validation"
 
-const departments = [
-  "Botany",
-  "Chemistry",
-  "Commerce",
-  "Economics",
-  "Education",
-  "English",
-  "Garo",
-  "Geography",
-  "Environment",
-  "History",
-  "Mathematics",
-  "Philosophy",
-  "Physics",
-  "Political Science",
-  "Sociology",
-  "Zoology",
-]
+function buildWhere(searchParams: URLSearchParams, publishedOnly: boolean): Prisma.QuestionPaperWhereInput {
+  const where: Prisma.QuestionPaperWhereInput = {}
 
-const YEARS = Array.from({ length: 2025 - 2015 + 1 }, (_, i) => 2015 + i)
+  if (publishedOnly) {
+    where.published = true
+  } else {
+    const status = searchParams.get("status")
+    if (status === "published") where.published = true
+    if (status === "draft") where.published = false
+  }
+
+  const fields = ["department", "programme", "academicYear", "examType"] as const
+  for (const field of fields) {
+    const val = searchParams.get(field)
+    if (val) (where as Record<string, string>)[field] = val
+  }
+
+  const semester = searchParams.get("semester")
+  if (semester) {
+    const sem = Number(semester)
+    if (!Number.isNaN(sem)) where.semester = sem
+  }
+
+  const examYear = searchParams.get("examYear")
+  if (examYear) {
+    const y = Number(examYear)
+    if (!Number.isNaN(y)) where.examYear = y
+  }
+
+  const search = searchParams.get("search")?.trim()
+  if (search) {
+    where.OR = [
+      { courseCode: { contains: search } },
+      { courseName: { contains: search } },
+      { department: { contains: search } },
+    ]
+  }
+
+  return where
+}
 
 export async function GET(request: NextRequest) {
   try {
-    if (!(prisma as any).questionPaper || typeof (prisma as any).questionPaper.findMany !== "function") {
-      console.warn("QuestionPaper model not available in Prisma client. Did you run 'npx prisma generate'?" )
-      return NextResponse.json(
-        { error: "QuestionPaper model not initialized. Run 'npx prisma generate' and restart the server." },
-        { status: 503 }
-      )
-    }
+    const session = await getServerSession(authOptions)
+    const includeDrafts =
+      request.nextUrl.searchParams.get("includeDrafts") === "1" &&
+      session &&
+      requirePermission(session.user?.role, PERMISSIONS.QUESTION_PAPER_VIEW)
 
-    const searchParams = request.nextUrl.searchParams
-    const yearParam = searchParams.get("year")
-    const department = searchParams.get("department")
-
-    const where: any = {}
-
-    if (yearParam) {
-      const year = Number(yearParam)
-      if (!YEARS.includes(year)) {
-        return NextResponse.json({ error: "Invalid year" }, { status: 400 })
-      }
-      where.year = year
-    }
-
-    if (department) {
-      if (!departments.includes(department)) {
-        return NextResponse.json({ error: "Invalid department" }, { status: 400 })
-      }
-      where.department = department
-    }
+    const where = buildWhere(request.nextUrl.searchParams, !includeDrafts)
 
     const papers = await prisma.questionPaper.findMany({
       where,
-      orderBy: [{ year: "desc" }, { department: "asc" }, { originalName: "asc" }],
+      orderBy: [
+        { examYear: "desc" },
+        { academicYear: "desc" },
+        { department: "asc" },
+        { semester: "asc" },
+        { courseCode: "asc" },
+      ],
     })
 
     return NextResponse.json(papers)
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("Error fetching question papers:", error)
-    return NextResponse.json(
-      { error: error.message || "Failed to fetch question papers" },
-      { status: 500 }
-    )
+    const message = error instanceof Error ? error.message : "Failed to fetch question papers"
+    return NextResponse.json({ error: message }, { status: 500 })
   }
 }
 
 export async function POST(request: NextRequest) {
   const session = await getServerSession(authOptions)
-
   if (!session) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
   }
+  if (!requirePermission(session.user?.role, PERMISSIONS.QUESTION_PAPER_UPLOAD)) {
+    return NextResponse.json({ error: "Forbidden" }, { status: 403 })
+  }
 
   try {
-    if (!(prisma as any).questionPaper || typeof (prisma as any).questionPaper.create !== "function") {
-      console.warn("QuestionPaper model not available in Prisma client. Did you run 'npx prisma generate'?" )
-      return NextResponse.json(
-        { error: "QuestionPaper model not initialized. Run 'npx prisma generate' and restart the server." },
-        { status: 503 }
-      )
-    }
-
     const body = await request.json()
-    const { year, department, fileUrl, originalName, fileType } = body
-
-    if (!YEARS.includes(year)) {
-      return NextResponse.json({ error: "Invalid year" }, { status: 400 })
+    const validationError = validateQuestionPaperFields(body)
+    if (validationError) {
+      return NextResponse.json({ error: validationError }, { status: 400 })
     }
 
-    if (!departments.includes(department)) {
-      return NextResponse.json({ error: "Invalid department" }, { status: 400 })
-    }
-
-    if (!fileUrl || !originalName) {
-      return NextResponse.json({ error: "File information is required" }, { status: 400 })
-    }
+    const canPublish = requirePermission(session.user?.role, PERMISSIONS.QUESTION_PAPER_PUBLISH)
 
     const paper = await prisma.questionPaper.create({
       data: {
-        year,
-        department,
-        fileUrl,
-        originalName,
-        fileType: fileType || null,
+        academicYear: body.academicYear,
+        department: body.department,
+        programme: body.programme,
+        semester: body.semester,
+        courseName: body.courseName.trim(),
+        courseCode: normalizeCourseCode(body.courseCode),
+        examType: body.examType,
+        examMonth: body.examMonth?.trim() || null,
+        examYear: body.examYear,
+        description: body.description?.trim() || null,
+        fileUrl: body.fileUrl,
+        originalName: body.originalName,
+        fileType: body.fileType || "application/pdf",
+        fileSize: body.fileSize ?? null,
+        published: canPublish ? Boolean(body.published) : false,
       },
     })
 
     return NextResponse.json(paper, { status: 201 })
-  } catch (error: any) {
+  } catch (error: unknown) {
+    if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === "P2002") {
+      return NextResponse.json({ error: "Duplicate question paper entry" }, { status: 409 })
+    }
     console.error("Error creating question paper:", error)
-    return NextResponse.json(
-      { error: error.message || "Failed to create question paper" },
-      { status: 500 }
-    )
+    const message = error instanceof Error ? error.message : "Failed to create question paper"
+    return NextResponse.json({ error: message }, { status: 500 })
   }
 }
-

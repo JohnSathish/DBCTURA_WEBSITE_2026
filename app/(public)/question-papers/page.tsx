@@ -1,45 +1,62 @@
-import { prisma } from "@/lib/prisma"
+import BreadcrumbTitleSetter from "@/components/layout/BreadcrumbTitleSetter"
 import QuestionPaperBrowser from "@/components/question-papers/QuestionPaperBrowser"
+import { prisma } from "@/lib/prisma"
 
 export const dynamic = "force-dynamic"
 
-async function getQuestionPapers() {
-  try {
-    const papers = await prisma.questionPaper.findMany({
-      orderBy: [{ year: "desc" }, { department: "asc" }, { originalName: "asc" }],
-    })
-    return papers
-  } catch (error) {
-    console.error("Error fetching question papers:", error)
-    return []
-  }
+export const metadata = {
+  title: "Question Papers | Don Bosco College, Tura",
+  description: "Browse and download previous year question papers by department, semester, and subject.",
 }
 
 export default async function QuestionPapersPage() {
-  const papers = await getQuestionPapers()
-  const serializedPapers = papers.map((paper) => ({
-    ...paper,
-    uploadedAt: paper.uploadedAt.toISOString(),
+  let papers: Awaited<ReturnType<typeof prisma.questionPaper.findMany>> = []
+  try {
+    papers = await prisma.questionPaper.findMany({
+      where: { published: true },
+      orderBy: [
+        { examYear: "desc" },
+        { academicYear: "desc" },
+        { department: "asc" },
+        { semester: "asc" },
+        { courseCode: "asc" },
+      ],
+    })
+  } catch (error) {
+    console.error("Error fetching question papers:", error)
+  }
+
+  const serialized = papers.map((p) => ({
+    id: p.id,
+    academicYear: p.academicYear,
+    department: p.department,
+    programme: p.programme,
+    semester: p.semester,
+    courseName: p.courseName,
+    courseCode: p.courseCode,
+    examType: p.examType,
+    examYear: p.examYear,
+    fileUrl: p.fileUrl,
+    originalName: p.originalName,
   }))
 
   return (
-    <div className="min-h-screen bg-brand-surface py-12">
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
-        <header className="space-y-3 text-center">
-          <h1 className="text-4xl font-bold text-brand-text">Question Papers</h1>
-          <p className="text-slate-600 max-w-3xl mx-auto">
-            Browse question papers by academic year and department. Select a year to get started, then choose your
-            department to view available documents.
-          </p>
-        </header>
-
-        <div className="bg-white/90 backdrop-blur rounded-3xl shadow-xl border border-brand-gold/20 p-6 sm:p-10">
-          <QuestionPaperBrowser initialPapers={serializedPapers} />
+    <>
+      <BreadcrumbTitleSetter title="Question Papers" />
+      <div className="min-h-screen bg-brand-surface py-12">
+        <div className="mx-auto max-w-6xl space-y-8 px-4 sm:px-6 lg:px-8">
+          <header className="space-y-3 text-center">
+            <h1 className="font-heading text-4xl font-bold text-brand-text">Previous Year Question Papers</h1>
+            <p className="mx-auto max-w-3xl text-slate-600">
+              Filter by department, semester, subject, academic year, and examination type. Download PDFs for your
+              programme and semester.
+            </p>
+          </header>
+          <div className="rounded-3xl border border-brand-gold/20 bg-white/90 p-6 shadow-xl backdrop-blur sm:p-10">
+            <QuestionPaperBrowser papers={serialized} />
+          </div>
         </div>
       </div>
-    </div>
+    </>
   )
 }
-
-
-

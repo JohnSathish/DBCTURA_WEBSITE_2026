@@ -195,7 +195,7 @@ export const defaultNavigation: NavigationItem[] = [
       { href: "/academics/institutional-distinctiveness", label: "Institutional Distinctiveness" },
       { href: "/academics/short-term-course", label: "Short Term Course" },
       { href: "/syllabus", label: "Syllabus" },
-      { href: "/academics/question-papers", label: "Question Papers" },
+      { href: "/question-papers", label: "Question Papers" },
     ],
   },
   {

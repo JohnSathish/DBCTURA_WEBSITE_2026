@@ -3,164 +3,213 @@
 import { useMemo, useState } from "react"
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
-import { Card, CardContent } from "@/components/ui/card"
-import { Download, FileText } from "lucide-react"
+import { Input } from "@/components/ui/input"
+import {
+  DEPARTMENTS,
+  EXAM_TYPES,
+  getAcademicYears,
+  getCalendarYears,
+  PROGRAMMES,
+  SEMESTERS,
+} from "@/lib/academics-constants"
+import { Download, FileText, Search } from "lucide-react"
 
-const YEARS = Array.from({ length: 2025 - 2015 + 1 }, (_, i) => 2015 + i)
-const DEPARTMENTS = [
-  "Botany",
-  "Chemistry",
-  "Commerce",
-  "Economics",
-  "Education",
-  "English",
-  "Garo",
-  "Geography",
-  "Environment",
-  "History",
-  "Mathematics",
-  "Philosophy",
-  "Physics",
-  "Political Science",
-  "Sociology",
-  "Zoology",
-]
-
-type QuestionPaper = {
+export type QuestionPaperPublic = {
   id: string
-  year: number
+  academicYear: string
   department: string
+  programme: string
+  semester: number
+  courseName: string
+  courseCode: string
+  examType: string
+  examYear: number
   fileUrl: string
   originalName: string
-  fileType?: string | null
-  uploadedAt: string
 }
 
-export default function QuestionPaperBrowser({ initialPapers }: { initialPapers: QuestionPaper[] }) {
-  const defaultYear = useMemo(() => {
-    if (!initialPapers || initialPapers.length === 0) {
-      return YEARS[YEARS.length - 1]
+export default function QuestionPaperBrowser({ papers }: { papers: QuestionPaperPublic[] }) {
+  const academicYears = useMemo(() => getAcademicYears(), [])
+  const calendarYears = useMemo(() => getCalendarYears(), [])
+
+  const [search, setSearch] = useState("")
+  const [academicYear, setAcademicYear] = useState<string>("")
+  const [examYear, setExamYear] = useState<number | null>(null)
+  const [department, setDepartment] = useState<string | null>(null)
+  const [programme, setProgramme] = useState<string | null>(null)
+  const [semester, setSemester] = useState<number | null>(null)
+  const [examType, setExamType] = useState<string | null>(null)
+
+  const availableAcademicYears = useMemo(() => {
+    const set = new Set(papers.map((p) => p.academicYear))
+    return academicYears.filter((y) => set.has(y))
+  }, [papers, academicYears])
+
+  const results = useMemo(() => {
+    let list = [...papers]
+    if (academicYear) list = list.filter((p) => p.academicYear === academicYear)
+    if (examYear != null) list = list.filter((p) => p.examYear === examYear)
+    if (department) list = list.filter((p) => p.department === department)
+    if (programme) list = list.filter((p) => p.programme === programme)
+    if (semester != null) list = list.filter((p) => p.semester === semester)
+    if (examType) list = list.filter((p) => p.examType === examType)
+    if (search.trim()) {
+      const q = search.trim().toLowerCase()
+      list = list.filter(
+        (p) =>
+          p.courseCode.toLowerCase().includes(q) ||
+          p.courseName.toLowerCase().includes(q) ||
+          p.department.toLowerCase().includes(q)
+      )
     }
-    return initialPapers.reduce((max, paper) => (paper.year > max ? paper.year : max), YEARS[0])
-  }, [initialPapers])
+    return list.sort((a, b) => b.examYear - a.examYear || a.courseCode.localeCompare(b.courseCode))
+  }, [papers, academicYear, examYear, department, programme, semester, examType, search])
 
-  const [selectedYear, setSelectedYear] = useState<number>(defaultYear)
-  const [selectedDepartment, setSelectedDepartment] = useState<string | null>(null)
+  const departmentsAvailable = useMemo(() => {
+    return DEPARTMENTS.filter((d) => papers.some((p) => p.department === d))
+  }, [papers])
 
-  const filteredDepartments = useMemo(() => {
-    const departmentsForYear = initialPapers
-      .filter((paper) => paper.year === selectedYear)
-      .map((paper) => paper.department)
-
-    return DEPARTMENTS.filter((dept) => departmentsForYear.includes(dept))
-  }, [initialPapers, selectedYear])
-
-  const selectedPapers = useMemo(() => {
-    if (!selectedDepartment) return []
-    return initialPapers.filter(
-      (paper) => paper.year === selectedYear && paper.department === selectedDepartment
+  if (papers.length === 0) {
+    return (
+      <div className="rounded-2xl border border-dashed border-brand-gold/30 bg-white/80 py-16 text-center">
+        <FileText className="mx-auto mb-4 h-12 w-12 text-slate-300" />
+        <p className="text-slate-600">Previous year question papers will appear here once published.</p>
+      </div>
     )
-  }, [initialPapers, selectedYear, selectedDepartment])
+  }
 
   return (
     <div className="space-y-8">
-      <section className="space-y-4">
-        <h2 className="text-xl font-semibold text-brand-text">Select Year</h2>
-        <div className="flex flex-wrap gap-3">
-          {YEARS.map((year) => {
-            const available = initialPapers.some((paper) => paper.year === year)
-            return (
-              <Button
-                key={year}
-                variant={selectedYear === year ? "default" : "outline"}
-                disabled={!available}
-                onClick={() => {
-                  if (available) {
-                    setSelectedYear(year)
-                    setSelectedDepartment(null)
-                  }
-                }}
-                className={cn(
-                  "min-w-[4.5rem]",
-                  selectedYear === year
-                    ? "bg-brand-gold text-brand-text hover:opacity-95 border-brand-gold"
-                    : available
-                    ? "border-brand-hover/25 text-brand-hover hover:bg-brand-hover/10"
-                    : "border-gray-200 text-gray-400 cursor-not-allowed"
-                )}
-              >
-                {year}
-              </Button>
-            )
-          })}
+      <div className="relative max-w-md">
+        <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
+        <Input
+          placeholder="Search course code, subject, department…"
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          className="pl-10"
+        />
+      </div>
+
+      <FilterSection title="Academic Year">
+        <div className="flex flex-wrap gap-2">
+          <FilterChip active={!academicYear} onClick={() => setAcademicYear("")} label="All" />
+          {availableAcademicYears.map((y) => (
+            <FilterChip key={y} active={academicYear === y} onClick={() => setAcademicYear(y)} label={y} />
+          ))}
         </div>
-      </section>
+      </FilterSection>
+
+      <FilterSection title="Exam Year">
+        <div className="flex flex-wrap gap-2">
+          <FilterChip active={examYear === null} onClick={() => setExamYear(null)} label="All" />
+          {calendarYears.filter((y) => papers.some((p) => p.examYear === y)).map((y) => (
+            <FilterChip key={y} active={examYear === y} onClick={() => setExamYear(y)} label={String(y)} />
+          ))}
+        </div>
+      </FilterSection>
+
+      <FilterSection title="Department">
+        <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-4">
+          {departmentsAvailable.map((d) => (
+            <FilterChip key={d} active={department === d} onClick={() => setDepartment(department === d ? null : d)} label={d} block />
+          ))}
+        </div>
+      </FilterSection>
+
+      <FilterSection title="Programme">
+        <div className="flex flex-wrap gap-2">
+          {PROGRAMMES.filter((p) => papers.some((x) => x.programme === p)).map((p) => (
+            <FilterChip key={p} active={programme === p} onClick={() => setProgramme(programme === p ? null : p)} label={p} />
+          ))}
+        </div>
+      </FilterSection>
+
+      <FilterSection title="Semester">
+        <div className="flex flex-wrap gap-2">
+          {SEMESTERS.filter((s) => papers.some((p) => p.semester === s)).map((s) => (
+            <FilterChip key={s} active={semester === s} onClick={() => setSemester(semester === s ? null : s)} label={`Sem ${s}`} />
+          ))}
+        </div>
+      </FilterSection>
+
+      <FilterSection title="Examination Type">
+        <div className="flex flex-wrap gap-2">
+          {EXAM_TYPES.filter((t) => papers.some((p) => p.examType === t)).map((t) => (
+            <FilterChip key={t} active={examType === t} onClick={() => setExamType(examType === t ? null : t)} label={t} />
+          ))}
+        </div>
+      </FilterSection>
 
       <section className="space-y-4">
-        <h2 className="text-xl font-semibold text-brand-text">Select Department</h2>
-        {filteredDepartments.length === 0 ? (
-          <p className="text-sm text-gray-500">
-            No question papers available for {selectedYear}. Please choose a different year.
-          </p>
+        <h2 className="font-heading text-lg font-semibold text-brand-text">
+          {results.length} question paper{results.length !== 1 ? "s" : ""}
+        </h2>
+        {results.length === 0 ? (
+          <p className="text-sm text-slate-500">No papers match your filters.</p>
         ) : (
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
-            {filteredDepartments.map((dept) => (
-              <button
-                key={dept}
-                onClick={() => setSelectedDepartment(dept)}
-                className={cn(
-                  "px-4 py-3 rounded-xl text-sm font-medium transition-all border",
-                  selectedDepartment === dept
-                    ? "bg-brand-gold text-brand-text border-brand-gold shadow"
-                    : "bg-white/80 border-brand-hover/20 text-brand-hover hover:bg-brand-hover/10"
-                )}
-              >
-                {dept}
-              </button>
-            ))}
-          </div>
-        )}
-      </section>
-
-      <section className="space-y-4">
-        <h2 className="text-xl font-semibold text-brand-text">Question Papers</h2>
-        {!selectedDepartment ? (
-          <p className="text-sm text-gray-500">Select a department to view question papers.</p>
-        ) : selectedPapers.length === 0 ? (
-          <p className="text-sm text-gray-500">
-            No question papers found for {selectedDepartment} ({selectedYear}).
-          </p>
-        ) : (
-          <div className="grid gap-4">
-            {selectedPapers.map((paper) => (
-              <Card key={paper.id} className="border-brand-gold/20 shadow-sm hover:shadow-md transition-shadow">
-                <CardContent className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 py-4">
-                  <div className="flex items-start gap-4">
-                    <div className="hidden sm:flex h-12 w-12 items-center justify-center rounded-full bg-brand-hover/10 text-brand-hover">
-                      <FileText className="h-6 w-6" />
-                    </div>
-                    <div>
-                      <h3 className="font-semibold text-brand-text break-all">{paper.originalName}</h3>
-                      <p className="text-xs text-gray-500 mt-1">
-                        Uploaded on {new Date(paper.uploadedAt).toLocaleDateString()}
-                      </p>
-                    </div>
+          <ul className="divide-y divide-slate-100 overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
+            {results.map((paper) => (
+              <li key={paper.id} className="flex flex-col gap-3 p-4 transition hover:bg-slate-50/80 sm:flex-row sm:items-center sm:justify-between">
+                <div className="flex min-w-0 gap-3">
+                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-red-50 text-red-600">
+                    <FileText className="h-5 w-5" />
                   </div>
-                  <div className="flex items-center gap-2">
-                    <Button variant="outline" asChild>
-                      <a href={paper.fileUrl} target="_blank" rel="noopener noreferrer">
-                        View / Download
-                        <Download className="h-4 w-4 ml-2" />
-                      </a>
-                    </Button>
+                  <div className="min-w-0">
+                    <p className="font-mono text-xs font-semibold text-brand-navy">{paper.courseCode}</p>
+                    <p className="font-medium text-slate-900 break-words">{paper.courseName}</p>
+                    <p className="mt-1 text-xs text-slate-500">
+                      {paper.department} · {paper.programme} · Sem {paper.semester} · {paper.examType} · {paper.examYear}
+                    </p>
                   </div>
-                </CardContent>
-              </Card>
+                </div>
+                <Button asChild className="shrink-0 bg-brand-navy hover:bg-brand-navy/90">
+                  <a href={`/api/question-papers/${paper.id}/download`}>
+                    <Download className="mr-2 h-4 w-4" />
+                    Download PDF
+                  </a>
+                </Button>
+              </li>
             ))}
-          </div>
+          </ul>
         )}
       </section>
     </div>
   )
 }
 
+function FilterSection({ title, children }: { title: string; children: React.ReactNode }) {
+  return (
+    <section className="space-y-2">
+      <h2 className="font-heading text-sm font-semibold uppercase tracking-wide text-slate-500">{title}</h2>
+      {children}
+    </section>
+  )
+}
+
+function FilterChip({
+  label,
+  active,
+  onClick,
+  block,
+}: {
+  label: string
+  active: boolean
+  onClick: () => void
+  block?: boolean
+}) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      className={cn(
+        "rounded-xl border px-3 py-2 text-sm font-medium transition",
+        block && "text-left",
+        active
+          ? "border-brand-gold bg-brand-gold text-brand-text shadow-sm"
+          : "border-slate-200 bg-white text-slate-700 hover:border-brand-hover/30 hover:bg-slate-50"
+      )}
+    >
+      {label}
+    </button>
+  )
+}

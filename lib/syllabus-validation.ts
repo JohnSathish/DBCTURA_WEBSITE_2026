@@ -1,5 +1,5 @@
 import {
-  ACADEMIC_YEARS,
+  getAcademicYears,
   DEPARTMENTS,
   PROGRAMMES,
   SEMESTERS,
@@ -30,7 +30,7 @@ export function validateSyllabusFields(body: Partial<SyllabusInput>): string | n
   if (!body.programme || !PROGRAMMES.includes(body.programme as Programme)) {
     return "Invalid programme"
   }
-  if (!body.academicYear || !ACADEMIC_YEARS.includes(body.academicYear)) {
+  if (!body.academicYear || !getAcademicYears().includes(body.academicYear)) {
     return "Invalid academic year"
   }
   if (body.semester == null || !SEMESTERS.includes(body.semester as (typeof SEMESTERS)[number])) {
