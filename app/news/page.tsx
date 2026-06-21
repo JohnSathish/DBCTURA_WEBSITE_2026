@@ -4,6 +4,9 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import Image from "next/image"
 import { ArrowLeft } from "lucide-react"
 
+// Read live DB at request time (runtime volume), not build-time snapshot.
+export const dynamic = "force-dynamic"
+
 export default async function NewsPage() {
   const news = await prisma.news.findMany({
     where: { publishedAt: { not: null } },

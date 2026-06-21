@@ -14,6 +14,7 @@
     "admin:set-password": "tsx scripts/set-admin-password.ts",
     "import-news:dbc": "tsx scripts/import-dbc-news-events.ts",
     "fix-news-images": "tsx scripts/clear-invalid-news-images.ts",
+    "migrate-news-images": "tsx scripts/migrate-news-images.ts",
     "import-testimonials:dbc": "tsx scripts/import-dbc-alumni-testimonials.ts",
     "import-short-term-courses:dbc": "tsx scripts/import-dbc-short-term-courses.ts",
     "import-vision-mission:dbc": "tsx scripts/import-dbc-vision-mission.ts",

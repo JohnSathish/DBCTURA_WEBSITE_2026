@@ -6,6 +6,8 @@ import Link from "next/link"
 import { ArrowLeft } from "lucide-react"
 import BreadcrumbTitleSetter from "@/components/layout/BreadcrumbTitleSetter"
 
+export const dynamic = "force-dynamic"
+
 export async function generateMetadata({
   params,
 }: {

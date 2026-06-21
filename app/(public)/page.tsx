@@ -18,6 +18,9 @@ import {
   sisterInstitutionLogos,
 } from "@/data/home-partner-logos"
 
+// Homepage news/hero content must reflect runtime DB, not build-time snapshot.
+export const dynamic = "force-dynamic"
+
 async function getHomeData() {
   const [about, featuredNews, galleryAlbums, testimonials, noticeBoardNotices, flashNews, heroSlides, shortTermCourses] = await Promise.all([
     prisma.page.findUnique({ where: { slug: "about" } }),
