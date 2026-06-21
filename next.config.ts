@@ -4,13 +4,9 @@ const nextConfig: NextConfig = {
   output: "standalone",
   poweredByHeader: false,
   images: {
-    localPatterns: [
-      { pathname: "/uploads/**" },
-      { pathname: "/news-images/**" },
-      { pathname: "/hero/**" },
-      { pathname: "/alumni-testimonials/**" },
-      { pathname: "/short-term-courses/**" },
-    ],
+    // Next.js 16 requires localPatterns; a single /** allows all public/ assets
+    // (logo.png, /uploads/**, /hero/**, etc.)
+    localPatterns: [{ pathname: "/**" }],
     remotePatterns: [
       {
         protocol: "https",
