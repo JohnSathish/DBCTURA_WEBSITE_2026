@@ -25,7 +25,7 @@ const STATS = [
   {
     icon: School,
     target: 118,
-    suffix: "",
+    suffix: "+",
     titleRest: " Staff",
     sub: "Teaching & non-teaching",
     iconTheme:

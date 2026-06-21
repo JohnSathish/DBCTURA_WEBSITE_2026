@@ -355,7 +355,7 @@ export default async function DashboardPage() {
                 </div>
                 <div>
                   <div className="text-white/70">Students</div>
-                  <div className="text-lg font-semibold">3000</div>
+                  <div className="text-lg font-semibold">3000+</div>
                 </div>
                 <div>
                   <div className="text-white/70">Accreditation</div>

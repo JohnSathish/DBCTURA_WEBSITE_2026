@@ -3,10 +3,10 @@
 import { GraduationCap, Users, School, Award, Briefcase } from "lucide-react"
 
 const STATS = [
-  { icon: Users, value: "3000", label: "Happy Students" },
+  { icon: Users, value: "3000+", label: "Happy Students" },
   { icon: GraduationCap, value: "25+", label: "Courses Offered" },
   { icon: School, value: "80+", label: "Experienced Faculty" },
-  { icon: Briefcase, value: "118", label: "Staff" },
+  { icon: Briefcase, value: "118+", label: "Staff" },
   { icon: Award, value: "B Grade", label: "NAAC Accredited" },
 ] as const
 

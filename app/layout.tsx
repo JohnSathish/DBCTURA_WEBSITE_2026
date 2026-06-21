@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next"
-import { Inter, Oswald, Poppins } from "next/font/google"
+import { Inter } from "next/font/google"
 import "./globals.css"
 import { Providers } from "./providers"
 import PerfMeasureGuard from "@/components/PerfMeasureGuard"
@@ -11,19 +11,6 @@ const inter = Inter({
   subsets: ["latin"],
   display: "swap",
   variable: "--font-inter",
-})
-
-const oswald = Oswald({
-  subsets: ["latin"],
-  display: "swap",
-  variable: "--font-oswald",
-})
-
-const poppins = Poppins({
-  subsets: ["latin"],
-  weight: ["400", "600", "700"],
-  display: "swap",
-  variable: "--font-poppins",
 })
 
 export const metadata: Metadata = {
@@ -70,7 +57,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body
-        className={`${inter.className} ${inter.variable} ${oswald.variable} ${poppins.variable} antialiased`}
+        className={`${inter.className} ${inter.variable} antialiased`}
         suppressHydrationWarning
       >
         <Providers>
