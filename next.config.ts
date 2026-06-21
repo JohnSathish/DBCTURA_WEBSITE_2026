@@ -4,6 +4,13 @@ const nextConfig: NextConfig = {
   output: "standalone",
   poweredByHeader: false,
   images: {
+    localPatterns: [
+      { pathname: "/uploads/**" },
+      { pathname: "/news-images/**" },
+      { pathname: "/hero/**" },
+      { pathname: "/alumni-testimonials/**" },
+      { pathname: "/short-term-courses/**" },
+    ],
     remotePatterns: [
       {
         protocol: "https",
