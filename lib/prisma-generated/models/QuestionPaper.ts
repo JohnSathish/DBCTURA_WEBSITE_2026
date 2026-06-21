@@ -26,81 +26,165 @@ export type AggregateQuestionPaper = {
 }
 
 export type QuestionPaperAvgAggregateOutputType = {
-  year: number | null
+  semester: number | null
+  examYear: number | null
+  fileSize: number | null
+  downloadCount: number | null
 }
 
 export type QuestionPaperSumAggregateOutputType = {
-  year: number | null
+  semester: number | null
+  examYear: number | null
+  fileSize: number | null
+  downloadCount: number | null
 }
 
 export type QuestionPaperMinAggregateOutputType = {
   id: string | null
-  year: number | null
+  academicYear: string | null
   department: string | null
+  programme: string | null
+  semester: number | null
+  courseName: string | null
+  courseCode: string | null
+  examType: string | null
+  examMonth: string | null
+  examYear: number | null
+  description: string | null
   fileUrl: string | null
   originalName: string | null
   fileType: string | null
-  uploadedAt: Date | null
+  fileSize: number | null
+  downloadCount: number | null
+  published: boolean | null
+  createdAt: Date | null
+  updatedAt: Date | null
 }
 
 export type QuestionPaperMaxAggregateOutputType = {
   id: string | null
-  year: number | null
+  academicYear: string | null
   department: string | null
+  programme: string | null
+  semester: number | null
+  courseName: string | null
+  courseCode: string | null
+  examType: string | null
+  examMonth: string | null
+  examYear: number | null
+  description: string | null
   fileUrl: string | null
   originalName: string | null
   fileType: string | null
-  uploadedAt: Date | null
+  fileSize: number | null
+  downloadCount: number | null
+  published: boolean | null
+  createdAt: Date | null
+  updatedAt: Date | null
 }
 
 export type QuestionPaperCountAggregateOutputType = {
   id: number
-  year: number
+  academicYear: number
   department: number
+  programme: number
+  semester: number
+  courseName: number
+  courseCode: number
+  examType: number
+  examMonth: number
+  examYear: number
+  description: number
   fileUrl: number
   originalName: number
   fileType: number
-  uploadedAt: number
+  fileSize: number
+  downloadCount: number
+  published: number
+  createdAt: number
+  updatedAt: number
   _all: number
 }
 
 
 export type QuestionPaperAvgAggregateInputType = {
-  year?: true
+  semester?: true
+  examYear?: true
+  fileSize?: true
+  downloadCount?: true
 }
 
 export type QuestionPaperSumAggregateInputType = {
-  year?: true
+  semester?: true
+  examYear?: true
+  fileSize?: true
+  downloadCount?: true
 }
 
 export type QuestionPaperMinAggregateInputType = {
   id?: true
-  year?: true
+  academicYear?: true
   department?: true
+  programme?: true
+  semester?: true
+  courseName?: true
+  courseCode?: true
+  examType?: true
+  examMonth?: true
+  examYear?: true
+  description?: true
   fileUrl?: true
   originalName?: true
   fileType?: true
-  uploadedAt?: true
+  fileSize?: true
+  downloadCount?: true
+  published?: true
+  createdAt?: true
+  updatedAt?: true
 }
 
 export type QuestionPaperMaxAggregateInputType = {
   id?: true
-  year?: true
+  academicYear?: true
   department?: true
+  programme?: true
+  semester?: true
+  courseName?: true
+  courseCode?: true
+  examType?: true
+  examMonth?: true
+  examYear?: true
+  description?: true
   fileUrl?: true
   originalName?: true
   fileType?: true
-  uploadedAt?: true
+  fileSize?: true
+  downloadCount?: true
+  published?: true
+  createdAt?: true
+  updatedAt?: true
 }
 
 export type QuestionPaperCountAggregateInputType = {
   id?: true
-  year?: true
+  academicYear?: true
   department?: true
+  programme?: true
+  semester?: true
+  courseName?: true
+  courseCode?: true
+  examType?: true
+  examMonth?: true
+  examYear?: true
+  description?: true
   fileUrl?: true
   originalName?: true
   fileType?: true
-  uploadedAt?: true
+  fileSize?: true
+  downloadCount?: true
+  published?: true
+  createdAt?: true
+  updatedAt?: true
   _all?: true
 }
 
@@ -192,12 +276,24 @@ export type QuestionPaperGroupByArgs<ExtArgs extends runtime.Types.Extensions.In
 
 export type QuestionPaperGroupByOutputType = {
   id: string
-  year: number
+  academicYear: string
   department: string
+  programme: string
+  semester: number
+  courseName: string
+  courseCode: string
+  examType: string
+  examMonth: string | null
+  examYear: number
+  description: string | null
   fileUrl: string
   originalName: string
   fileType: string | null
-  uploadedAt: Date
+  fileSize: number | null
+  downloadCount: number
+  published: boolean
+  createdAt: Date
+  updatedAt: Date
   _count: QuestionPaperCountAggregateOutputType | null
   _avg: QuestionPaperAvgAggregateOutputType | null
   _sum: QuestionPaperSumAggregateOutputType | null
@@ -225,45 +321,94 @@ export type QuestionPaperWhereInput = {
   OR?: Prisma.QuestionPaperWhereInput[]
   NOT?: Prisma.QuestionPaperWhereInput | Prisma.QuestionPaperWhereInput[]
   id?: Prisma.StringFilter<"QuestionPaper"> | string
-  year?: Prisma.IntFilter<"QuestionPaper"> | number
+  academicYear?: Prisma.StringFilter<"QuestionPaper"> | string
   department?: Prisma.StringFilter<"QuestionPaper"> | string
+  programme?: Prisma.StringFilter<"QuestionPaper"> | string
+  semester?: Prisma.IntFilter<"QuestionPaper"> | number
+  courseName?: Prisma.StringFilter<"QuestionPaper"> | string
+  courseCode?: Prisma.StringFilter<"QuestionPaper"> | string
+  examType?: Prisma.StringFilter<"QuestionPaper"> | string
+  examMonth?: Prisma.StringNullableFilter<"QuestionPaper"> | string | null
+  examYear?: Prisma.IntFilter<"QuestionPaper"> | number
+  description?: Prisma.StringNullableFilter<"QuestionPaper"> | string | null
   fileUrl?: Prisma.StringFilter<"QuestionPaper"> | string
   originalName?: Prisma.StringFilter<"QuestionPaper"> | string
   fileType?: Prisma.StringNullableFilter<"QuestionPaper"> | string | null
-  uploadedAt?: Prisma.DateTimeFilter<"QuestionPaper"> | Date | string
+  fileSize?: Prisma.IntNullableFilter<"QuestionPaper"> | number | null
+  downloadCount?: Prisma.IntFilter<"QuestionPaper"> | number
+  published?: Prisma.BoolFilter<"QuestionPaper"> | boolean
+  createdAt?: Prisma.DateTimeFilter<"QuestionPaper"> | Date | string
+  updatedAt?: Prisma.DateTimeFilter<"QuestionPaper"> | Date | string
 }
 
 export type QuestionPaperOrderByWithRelationInput = {
   id?: Prisma.SortOrder
-  year?: Prisma.SortOrder
+  academicYear?: Prisma.SortOrder
   department?: Prisma.SortOrder
+  programme?: Prisma.SortOrder
+  semester?: Prisma.SortOrder
+  courseName?: Prisma.SortOrder
+  courseCode?: Prisma.SortOrder
+  examType?: Prisma.SortOrder
+  examMonth?: Prisma.SortOrderInput | Prisma.SortOrder
+  examYear?: Prisma.SortOrder
+  description?: Prisma.SortOrderInput | Prisma.SortOrder
   fileUrl?: Prisma.SortOrder
   originalName?: Prisma.SortOrder
   fileType?: Prisma.SortOrderInput | Prisma.SortOrder
-  uploadedAt?: Prisma.SortOrder
+  fileSize?: Prisma.SortOrderInput | Prisma.SortOrder
+  downloadCount?: Prisma.SortOrder
+  published?: Prisma.SortOrder
+  createdAt?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
 }
 
 export type QuestionPaperWhereUniqueInput = Prisma.AtLeast<{
   id?: string
+  academicYear_department_programme_semester_courseCode_examType_examYear?: Prisma.QuestionPaperAcademicYearDepartmentProgrammeSemesterCourseCodeExamTypeExamYearCompoundUniqueInput
   AND?: Prisma.QuestionPaperWhereInput | Prisma.QuestionPaperWhereInput[]
   OR?: Prisma.QuestionPaperWhereInput[]
   NOT?: Prisma.QuestionPaperWhereInput | Prisma.QuestionPaperWhereInput[]
-  year?: Prisma.IntFilter<"QuestionPaper"> | number
+  academicYear?: Prisma.StringFilter<"QuestionPaper"> | string
   department?: Prisma.StringFilter<"QuestionPaper"> | string
+  programme?: Prisma.StringFilter<"QuestionPaper"> | string
+  semester?: Prisma.IntFilter<"QuestionPaper"> | number
+  courseName?: Prisma.StringFilter<"QuestionPaper"> | string
+  courseCode?: Prisma.StringFilter<"QuestionPaper"> | string
+  examType?: Prisma.StringFilter<"QuestionPaper"> | string
+  examMonth?: Prisma.StringNullableFilter<"QuestionPaper"> | string | null
+  examYear?: Prisma.IntFilter<"QuestionPaper"> | number
+  description?: Prisma.StringNullableFilter<"QuestionPaper"> | string | null
   fileUrl?: Prisma.StringFilter<"QuestionPaper"> | string
   originalName?: Prisma.StringFilter<"QuestionPaper"> | string
   fileType?: Prisma.StringNullableFilter<"QuestionPaper"> | string | null
-  uploadedAt?: Prisma.DateTimeFilter<"QuestionPaper"> | Date | string
-}, "id">
+  fileSize?: Prisma.IntNullableFilter<"QuestionPaper"> | number | null
+  downloadCount?: Prisma.IntFilter<"QuestionPaper"> | number
+  published?: Prisma.BoolFilter<"QuestionPaper"> | boolean
+  createdAt?: Prisma.DateTimeFilter<"QuestionPaper"> | Date | string
+  updatedAt?: Prisma.DateTimeFilter<"QuestionPaper"> | Date | string
+}, "id" | "academicYear_department_programme_semester_courseCode_examType_examYear">
 
 export type QuestionPaperOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
-  year?: Prisma.SortOrder
+  academicYear?: Prisma.SortOrder
   department?: Prisma.SortOrder
+  programme?: Prisma.SortOrder
+  semester?: Prisma.SortOrder
+  courseName?: Prisma.SortOrder
+  courseCode?: Prisma.SortOrder
+  examType?: Prisma.SortOrder
+  examMonth?: Prisma.SortOrderInput | Prisma.SortOrder
+  examYear?: Prisma.SortOrder
+  description?: Prisma.SortOrderInput | Prisma.SortOrder
   fileUrl?: Prisma.SortOrder
   originalName?: Prisma.SortOrder
   fileType?: Prisma.SortOrderInput | Prisma.SortOrder
-  uploadedAt?: Prisma.SortOrder
+  fileSize?: Prisma.SortOrderInput | Prisma.SortOrder
+  downloadCount?: Prisma.SortOrder
+  published?: Prisma.SortOrder
+  createdAt?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
   _count?: Prisma.QuestionPaperCountOrderByAggregateInput
   _avg?: Prisma.QuestionPaperAvgOrderByAggregateInput
   _max?: Prisma.QuestionPaperMaxOrderByAggregateInput
@@ -276,177 +421,393 @@ export type QuestionPaperScalarWhereWithAggregatesInput = {
   OR?: Prisma.QuestionPaperScalarWhereWithAggregatesInput[]
   NOT?: Prisma.QuestionPaperScalarWhereWithAggregatesInput | Prisma.QuestionPaperScalarWhereWithAggregatesInput[]
   id?: Prisma.StringWithAggregatesFilter<"QuestionPaper"> | string
-  year?: Prisma.IntWithAggregatesFilter<"QuestionPaper"> | number
+  academicYear?: Prisma.StringWithAggregatesFilter<"QuestionPaper"> | string
   department?: Prisma.StringWithAggregatesFilter<"QuestionPaper"> | string
+  programme?: Prisma.StringWithAggregatesFilter<"QuestionPaper"> | string
+  semester?: Prisma.IntWithAggregatesFilter<"QuestionPaper"> | number
+  courseName?: Prisma.StringWithAggregatesFilter<"QuestionPaper"> | string
+  courseCode?: Prisma.StringWithAggregatesFilter<"QuestionPaper"> | string
+  examType?: Prisma.StringWithAggregatesFilter<"QuestionPaper"> | string
+  examMonth?: Prisma.StringNullableWithAggregatesFilter<"QuestionPaper"> | string | null
+  examYear?: Prisma.IntWithAggregatesFilter<"QuestionPaper"> | number
+  description?: Prisma.StringNullableWithAggregatesFilter<"QuestionPaper"> | string | null
   fileUrl?: Prisma.StringWithAggregatesFilter<"QuestionPaper"> | string
   originalName?: Prisma.StringWithAggregatesFilter<"QuestionPaper"> | string
   fileType?: Prisma.StringNullableWithAggregatesFilter<"QuestionPaper"> | string | null
-  uploadedAt?: Prisma.DateTimeWithAggregatesFilter<"QuestionPaper"> | Date | string
+  fileSize?: Prisma.IntNullableWithAggregatesFilter<"QuestionPaper"> | number | null
+  downloadCount?: Prisma.IntWithAggregatesFilter<"QuestionPaper"> | number
+  published?: Prisma.BoolWithAggregatesFilter<"QuestionPaper"> | boolean
+  createdAt?: Prisma.DateTimeWithAggregatesFilter<"QuestionPaper"> | Date | string
+  updatedAt?: Prisma.DateTimeWithAggregatesFilter<"QuestionPaper"> | Date | string
 }
 
 export type QuestionPaperCreateInput = {
   id?: string
-  year: number
+  academicYear: string
   department: string
+  programme?: string
+  semester?: number
+  courseName: string
+  courseCode: string
+  examType: string
+  examMonth?: string | null
+  examYear: number
+  description?: string | null
   fileUrl: string
   originalName: string
   fileType?: string | null
-  uploadedAt?: Date | string
+  fileSize?: number | null
+  downloadCount?: number
+  published?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
 }
 
 export type QuestionPaperUncheckedCreateInput = {
   id?: string
-  year: number
+  academicYear: string
   department: string
+  programme?: string
+  semester?: number
+  courseName: string
+  courseCode: string
+  examType: string
+  examMonth?: string | null
+  examYear: number
+  description?: string | null
   fileUrl: string
   originalName: string
   fileType?: string | null
-  uploadedAt?: Date | string
+  fileSize?: number | null
+  downloadCount?: number
+  published?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
 }
 
 export type QuestionPaperUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  year?: Prisma.IntFieldUpdateOperationsInput | number
+  academicYear?: Prisma.StringFieldUpdateOperationsInput | string
   department?: Prisma.StringFieldUpdateOperationsInput | string
+  programme?: Prisma.StringFieldUpdateOperationsInput | string
+  semester?: Prisma.IntFieldUpdateOperationsInput | number
+  courseName?: Prisma.StringFieldUpdateOperationsInput | string
+  courseCode?: Prisma.StringFieldUpdateOperationsInput | string
+  examType?: Prisma.StringFieldUpdateOperationsInput | string
+  examMonth?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  examYear?: Prisma.IntFieldUpdateOperationsInput | number
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   fileUrl?: Prisma.StringFieldUpdateOperationsInput | string
   originalName?: Prisma.StringFieldUpdateOperationsInput | string
   fileType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  uploadedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  fileSize?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  downloadCount?: Prisma.IntFieldUpdateOperationsInput | number
+  published?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type QuestionPaperUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  year?: Prisma.IntFieldUpdateOperationsInput | number
+  academicYear?: Prisma.StringFieldUpdateOperationsInput | string
   department?: Prisma.StringFieldUpdateOperationsInput | string
+  programme?: Prisma.StringFieldUpdateOperationsInput | string
+  semester?: Prisma.IntFieldUpdateOperationsInput | number
+  courseName?: Prisma.StringFieldUpdateOperationsInput | string
+  courseCode?: Prisma.StringFieldUpdateOperationsInput | string
+  examType?: Prisma.StringFieldUpdateOperationsInput | string
+  examMonth?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  examYear?: Prisma.IntFieldUpdateOperationsInput | number
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   fileUrl?: Prisma.StringFieldUpdateOperationsInput | string
   originalName?: Prisma.StringFieldUpdateOperationsInput | string
   fileType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  uploadedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  fileSize?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  downloadCount?: Prisma.IntFieldUpdateOperationsInput | number
+  published?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type QuestionPaperCreateManyInput = {
   id?: string
-  year: number
+  academicYear: string
   department: string
+  programme?: string
+  semester?: number
+  courseName: string
+  courseCode: string
+  examType: string
+  examMonth?: string | null
+  examYear: number
+  description?: string | null
   fileUrl: string
   originalName: string
   fileType?: string | null
-  uploadedAt?: Date | string
+  fileSize?: number | null
+  downloadCount?: number
+  published?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
 }
 
 export type QuestionPaperUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  year?: Prisma.IntFieldUpdateOperationsInput | number
+  academicYear?: Prisma.StringFieldUpdateOperationsInput | string
   department?: Prisma.StringFieldUpdateOperationsInput | string
+  programme?: Prisma.StringFieldUpdateOperationsInput | string
+  semester?: Prisma.IntFieldUpdateOperationsInput | number
+  courseName?: Prisma.StringFieldUpdateOperationsInput | string
+  courseCode?: Prisma.StringFieldUpdateOperationsInput | string
+  examType?: Prisma.StringFieldUpdateOperationsInput | string
+  examMonth?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  examYear?: Prisma.IntFieldUpdateOperationsInput | number
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   fileUrl?: Prisma.StringFieldUpdateOperationsInput | string
   originalName?: Prisma.StringFieldUpdateOperationsInput | string
   fileType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  uploadedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  fileSize?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  downloadCount?: Prisma.IntFieldUpdateOperationsInput | number
+  published?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type QuestionPaperUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  year?: Prisma.IntFieldUpdateOperationsInput | number
+  academicYear?: Prisma.StringFieldUpdateOperationsInput | string
   department?: Prisma.StringFieldUpdateOperationsInput | string
+  programme?: Prisma.StringFieldUpdateOperationsInput | string
+  semester?: Prisma.IntFieldUpdateOperationsInput | number
+  courseName?: Prisma.StringFieldUpdateOperationsInput | string
+  courseCode?: Prisma.StringFieldUpdateOperationsInput | string
+  examType?: Prisma.StringFieldUpdateOperationsInput | string
+  examMonth?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  examYear?: Prisma.IntFieldUpdateOperationsInput | number
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   fileUrl?: Prisma.StringFieldUpdateOperationsInput | string
   originalName?: Prisma.StringFieldUpdateOperationsInput | string
   fileType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  uploadedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  fileSize?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  downloadCount?: Prisma.IntFieldUpdateOperationsInput | number
+  published?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type QuestionPaperAcademicYearDepartmentProgrammeSemesterCourseCodeExamTypeExamYearCompoundUniqueInput = {
+  academicYear: string
+  department: string
+  programme: string
+  semester: number
+  courseCode: string
+  examType: string
+  examYear: number
 }
 
 export type QuestionPaperCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
-  year?: Prisma.SortOrder
+  academicYear?: Prisma.SortOrder
   department?: Prisma.SortOrder
+  programme?: Prisma.SortOrder
+  semester?: Prisma.SortOrder
+  courseName?: Prisma.SortOrder
+  courseCode?: Prisma.SortOrder
+  examType?: Prisma.SortOrder
+  examMonth?: Prisma.SortOrder
+  examYear?: Prisma.SortOrder
+  description?: Prisma.SortOrder
   fileUrl?: Prisma.SortOrder
   originalName?: Prisma.SortOrder
   fileType?: Prisma.SortOrder
-  uploadedAt?: Prisma.SortOrder
+  fileSize?: Prisma.SortOrder
+  downloadCount?: Prisma.SortOrder
+  published?: Prisma.SortOrder
+  createdAt?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
 }
 
 export type QuestionPaperAvgOrderByAggregateInput = {
-  year?: Prisma.SortOrder
+  semester?: Prisma.SortOrder
+  examYear?: Prisma.SortOrder
+  fileSize?: Prisma.SortOrder
+  downloadCount?: Prisma.SortOrder
 }
 
 export type QuestionPaperMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
-  year?: Prisma.SortOrder
+  academicYear?: Prisma.SortOrder
   department?: Prisma.SortOrder
+  programme?: Prisma.SortOrder
+  semester?: Prisma.SortOrder
+  courseName?: Prisma.SortOrder
+  courseCode?: Prisma.SortOrder
+  examType?: Prisma.SortOrder
+  examMonth?: Prisma.SortOrder
+  examYear?: Prisma.SortOrder
+  description?: Prisma.SortOrder
   fileUrl?: Prisma.SortOrder
   originalName?: Prisma.SortOrder
   fileType?: Prisma.SortOrder
-  uploadedAt?: Prisma.SortOrder
+  fileSize?: Prisma.SortOrder
+  downloadCount?: Prisma.SortOrder
+  published?: Prisma.SortOrder
+  createdAt?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
 }
 
 export type QuestionPaperMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
-  year?: Prisma.SortOrder
+  academicYear?: Prisma.SortOrder
   department?: Prisma.SortOrder
+  programme?: Prisma.SortOrder
+  semester?: Prisma.SortOrder
+  courseName?: Prisma.SortOrder
+  courseCode?: Prisma.SortOrder
+  examType?: Prisma.SortOrder
+  examMonth?: Prisma.SortOrder
+  examYear?: Prisma.SortOrder
+  description?: Prisma.SortOrder
   fileUrl?: Prisma.SortOrder
   originalName?: Prisma.SortOrder
   fileType?: Prisma.SortOrder
-  uploadedAt?: Prisma.SortOrder
+  fileSize?: Prisma.SortOrder
+  downloadCount?: Prisma.SortOrder
+  published?: Prisma.SortOrder
+  createdAt?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
 }
 
 export type QuestionPaperSumOrderByAggregateInput = {
-  year?: Prisma.SortOrder
+  semester?: Prisma.SortOrder
+  examYear?: Prisma.SortOrder
+  fileSize?: Prisma.SortOrder
+  downloadCount?: Prisma.SortOrder
+}
+
+export type NullableIntFieldUpdateOperationsInput = {
+  set?: number | null
+  increment?: number
+  decrement?: number
+  multiply?: number
+  divide?: number
 }
 
 
 
 export type QuestionPaperSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
-  year?: boolean
+  academicYear?: boolean
   department?: boolean
+  programme?: boolean
+  semester?: boolean
+  courseName?: boolean
+  courseCode?: boolean
+  examType?: boolean
+  examMonth?: boolean
+  examYear?: boolean
+  description?: boolean
   fileUrl?: boolean
   originalName?: boolean
   fileType?: boolean
-  uploadedAt?: boolean
+  fileSize?: boolean
+  downloadCount?: boolean
+  published?: boolean
+  createdAt?: boolean
+  updatedAt?: boolean
 }, ExtArgs["result"]["questionPaper"]>
 
 export type QuestionPaperSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
-  year?: boolean
+  academicYear?: boolean
   department?: boolean
+  programme?: boolean
+  semester?: boolean
+  courseName?: boolean
+  courseCode?: boolean
+  examType?: boolean
+  examMonth?: boolean
+  examYear?: boolean
+  description?: boolean
   fileUrl?: boolean
   originalName?: boolean
   fileType?: boolean
-  uploadedAt?: boolean
+  fileSize?: boolean
+  downloadCount?: boolean
+  published?: boolean
+  createdAt?: boolean
+  updatedAt?: boolean
 }, ExtArgs["result"]["questionPaper"]>
 
 export type QuestionPaperSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
-  year?: boolean
+  academicYear?: boolean
   department?: boolean
+  programme?: boolean
+  semester?: boolean
+  courseName?: boolean
+  courseCode?: boolean
+  examType?: boolean
+  examMonth?: boolean
+  examYear?: boolean
+  description?: boolean
   fileUrl?: boolean
   originalName?: boolean
   fileType?: boolean
-  uploadedAt?: boolean
+  fileSize?: boolean
+  downloadCount?: boolean
+  published?: boolean
+  createdAt?: boolean
+  updatedAt?: boolean
 }, ExtArgs["result"]["questionPaper"]>
 
 export type QuestionPaperSelectScalar = {
   id?: boolean
-  year?: boolean
+  academicYear?: boolean
   department?: boolean
+  programme?: boolean
+  semester?: boolean
+  courseName?: boolean
+  courseCode?: boolean
+  examType?: boolean
+  examMonth?: boolean
+  examYear?: boolean
+  description?: boolean
   fileUrl?: boolean
   originalName?: boolean
   fileType?: boolean
-  uploadedAt?: boolean
+  fileSize?: boolean
+  downloadCount?: boolean
+  published?: boolean
+  createdAt?: boolean
+  updatedAt?: boolean
 }
 
-export type QuestionPaperOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "year" | "department" | "fileUrl" | "originalName" | "fileType" | "uploadedAt", ExtArgs["result"]["questionPaper"]>
+export type QuestionPaperOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "academicYear" | "department" | "programme" | "semester" | "courseName" | "courseCode" | "examType" | "examMonth" | "examYear" | "description" | "fileUrl" | "originalName" | "fileType" | "fileSize" | "downloadCount" | "published" | "createdAt" | "updatedAt", ExtArgs["result"]["questionPaper"]>
 
 export type $QuestionPaperPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "QuestionPaper"
   objects: {}
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
-    year: number
+    academicYear: string
     department: string
+    programme: string
+    semester: number
+    courseName: string
+    courseCode: string
+    examType: string
+    examMonth: string | null
+    examYear: number
+    description: string | null
     fileUrl: string
     originalName: string
     fileType: string | null
-    uploadedAt: Date
+    fileSize: number | null
+    downloadCount: number
+    published: boolean
+    createdAt: Date
+    updatedAt: Date
   }, ExtArgs["result"]["questionPaper"]>
   composites: {}
 }
@@ -871,12 +1232,24 @@ export interface Prisma__QuestionPaperClient<T, Null = never, ExtArgs extends ru
  */
 export interface QuestionPaperFieldRefs {
   readonly id: Prisma.FieldRef<"QuestionPaper", 'String'>
-  readonly year: Prisma.FieldRef<"QuestionPaper", 'Int'>
+  readonly academicYear: Prisma.FieldRef<"QuestionPaper", 'String'>
   readonly department: Prisma.FieldRef<"QuestionPaper", 'String'>
+  readonly programme: Prisma.FieldRef<"QuestionPaper", 'String'>
+  readonly semester: Prisma.FieldRef<"QuestionPaper", 'Int'>
+  readonly courseName: Prisma.FieldRef<"QuestionPaper", 'String'>
+  readonly courseCode: Prisma.FieldRef<"QuestionPaper", 'String'>
+  readonly examType: Prisma.FieldRef<"QuestionPaper", 'String'>
+  readonly examMonth: Prisma.FieldRef<"QuestionPaper", 'String'>
+  readonly examYear: Prisma.FieldRef<"QuestionPaper", 'Int'>
+  readonly description: Prisma.FieldRef<"QuestionPaper", 'String'>
   readonly fileUrl: Prisma.FieldRef<"QuestionPaper", 'String'>
   readonly originalName: Prisma.FieldRef<"QuestionPaper", 'String'>
   readonly fileType: Prisma.FieldRef<"QuestionPaper", 'String'>
-  readonly uploadedAt: Prisma.FieldRef<"QuestionPaper", 'DateTime'>
+  readonly fileSize: Prisma.FieldRef<"QuestionPaper", 'Int'>
+  readonly downloadCount: Prisma.FieldRef<"QuestionPaper", 'Int'>
+  readonly published: Prisma.FieldRef<"QuestionPaper", 'Boolean'>
+  readonly createdAt: Prisma.FieldRef<"QuestionPaper", 'DateTime'>
+  readonly updatedAt: Prisma.FieldRef<"QuestionPaper", 'DateTime'>
 }
     
 

@@ -2348,12 +2348,24 @@ export type NavigationMenuScalarFieldEnum = (typeof NavigationMenuScalarFieldEnu
 
 export const QuestionPaperScalarFieldEnum = {
   id: 'id',
-  year: 'year',
+  academicYear: 'academicYear',
   department: 'department',
+  programme: 'programme',
+  semester: 'semester',
+  courseName: 'courseName',
+  courseCode: 'courseCode',
+  examType: 'examType',
+  examMonth: 'examMonth',
+  examYear: 'examYear',
+  description: 'description',
   fileUrl: 'fileUrl',
   originalName: 'originalName',
   fileType: 'fileType',
-  uploadedAt: 'uploadedAt'
+  fileSize: 'fileSize',
+  downloadCount: 'downloadCount',
+  published: 'published',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
 } as const
 
 export type QuestionPaperScalarFieldEnum = (typeof QuestionPaperScalarFieldEnum)[keyof typeof QuestionPaperScalarFieldEnum]
