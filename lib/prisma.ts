@@ -27,15 +27,22 @@ const getDatabaseUrl = () => {
 }
 
 export const prisma =
-  globalForPrisma.prisma ??
-  new PrismaClient({
-    datasources: {
-      db: {
-        url: getDatabaseUrl(),
-      },
-    },
-    log: process.env.NODE_ENV === 'development' ? ['query', 'error', 'warn'] : ['error'],
-  })
+  globalForPrisma.prisma && hasExpectedModels(globalForPrisma.prisma)
+    ? globalForPrisma.prisma
+    : new PrismaClient({
+        datasources: {
+          db: {
+            url: getDatabaseUrl(),
+          },
+        },
+        log: process.env.NODE_ENV === 'development' ? ['query', 'error', 'warn'] : ['error'],
+      })
 
 if (process.env.NODE_ENV !== 'production') globalForPrisma.prisma = prisma
+
+/** Recreate client after schema changes during hot reload (dev only). */
+function hasExpectedModels(client: PrismaClient): boolean {
+  const c = client as PrismaClient & { syllabus?: unknown; questionPaper?: unknown }
+  return typeof c.syllabus?.findMany === 'function' && typeof c.questionPaper?.findMany === 'function'
+}
 
