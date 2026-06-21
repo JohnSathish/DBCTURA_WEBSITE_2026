@@ -53,8 +53,16 @@ NEXTAUTH_SECRET="<run: openssl rand -base64 32>"
 Database schema is applied with the **tools** profile (uses full build image with Prisma CLI):
 
 ```bash
-docker compose -f docker-compose.prod.yml --profile tools run --rm db-push
+docker compose -f docker-compose.prod.yml --profile tools run --rm --build db-push
 ```
+
+**Question Bank error** (`column academicYear does not exist`): production DB still has the old `QuestionPaper` table. Run the one-time migration (backs up DB, drops legacy table, re-applies schema):
+
+```bash
+bash /opt/donboscocollege/scripts/migrate-academics-schema.sh
+```
+
+Then re-upload question papers via `/admin/question-bank`.
 
 Set admin password:
 

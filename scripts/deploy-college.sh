@@ -87,3 +87,7 @@ curl -sk -o /dev/null -w "  https site      → HTTP %{http_code}\n" https://don
 log "Deploy complete."
 log "Open: https://donboscocollege.ac.in/admin/login"
 log "If still 502, run: docker compose -f $COMPOSE_FILE logs --tail=50 web"
+log ""
+log "Applying database schema (--build ensures latest prisma/schema.prisma)..."
+docker compose -f "$COMPOSE_FILE" --profile tools run --rm --build db-push || \
+  log "WARN: db-push failed — if Question Bank shows missing columns, run: bash scripts/migrate-academics-schema.sh"
