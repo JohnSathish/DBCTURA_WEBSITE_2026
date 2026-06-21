@@ -66,6 +66,7 @@ export const ModelName = {
   StaffProfile: 'StaffProfile',
   NavigationMenu: 'NavigationMenu',
   QuestionPaper: 'QuestionPaper',
+  Syllabus: 'Syllabus',
   Grievance: 'Grievance',
   BloodDonor: 'BloodDonor',
   AlumniRegistration: 'AlumniRegistration'
@@ -347,6 +348,28 @@ export const QuestionPaperScalarFieldEnum = {
 } as const
 
 export type QuestionPaperScalarFieldEnum = (typeof QuestionPaperScalarFieldEnum)[keyof typeof QuestionPaperScalarFieldEnum]
+
+
+export const SyllabusScalarFieldEnum = {
+  id: 'id',
+  department: 'department',
+  programme: 'programme',
+  academicYear: 'academicYear',
+  curriculumVersion: 'curriculumVersion',
+  semester: 'semester',
+  courseCode: 'courseCode',
+  courseName: 'courseName',
+  description: 'description',
+  fileUrl: 'fileUrl',
+  originalName: 'originalName',
+  fileSize: 'fileSize',
+  published: 'published',
+  displayOrder: 'displayOrder',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type SyllabusScalarFieldEnum = (typeof SyllabusScalarFieldEnum)[keyof typeof SyllabusScalarFieldEnum]
 
 
 export const GrievanceScalarFieldEnum = {

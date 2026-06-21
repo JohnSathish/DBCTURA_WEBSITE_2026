@@ -134,6 +134,11 @@ export type NavigationMenu = Prisma.NavigationMenuModel
  */
 export type QuestionPaper = Prisma.QuestionPaperModel
 /**
+ * Model Syllabus
+ * 
+ */
+export type Syllabus = Prisma.SyllabusModel
+/**
  * Model Grievance
  * 
  */

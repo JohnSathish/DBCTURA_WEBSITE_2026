@@ -231,6 +231,29 @@ model QuestionPaper {
   uploadedAt    DateTime @default(now())
 }
 
+model Syllabus {
+  id                String   @id @default(cuid())
+  department        String
+  programme         String
+  academicYear      String
+  curriculumVersion String?
+  semester          Int
+  courseCode        String
+  courseName        String
+  description       String?
+  fileUrl           String
+  originalName      String
+  fileSize          Int?
+  published         Boolean  @default(false)
+  displayOrder      Int      @default(0)
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  @@unique([department, programme, semester, courseCode, academicYear])
+  @@index([department, programme, semester])
+  @@index([published, academicYear])
+}
+
 model Grievance {
   id         String   @id @default(cuid())
   category   String

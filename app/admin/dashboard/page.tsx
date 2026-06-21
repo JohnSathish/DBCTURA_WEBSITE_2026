@@ -14,6 +14,7 @@ import {
   Megaphone,
   Calendar,
   GraduationCap,
+  BookOpen,
 } from "lucide-react"
 
 function startOfMonth() {
@@ -53,6 +54,10 @@ export default async function DashboardPage() {
     downloadsThisMonth,
     recentNews,
     recentPages,
+    syllabusTotal,
+    syllabusPublished,
+    syllabusDraft,
+    recentSyllabus,
   ] = await Promise.all([
     prisma.page.count(),
     prisma.news.count(),
@@ -72,6 +77,16 @@ export default async function DashboardPage() {
       take: 5,
       select: { id: true, title: true, updatedAt: true, published: true },
     }),
+    prisma.syllabus.count().catch(() => 0),
+    prisma.syllabus.count({ where: { published: true } }).catch(() => 0),
+    prisma.syllabus.count({ where: { published: false } }).catch(() => 0),
+    prisma.syllabus
+      .findMany({
+        orderBy: { updatedAt: "desc" },
+        take: 5,
+        select: { id: true, courseName: true, courseCode: true, updatedAt: true, published: true },
+      })
+      .catch(() => []),
   ])
 
   const totalContent = pagesCount + newsCount + galleryCount + downloadsCount
@@ -169,6 +184,14 @@ export default async function DashboardPage() {
       icon: Download,
       className: "from-amber-500/10 to-orange-500/5 border-amber-200/60 hover:border-amber-300",
       iconClass: "bg-amber-600 text-white",
+    },
+    {
+      href: "/admin/syllabus",
+      label: "Manage Syllabus",
+      sub: "Department PDFs",
+      icon: BookOpen,
+      className: "from-violet-500/10 to-purple-500/5 border-violet-200/60 hover:border-violet-300",
+      iconClass: "bg-violet-600 text-white",
     },
   ]
 
@@ -339,6 +362,54 @@ export default async function DashboardPage() {
               </Link>
             </div>
           </div>
+        </div>
+
+        <div className="rounded-2xl border border-violet-200/60 bg-gradient-to-br from-violet-50/80 to-white p-6 shadow-sm">
+          <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+            <div>
+              <h2 className="flex items-center gap-2 text-lg font-semibold text-slate-900">
+                <BookOpen className="h-5 w-5 text-violet-600" />
+                Syllabus Statistics
+              </h2>
+              <p className="mt-1 text-sm text-slate-500">Department-wise syllabus documents</p>
+            </div>
+            <Link
+              href="/admin/syllabus"
+              className="inline-flex items-center gap-2 rounded-xl bg-violet-600 px-4 py-2 text-sm font-semibold text-white hover:bg-violet-700"
+            >
+              Manage Syllabus
+              <ArrowRight className="h-4 w-4" />
+            </Link>
+          </div>
+          <div className="mt-5 grid grid-cols-1 gap-4 sm:grid-cols-3">
+            <div className="rounded-xl border border-slate-200/80 bg-white p-4">
+              <p className="text-sm text-slate-500">Total documents</p>
+              <p className="text-2xl font-bold text-slate-900">{syllabusTotal}</p>
+            </div>
+            <div className="rounded-xl border border-emerald-200/60 bg-emerald-50/50 p-4">
+              <p className="text-sm text-emerald-700">Published</p>
+              <p className="text-2xl font-bold text-emerald-800">{syllabusPublished}</p>
+            </div>
+            <div className="rounded-xl border border-amber-200/60 bg-amber-50/50 p-4">
+              <p className="text-sm text-amber-700">Draft</p>
+              <p className="text-2xl font-bold text-amber-800">{syllabusDraft}</p>
+            </div>
+          </div>
+          {recentSyllabus.length > 0 && (
+            <div className="mt-5">
+              <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">Recently uploaded</p>
+              <ul className="mt-2 space-y-2">
+                {recentSyllabus.map((s) => (
+                  <li key={s.id} className="flex items-center justify-between gap-2 text-sm">
+                    <span className="min-w-0 truncate font-medium text-slate-800">
+                      {s.courseCode} — {s.courseName}
+                    </span>
+                    <span className="shrink-0 text-xs text-slate-500">{formatRelative(s.updatedAt)}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
         </div>
 
         <div className="overflow-hidden rounded-2xl bg-gradient-to-r from-indigo-600 via-blue-600 to-sky-500 p-6 text-white shadow-lg md:p-8">

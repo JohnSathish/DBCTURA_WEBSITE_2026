@@ -407,6 +407,7 @@ export const ModelName = {
   StaffProfile: 'StaffProfile',
   NavigationMenu: 'NavigationMenu',
   QuestionPaper: 'QuestionPaper',
+  Syllabus: 'Syllabus',
   Grievance: 'Grievance',
   BloodDonor: 'BloodDonor',
   AlumniRegistration: 'AlumniRegistration'
@@ -425,7 +426,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "page" | "news" | "galleryAlbum" | "galleryImage" | "download" | "setting" | "testimonial" | "noticeBoardEvent" | "noticeBoardNotice" | "courseApplication" | "flashNews" | "heroSlide" | "shortTermCourse" | "popupBanner" | "staffProfile" | "navigationMenu" | "questionPaper" | "grievance" | "bloodDonor" | "alumniRegistration"
+    modelProps: "user" | "page" | "news" | "galleryAlbum" | "galleryImage" | "download" | "setting" | "testimonial" | "noticeBoardEvent" | "noticeBoardNotice" | "courseApplication" | "flashNews" | "heroSlide" | "shortTermCourse" | "popupBanner" | "staffProfile" | "navigationMenu" | "questionPaper" | "syllabus" | "grievance" | "bloodDonor" | "alumniRegistration"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1761,6 +1762,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    Syllabus: {
+      payload: Prisma.$SyllabusPayload<ExtArgs>
+      fields: Prisma.SyllabusFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.SyllabusFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SyllabusPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.SyllabusFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SyllabusPayload>
+        }
+        findFirst: {
+          args: Prisma.SyllabusFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SyllabusPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.SyllabusFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SyllabusPayload>
+        }
+        findMany: {
+          args: Prisma.SyllabusFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SyllabusPayload>[]
+        }
+        create: {
+          args: Prisma.SyllabusCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SyllabusPayload>
+        }
+        createMany: {
+          args: Prisma.SyllabusCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.SyllabusCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SyllabusPayload>[]
+        }
+        delete: {
+          args: Prisma.SyllabusDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SyllabusPayload>
+        }
+        update: {
+          args: Prisma.SyllabusUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SyllabusPayload>
+        }
+        deleteMany: {
+          args: Prisma.SyllabusDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.SyllabusUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.SyllabusUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SyllabusPayload>[]
+        }
+        upsert: {
+          args: Prisma.SyllabusUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SyllabusPayload>
+        }
+        aggregate: {
+          args: Prisma.SyllabusAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateSyllabus>
+        }
+        groupBy: {
+          args: Prisma.SyllabusGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.SyllabusGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.SyllabusCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.SyllabusCountAggregateOutputType> | number
+        }
+      }
+    }
     Grievance: {
       payload: Prisma.$GrievancePayload<ExtArgs>
       fields: Prisma.GrievanceFieldRefs
@@ -2284,6 +2359,28 @@ export const QuestionPaperScalarFieldEnum = {
 export type QuestionPaperScalarFieldEnum = (typeof QuestionPaperScalarFieldEnum)[keyof typeof QuestionPaperScalarFieldEnum]
 
 
+export const SyllabusScalarFieldEnum = {
+  id: 'id',
+  department: 'department',
+  programme: 'programme',
+  academicYear: 'academicYear',
+  curriculumVersion: 'curriculumVersion',
+  semester: 'semester',
+  courseCode: 'courseCode',
+  courseName: 'courseName',
+  description: 'description',
+  fileUrl: 'fileUrl',
+  originalName: 'originalName',
+  fileSize: 'fileSize',
+  published: 'published',
+  displayOrder: 'displayOrder',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type SyllabusScalarFieldEnum = (typeof SyllabusScalarFieldEnum)[keyof typeof SyllabusScalarFieldEnum]
+
+
 export const GrievanceScalarFieldEnum = {
   id: 'id',
   category: 'category',
@@ -2521,6 +2618,7 @@ export type GlobalOmitConfig = {
   staffProfile?: Prisma.StaffProfileOmit
   navigationMenu?: Prisma.NavigationMenuOmit
   questionPaper?: Prisma.QuestionPaperOmit
+  syllabus?: Prisma.SyllabusOmit
   grievance?: Prisma.GrievanceOmit
   bloodDonor?: Prisma.BloodDonorOmit
   alumniRegistration?: Prisma.AlumniRegistrationOmit
