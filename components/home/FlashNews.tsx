@@ -60,36 +60,37 @@ export default function FlashNews({ items }: FlashNewsProps) {
 
   const safeIndex = mounted ? currentIndex : 0
   const currentItem = items[safeIndex] ?? items[0]
+  const title = currentItem.title.trim()
 
   return (
     <div
-      className="bg-[#0c2340] text-white py-2.5 md:py-3 overflow-hidden relative border-b border-white/10"
+      className="flash-news-bar w-full max-w-[100vw] overflow-hidden border-b border-white/10 bg-[#0c2340] text-white"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center gap-2 sm:gap-3 md:gap-4">
-          {/* Fixed labels — never overlap the scrolling ticker */}
-          <div className="flex shrink-0 items-center gap-2 sm:gap-3">
-            <MegaphoneIcon className="h-5 w-5 md:h-6 md:w-6 shrink-0 text-amber-400 drop-shadow-sm" />
+      <div className="mx-auto max-w-7xl px-3 py-2.5 sm:px-6 lg:px-8">
+        <div className="flex min-w-0 items-center gap-2 sm:gap-3">
+          <div className="flex shrink-0 items-center gap-1.5 sm:gap-2">
+            <MegaphoneIcon className="h-5 w-5 shrink-0 text-amber-400 drop-shadow-sm md:h-6 md:w-6" />
             <span className="shrink-0 rounded bg-red-600 px-1.5 py-0.5 text-[10px] font-bold uppercase tracking-wider text-white">
               New
             </span>
           </div>
 
-          {/* Ticker only — clipped so text cannot slide under the icons/badges */}
-          <div className="relative min-w-0 flex-1 overflow-hidden">
+          {/* Clipped ticker — animation stays inside, never widens the page */}
+          <div className="flash-news-ticker relative min-h-[1.75rem] min-w-0 flex-1 overflow-hidden md:min-h-[2rem]">
             <Link
               href={`/flash-news/${currentItem.id}`}
-              className="block overflow-hidden hover:opacity-90 transition-opacity"
+              className="absolute inset-0 flex items-center overflow-hidden hover:opacity-90"
+              title={title}
             >
               <div
-                className={`animate-marquee inline-flex w-max whitespace-nowrap ${isHovered ? "pause-animation" : ""}`}
+                className={`flash-news-marquee flex w-max items-center whitespace-nowrap ${isHovered ? "pause-animation" : ""}`}
               >
                 {[0, 1].map((dup) => (
                   <span
                     key={dup}
-                    className="inline-flex items-center gap-2 pr-10 text-sm md:text-base font-medium leading-relaxed"
+                    className="inline-flex max-w-none items-center gap-2 pr-8 text-sm font-medium leading-snug md:pr-12 md:text-base"
                   >
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img
@@ -97,9 +98,9 @@ export default function FlashNews({ items }: FlashNewsProps) {
                       alt=""
                       width={24}
                       height={24}
-                      className="h-5 w-5 md:h-6 md:w-6 object-contain shrink-0"
+                      className="h-5 w-5 shrink-0 object-contain md:h-6 md:w-6"
                     />
-                    {currentItem.title}
+                    <span>{title}</span>
                   </span>
                 ))}
               </div>
@@ -108,9 +109,15 @@ export default function FlashNews({ items }: FlashNewsProps) {
 
           <Link
             href="/notice-board"
-            className="shrink-0 rounded-lg border border-white/35 bg-white/5 px-2.5 py-1.5 text-[11px] font-semibold text-white backdrop-blur-sm transition hover:bg-white/15 sm:px-3 sm:text-sm"
+            className="hidden shrink-0 rounded-lg border border-white/35 bg-white/5 px-2.5 py-1.5 text-[11px] font-semibold text-white backdrop-blur-sm transition hover:bg-white/15 sm:inline-block sm:px-3 sm:text-sm"
           >
             View All Notices
+          </Link>
+          <Link
+            href="/notice-board"
+            className="shrink-0 rounded-lg border border-white/35 bg-white/5 px-2 py-1 text-[10px] font-semibold text-white backdrop-blur-sm transition hover:bg-white/15 sm:hidden"
+          >
+            Notices
           </Link>
         </div>
       </div>

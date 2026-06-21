@@ -8,7 +8,7 @@ export default function PublicLayout({
   children: React.ReactNode
 }) {
   return (
-    <div className="min-h-screen flex flex-col" suppressHydrationWarning>
+    <div className="min-h-screen flex flex-col overflow-x-hidden" suppressHydrationWarning>
       <StickyHeaderWrapper />
       <main className="flex-1" suppressHydrationWarning>{children}</main>
       <Footer />

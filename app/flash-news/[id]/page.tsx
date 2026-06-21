@@ -42,14 +42,16 @@ export default async function FlashNewsDetailPage({
           </Link>
         </div>
 
-        <Card className="border-2 border-brand-hover/25 shadow-lg">
+        <Card className="border-2 border-brand-hover/25 shadow-lg overflow-hidden">
           <CardHeader className="bg-brand-navy text-white rounded-t-lg">
-            <CardTitle className="text-white text-2xl md:text-3xl">{flashNews.title}</CardTitle>
+            <CardTitle className="text-white text-xl md:text-2xl lg:text-3xl break-words hyphens-auto">
+              {flashNews.title}
+            </CardTitle>
           </CardHeader>
-          <CardContent className="p-6 md:p-8">
+          <CardContent className="p-6 md:p-8 overflow-hidden">
             {flashNews.description && (
-              <div className="prose max-w-none mb-6">
-                <p className="text-gray-700 text-lg leading-relaxed whitespace-pre-wrap">
+              <div className="prose max-w-none mb-6 overflow-hidden">
+                <p className="text-gray-700 text-base md:text-lg leading-relaxed whitespace-pre-wrap break-words [overflow-wrap:anywhere]">
                   {flashNews.description}
                 </p>
               </div>
