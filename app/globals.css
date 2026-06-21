@@ -380,3 +380,30 @@
   border-top-right-radius: 0.65rem;
 }
 
+/* Admin panel: prevent long text from breaking page layout */
+.admin-page {
+  max-width: 100%;
+  min-width: 0;
+}
+
+.admin-table-shell {
+  max-width: 100%;
+  min-width: 0;
+  overflow: hidden;
+  border-radius: 0.75rem;
+  border: 1px solid #e2e8f0;
+  background: #ffffff;
+}
+
+.admin-data-table {
+  table-layout: fixed;
+  width: 100%;
+  max-width: 100%;
+}
+
+.admin-data-table td,
+.admin-data-table th {
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+

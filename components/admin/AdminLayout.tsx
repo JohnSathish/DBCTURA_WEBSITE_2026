@@ -134,7 +134,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-50 via-slate-50 to-slate-100/40">
+    <div className="min-h-screen overflow-x-hidden bg-gradient-to-b from-slate-50 via-slate-50 to-slate-100/40">
       {/* Mobile Header */}
       <header className="lg:hidden bg-white/90 backdrop-blur border-b border-slate-200 sticky top-0 z-50">
         <div className="flex items-center justify-between px-4 py-3">
@@ -208,7 +208,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         </div>
       </header>
 
-      <div className="flex">
+      <div className="flex min-w-0">
         {/* Desktop Sidebar */}
         <aside className="hidden lg:flex w-72 flex-col bg-gradient-to-b from-slate-900 via-slate-900 to-slate-950 text-white min-h-screen sticky top-0">
           <div className="border-b border-white/10 px-5 py-5">
@@ -254,12 +254,12 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         </aside>
 
         {/* Main Content */}
-        <main className="flex-1 p-4 lg:p-8 relative">
+        <main className="relative min-w-0 flex-1 overflow-x-hidden p-4 lg:p-8">
           <div
             aria-hidden="true"
             className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(900px_circle_at_20%_-10%,rgba(99,102,241,0.08),transparent_60%),radial-gradient(900px_circle_at_80%_0%,rgba(37,99,235,0.06),transparent_60%),radial-gradient(900px_circle_at_10%_90%,rgba(14,165,233,0.05),transparent_55%)]"
           />
-          {children}
+          <div className="admin-page mx-auto w-full max-w-full min-w-0">{children}</div>
         </main>
       </div>
     </div>

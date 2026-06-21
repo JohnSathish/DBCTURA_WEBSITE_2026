@@ -20,6 +20,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog"
 import { Pencil, Trash2, Eye } from "lucide-react"
+import { adminCellActions, adminCellWrap } from "@/components/admin/admin-table-classes"
 
 interface NewsItem {
   id: string
@@ -56,30 +57,33 @@ export default function NewsList({ initialNews }: { initialNews: NewsItem[] }) {
 
   return (
     <>
-      <div className="bg-white rounded-lg border overflow-hidden">
-        <div className="overflow-x-auto">
-          <Table>
-            <TableHeader>
+      <div className="overflow-hidden rounded-lg border bg-white">
+        <Table className="table-fixed">
+          <TableHeader>
+            <TableRow>
+              <TableHead className="w-[36%]">Title</TableHead>
+              <TableHead className="w-[12%] whitespace-nowrap">Category</TableHead>
+              <TableHead className="whitespace-nowrap">Status</TableHead>
+              <TableHead className="whitespace-nowrap">Featured</TableHead>
+              <TableHead className="whitespace-nowrap">Published</TableHead>
+              <TableHead className={adminCellActions}>Actions</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {news.length === 0 ? (
               <TableRow>
-                <TableHead>Title</TableHead>
-                <TableHead>Category</TableHead>
-                <TableHead>Status</TableHead>
-                <TableHead>Featured</TableHead>
-                <TableHead>Published</TableHead>
-                <TableHead className="text-right">Actions</TableHead>
+                <TableCell colSpan={6} className="py-8 text-center text-gray-500">
+                  No news articles yet. Create your first article!
+                </TableCell>
               </TableRow>
-            </TableHeader>
-            <TableBody>
-              {news.length === 0 ? (
-                <TableRow>
-                  <TableCell colSpan={6} className="text-center py-8 text-gray-500">
-                    No news articles yet. Create your first article!
+            ) : (
+              news.map((item) => (
+                <TableRow key={item.id}>
+                  <TableCell className={`font-medium ${adminCellWrap}`}>
+                    <span className="line-clamp-3" title={item.title}>
+                      {item.title}
+                    </span>
                   </TableCell>
-                </TableRow>
-              ) : (
-                news.map((item) => (
-                  <TableRow key={item.id}>
-                    <TableCell className="font-medium">{item.title}</TableCell>
                     <TableCell>{item.category || "-"}</TableCell>
                     <TableCell>
                       <span
@@ -104,7 +108,7 @@ export default function NewsList({ initialNews }: { initialNews: NewsItem[] }) {
                         ? new Date(item.publishedAt).toLocaleDateString()
                         : "-"}
                     </TableCell>
-                    <TableCell className="text-right">
+                    <TableCell className={adminCellActions}>
                       <div className="flex justify-end gap-2">
                         {item.publishedAt && (
                           <Link href={`/news/${item.slug}`} target="_blank">
@@ -135,7 +139,6 @@ export default function NewsList({ initialNews }: { initialNews: NewsItem[] }) {
               )}
             </TableBody>
           </Table>
-        </div>
       </div>
 
       <Dialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>

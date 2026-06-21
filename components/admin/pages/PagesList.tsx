@@ -21,6 +21,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog"
 import { Pencil, Trash2, Eye, Search } from "lucide-react"
+import { adminCellActions, adminCellTruncate, adminCellWrap } from "@/components/admin/admin-table-classes"
 
 interface Page {
   id: string
@@ -111,36 +112,41 @@ export default function PagesList({ initialPages = [] }: { initialPages?: Page[]
         )}
       </div>
 
-      <div className="bg-white rounded-lg border overflow-hidden">
-        <div className="overflow-x-auto">
-          <Table>
-            <TableHeader>
+      <div className="overflow-hidden rounded-lg border bg-white">
+        <Table className="table-fixed">
+          <TableHeader>
+            <TableRow>
+              <TableHead className="w-[34%]">Title</TableHead>
+              <TableHead className="w-[22%]">Slug</TableHead>
+              <TableHead className="whitespace-nowrap">Status</TableHead>
+              <TableHead className="whitespace-nowrap">Last Updated</TableHead>
+              <TableHead className={adminCellActions}>Actions</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {(initialPages.length === 0) && (!pages || pages.length === 0) ? (
               <TableRow>
-                <TableHead>Title</TableHead>
-                <TableHead>Slug</TableHead>
-                <TableHead>Status</TableHead>
-                <TableHead>Last Updated</TableHead>
-                <TableHead className="text-right">Actions</TableHead>
+                <TableCell colSpan={5} className="py-8 text-center text-gray-500">
+                  No pages yet. Create your first page!
+                </TableCell>
               </TableRow>
-            </TableHeader>
-            <TableBody>
-              {(initialPages.length === 0) && (!pages || pages.length === 0) ? (
-                <TableRow>
-                  <TableCell colSpan={5} className="text-center py-8 text-gray-500">
-                    No pages yet. Create your first page!
+            ) : filteredPages.length === 0 ? (
+              <TableRow>
+                <TableCell colSpan={5} className="py-8 text-center text-gray-500">
+                  No pages found matching "{searchQuery}"
+                </TableCell>
+              </TableRow>
+            ) : (
+              filteredPages.map((page) => (
+                <TableRow key={page.id}>
+                  <TableCell className={`font-medium ${adminCellWrap}`}>
+                    <span className="line-clamp-3" title={page.title}>
+                      {page.title}
+                    </span>
                   </TableCell>
-                </TableRow>
-              ) : filteredPages.length === 0 ? (
-                <TableRow>
-                  <TableCell colSpan={5} className="text-center py-8 text-gray-500">
-                    No pages found matching "{searchQuery}"
+                  <TableCell className={`text-gray-600 ${adminCellTruncate}`} title={page.slug}>
+                    {page.slug}
                   </TableCell>
-                </TableRow>
-              ) : (
-                filteredPages.map((page) => (
-                  <TableRow key={page.id}>
-                    <TableCell className="font-medium">{page.title}</TableCell>
-                    <TableCell className="text-gray-600">{page.slug}</TableCell>
                     <TableCell>
                       <span
                         className={`px-2 py-1 rounded-full text-xs font-medium ${
@@ -155,7 +161,7 @@ export default function PagesList({ initialPages = [] }: { initialPages?: Page[]
                     <TableCell>
                       {page.updatedAt ? new Date(page.updatedAt).toLocaleDateString() : '-'}
                     </TableCell>
-                    <TableCell className="text-right">
+                    <TableCell className={adminCellActions}>
                       <div className="flex justify-end gap-2">
                         <Link href={`/${page.slug}`} target="_blank">
                           <Button variant="ghost" size="icon">
@@ -184,7 +190,6 @@ export default function PagesList({ initialPages = [] }: { initialPages?: Page[]
               )}
             </TableBody>
           </Table>
-        </div>
       </div>
 
       <Dialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>

@@ -14,6 +14,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
+import { adminCellActions, adminCellWrap } from "@/components/admin/admin-table-classes"
 
 export default async function DownloadsPage() {
   const session = await getServerSession(authOptions)
@@ -46,25 +47,29 @@ export default async function DownloadsPage() {
             </CardContent>
           </Card>
         ) : (
-          <div className="bg-white rounded-lg border overflow-hidden">
-            <Table>
+          <div className="overflow-hidden rounded-lg border bg-white">
+            <Table className="table-fixed">
               <TableHeader>
                 <TableRow>
-                  <TableHead>Title</TableHead>
-                  <TableHead>Category</TableHead>
-                  <TableHead>Uploaded</TableHead>
-                  <TableHead className="text-right">Actions</TableHead>
+                  <TableHead className="w-[45%]">Title</TableHead>
+                  <TableHead className="whitespace-nowrap">Category</TableHead>
+                  <TableHead className="whitespace-nowrap">Uploaded</TableHead>
+                  <TableHead className={adminCellActions}>Actions</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
                 {downloads.map((download) => (
                   <TableRow key={download.id}>
-                    <TableCell className="font-medium">{download.title}</TableCell>
+                    <TableCell className={`font-medium ${adminCellWrap}`}>
+                      <span className="line-clamp-3" title={download.title}>
+                        {download.title}
+                      </span>
+                    </TableCell>
                     <TableCell>{download.category || "-"}</TableCell>
                     <TableCell>
                       {new Date(download.uploadedAt).toLocaleDateString()}
                     </TableCell>
-                    <TableCell className="text-right">
+                    <TableCell className={adminCellActions}>
                       <Link href={`/admin/downloads/${download.id}`}>
                         <Button variant="ghost" size="sm">
                           Edit

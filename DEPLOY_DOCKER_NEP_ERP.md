@@ -166,10 +166,38 @@ Nginx routes by **hostname** — ERP and college site can share **80/443** safel
 
 ## Updates (college site only)
 
+**Always use the deploy script** — it rebuilds the app and fixes the nginx upstream (prevents 502 after rebuild):
+
 ```bash
 cd /opt/donboscocollege
-git pull
-docker compose -f docker-compose.prod.yml up -d --build
+git pull origin main
+bash scripts/deploy-college.sh
+```
+
+Or one line:
+
+```bash
+bash /opt/donboscocollege/scripts/deploy-college.sh
+```
+
+### Why you get 502 after `docker compose up --build`
+
+When `donboscocollege-web` is recreated, its **Docker IP changes**. Nginx still proxies to the **old IP**, so you see **502 Bad Gateway**.
+
+The deploy script:
+
+1. Pulls code and rebuilds `donboscocollege-web`
+2. Waits until `http://127.0.0.1:3002` responds
+3. Connects the college container to the ERP nginx network
+4. Updates `donboscocollege_upstream` in nginx config to `donboscocollege-web:3000` (or current IP)
+5. Runs `nginx -t` and `nginx -s reload`
+
+**Do not use plain `git pull && docker compose up --build` without the nginx fix.**
+
+Manual fix if needed:
+
+```bash
+bash /opt/donboscocollege/scripts/deploy-college.sh
 ```
 
 ERP containers are not affected.

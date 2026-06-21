@@ -16,6 +16,7 @@ import {
   TableRow,
 } from "@/components/ui/table"
 import { DeleteTestimonialButton } from "@/components/admin/testimonials/DeleteTestimonialButton"
+import { adminCellActions, adminCellWrap } from "@/components/admin/admin-table-classes"
 
 export default async function TestimonialsPage() {
   const session = await getServerSession(authOptions)
@@ -65,21 +66,29 @@ export default async function TestimonialsPage() {
                 <p>No testimonials yet. Create your first one!</p>
               </div>
             ) : (
-              <Table>
+              <Table className="table-fixed">
                 <TableHeader>
                   <TableRow>
-                    <TableHead>Name</TableHead>
-                    <TableHead>Designation</TableHead>
-                    <TableHead>Image</TableHead>
-                    <TableHead>Status</TableHead>
-                    <TableHead>Actions</TableHead>
+                    <TableHead className="w-[22%]">Name</TableHead>
+                    <TableHead className="w-[38%]">Designation</TableHead>
+                    <TableHead className="whitespace-nowrap">Image</TableHead>
+                    <TableHead className="whitespace-nowrap">Status</TableHead>
+                    <TableHead className={adminCellActions}>Actions</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
                   {testimonials.map((testimonial) => (
                     <TableRow key={testimonial.id}>
-                      <TableCell className="font-medium">{testimonial.name}</TableCell>
-                      <TableCell className="text-gray-600">{testimonial.designation}</TableCell>
+                      <TableCell className={`font-medium ${adminCellWrap}`}>
+                        <span className="line-clamp-2" title={testimonial.name}>
+                          {testimonial.name}
+                        </span>
+                      </TableCell>
+                      <TableCell className={`text-gray-600 ${adminCellWrap}`}>
+                        <span className="line-clamp-2" title={testimonial.designation}>
+                          {testimonial.designation}
+                        </span>
+                      </TableCell>
                       <TableCell>
                         {testimonial.image ? (
                           <span className="text-sm text-blue-600">Yes</span>
@@ -98,8 +107,8 @@ export default async function TestimonialsPage() {
                           {testimonial.published ? "Published" : "Draft"}
                         </span>
                       </TableCell>
-                      <TableCell>
-                        <div className="flex gap-2">
+                      <TableCell className={adminCellActions}>
+                        <div className="flex justify-end gap-2">
                           <Link href={`/admin/testimonials/${testimonial.id}`}>
                             <Button variant="outline" size="sm">
                               <Edit className="h-4 w-4" />
