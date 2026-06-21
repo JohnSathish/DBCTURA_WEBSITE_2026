@@ -24,10 +24,10 @@ const STATS = [
   },
   {
     icon: School,
-    target: 160,
-    suffix: "+",
+    target: 118,
+    suffix: "",
     titleRest: " Staff",
-    sub: "Dedicated educators",
+    sub: "Teaching & non-teaching",
     iconTheme:
       "bg-gradient-to-br from-[#4f46e5] via-[#6366f1] to-[#818cf8] shadow-[0_6px_20px_-4px_rgba(79,70,229,0.40)] group-hover:shadow-[0_8px_28px_-4px_rgba(79,70,229,0.55)]",
   },
