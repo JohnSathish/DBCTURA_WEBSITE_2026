@@ -73,7 +73,21 @@ type Stats = {
   totalDownloads: number
 }
 
-const emptyForm = {
+type QuestionPaperForm = {
+  academicYear: string
+  department: string
+  programme: string
+  semester: number
+  courseName: string
+  courseCode: string
+  examType: string
+  examMonth: string
+  examYear: number
+  description: string
+  published: boolean
+}
+
+const emptyForm: QuestionPaperForm = {
   academicYear: getDefaultAcademicYear(),
   department: DEPARTMENTS[0],
   programme: PROGRAMMES[0],
@@ -107,12 +121,12 @@ export default function QuestionBankManager() {
   const [filterExamType, setFilterExamType] = useState("all")
   const [filterStatus, setFilterStatus] = useState("all")
 
-  const [form, setForm] = useState({ ...emptyForm })
+  const [form, setForm] = useState<QuestionPaperForm>({ ...emptyForm })
   const [pdfFile, setPdfFile] = useState<File | null>(null)
   const [uploading, setUploading] = useState(false)
 
   const [editItem, setEditItem] = useState<QuestionPaperRecord | null>(null)
-  const [editForm, setEditForm] = useState({ ...emptyForm })
+  const [editForm, setEditForm] = useState<QuestionPaperForm>({ ...emptyForm })
   const [editPdf, setEditPdf] = useState<File | null>(null)
   const [savingEdit, setSavingEdit] = useState(false)
 

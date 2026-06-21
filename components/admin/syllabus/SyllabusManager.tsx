@@ -55,7 +55,20 @@ export type SyllabusRecord = {
   updatedAt: string
 }
 
-const emptyForm = {
+type SyllabusForm = {
+  department: string
+  programme: string
+  academicYear: string
+  curriculumVersion: string
+  semester: number
+  courseCode: string
+  courseName: string
+  description: string
+  published: boolean
+  displayOrder: number
+}
+
+const emptyForm: SyllabusForm = {
   department: DEPARTMENTS[0],
   programme: PROGRAMMES[0],
   academicYear: getAcademicYears()[0],
@@ -81,12 +94,12 @@ export default function SyllabusManager() {
   const [filterYear, setFilterYear] = useState<string>("all")
   const [filterStatus, setFilterStatus] = useState<string>("all")
 
-  const [form, setForm] = useState({ ...emptyForm })
+  const [form, setForm] = useState<SyllabusForm>({ ...emptyForm })
   const [pdfFile, setPdfFile] = useState<File | null>(null)
   const [uploading, setUploading] = useState(false)
 
   const [editItem, setEditItem] = useState<SyllabusRecord | null>(null)
-  const [editForm, setEditForm] = useState({ ...emptyForm })
+  const [editForm, setEditForm] = useState<SyllabusForm>({ ...emptyForm })
   const [editPdf, setEditPdf] = useState<File | null>(null)
   const [savingEdit, setSavingEdit] = useState(false)
 
