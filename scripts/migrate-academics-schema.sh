@@ -45,6 +45,28 @@ docker compose -f "$COMPOSE_FILE" exec -T web sh -c "chown -R nextjs:nodejs /app
 log "Restarting web container..."
 docker compose -f "$COMPOSE_FILE" restart web
 
+log "Re-patching nginx upstream (prevents 502 after container restart)..."
+NGINX_CONTAINER="${NGINX_CONTAINER:-nep-erp-nginx-1}"
+COLLEGE_CONTAINER="${COLLEGE_CONTAINER:-donboscocollege-web}"
+if docker ps --format '{{.Names}}' | grep -qx "$NGINX_CONTAINER"; then
+  ERP_NET=$(docker inspect "$NGINX_CONTAINER" --format '{{range $k,$v := .NetworkSettings.Networks}}{{$k}} {{end}}' | awk '{print $1}')
+  docker network connect "$ERP_NET" "$COLLEGE_CONTAINER" 2>/dev/null || true
+  if docker exec "$NGINX_CONTAINER" wget -qO- --timeout=5 "http://${COLLEGE_CONTAINER}:3000/" 2>/dev/null | head -c 80 >/dev/null; then
+    UPSTREAM="server ${COLLEGE_CONTAINER}:3000;"
+  else
+    COLLEGE_IP=$(docker network inspect "$ERP_NET" -f "{{range .Containers}}{{if eq .Name \"${COLLEGE_CONTAINER}\"}}{{.IPv4Address}}{{end}}{{end}}" | cut -d/ -f1)
+    UPSTREAM="server ${COLLEGE_IP}:3000;"
+  fi
+  for conf in /opt/nep-erp/nginx/conf.d/*.conf /opt/nep-erp/nginx/nginx.conf; do
+    [[ -f "$conf" ]] && grep -q 'donboscocollege_upstream' "$conf" && \
+      sed -i "/upstream donboscocollege_upstream/,/^  }/ s|server .*;|${UPSTREAM}|" "$conf"
+  done
+  docker exec "$NGINX_CONTAINER" nginx -t && docker exec "$NGINX_CONTAINER" nginx -s reload
+  log "Nginx upstream updated and reloaded"
+else
+  log "WARN: nginx container not found — run: bash scripts/deploy-college.sh"
+fi
+
 log "Waiting for app..."
 sleep 3
 code=$(curl -s -o /dev/null -w '%{http_code}' http://127.0.0.1:3002/admin/login 2>/dev/null || echo "000")
