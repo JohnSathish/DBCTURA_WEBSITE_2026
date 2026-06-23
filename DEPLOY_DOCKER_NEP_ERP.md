@@ -190,22 +190,34 @@ bash /opt/donboscocollege/scripts/deploy-college.sh
 
 ### Why you get 502 after `docker compose up --build`
 
-When `donboscocollege-web` is recreated, its **Docker IP changes**. Nginx still proxies to the **old IP**, so you see **502 Bad Gateway**.
+When `donboscocollege-web` is recreated, its **Docker IP changes**. Nginx still proxies to the **old IP** (or a cached `zone` peer), so you see **502 Bad Gateway**.
+
+**This is NOT caused by too many subdomains.** ERP subdomains use stable Docker service names (`web:3000`, `api:3001`) inside the same compose stack. The college website runs in a **separate** container — only its nginx upstream must be kept in sync.
+
+**Permanent upstream (no zone, no raw IP):**
+
+```nginx
+upstream donboscocollege_upstream {
+  server donboscocollege-web:3000;
+}
+```
+
+Or fallback: `server host.docker.internal:3002;` (host port — survives container IP changes).
+
+**Do NOT use:** `server 172.18.x.x:3000;` or `zone donboscocollege_upstream` — these cause recurring 502 after rebuilds.
 
 The deploy script:
 
 1. Pulls code and rebuilds `donboscocollege-web`
 2. Waits until `http://127.0.0.1:3002` responds
-3. Connects the college container to the ERP nginx network
-4. Updates `donboscocollege_upstream` in nginx config to `donboscocollege-web:3000` (or current IP)
-5. Runs `nginx -t` and `nginx -s reload`
+3. Runs `scripts/fix-college-nginx.sh` — patches upstream and reloads nginx **only** (ERP web/api never restarted)
 
 **Do not use plain `git pull && docker compose up --build` without the nginx fix.**
 
-Manual fix if needed:
+Quick fix anytime:
 
 ```bash
-bash /opt/donboscocollege/scripts/deploy-college.sh
+bash /opt/donboscocollege/scripts/fix-college-nginx.sh
 ```
 
 ERP containers are not affected.

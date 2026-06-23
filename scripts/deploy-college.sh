@@ -48,63 +48,8 @@ ERP_NET=$(docker inspect "$NGINX_CONTAINER" --format '{{range $k,$v := .NetworkS
 docker network connect "$ERP_NET" "$COLLEGE_CONTAINER" 2>/dev/null || true
 log "ERP network: $ERP_NET"
 
-log "Choosing nginx upstream (tested from inside nginx container)..."
-UPSTREAM=""
-for candidate in \
-  "host.docker.internal:3002" \
-  "172.17.0.1:3002" \
-  "${COLLEGE_CONTAINER}:3000"; do
-  if docker exec "$NGINX_CONTAINER" wget -qO- --timeout=5 "http://${candidate}/" 2>/dev/null | head -c 80 >/dev/null; then
-    UPSTREAM="server ${candidate};"
-    log "Using upstream: ${candidate}"
-    break
-  fi
-done
-if [[ -z "$UPSTREAM" ]]; then
-  COLLEGE_IP=$(docker network inspect "$ERP_NET" -f "{{range .Containers}}{{if eq .Name \"${COLLEGE_CONTAINER}\"}}{{.IPv4Address}}{{end}}{{end}}" | cut -d/ -f1)
-  [[ -n "$COLLEGE_IP" ]] || die "Could not resolve ${COLLEGE_CONTAINER} IP on network $ERP_NET"
-  UPSTREAM="server ${COLLEGE_IP}:3000;"
-  log "WARN: nginx could not reach host port — using container IP: ${COLLEGE_IP}:3000"
-fi
-
-patch_upstream() {
-  local file="$1"
-  [[ -f "$file" ]] || return 0
-  if grep -q 'donboscocollege_upstream' "$file"; then
-    cp "$file" "${file}.bak.$(date +%Y%m%d%H%M%S)"
-    sed -i "/upstream donboscocollege_upstream/,/^  }/ s|server .*;|${UPSTREAM}|" "$file"
-    log "Patched upstream in: $file"
-  fi
-  # Some vhosts proxy directly to host.docker.internal:3002 without an upstream block
-  if grep -qE 'proxy_pass[[:space:]]+http://(host\.docker\.internal|172\.17\.0\.1|[0-9.]+):3002' "$file"; then
-    cp "$file" "${file}.bak.$(date +%Y%m%d%H%M%S)" 2>/dev/null || true
-    sed -i -E "s|proxy_pass[[:space:]]+http://[^;]+;|proxy_pass http://donboscocollege_upstream;|g" "$file" 2>/dev/null || true
-  fi
-}
-
-NGINX_CONF=$(docker inspect "$NGINX_CONTAINER" --format '{{ range .Mounts }}{{ if eq .Destination "/etc/nginx/nginx.conf" }}{{ .Source }}{{ end }}{{ end }}')
-[[ -n "$NGINX_CONF" && "$NGINX_CONF" != "/opt/nep-erp/nginx/nginx.conf" ]] && patch_upstream "$NGINX_CONF"
-
-for conf in /opt/nep-erp/nginx/conf.d/*.conf /opt/nep-erp/nginx/nginx.conf; do
-  patch_upstream "$conf"
-done
-
-log "Testing and reloading nginx..."
-docker exec "$NGINX_CONTAINER" nginx -t
-docker exec "$NGINX_CONTAINER" nginx -s reload
-
-# Wait for container health after reload
-sleep 5
-
-log "Final checks..."
-docker compose -f "$COMPOSE_FILE" ps
-curl -s -o /dev/null -w "  localhost:3002  → HTTP %{http_code}\n" http://127.0.0.1:3002/
-if docker exec "$NGINX_CONTAINER" wget -qO- --timeout=10 "http://donboscocollege_upstream/" 2>/dev/null | head -c 80 >/dev/null; then
-  log "  nginx → college  → OK (upstream reachable)"
-else
-  log "  WARN: nginx cannot reach donboscocollege_upstream — check grep donboscocollege /opt/nep-erp/nginx/"
-fi
-curl -sk -o /dev/null -w "  https site      → HTTP %{http_code}\n" https://donboscocollege.ac.in/ || true
+log "Fixing college nginx upstream (ERP web/api not restarted)..."
+bash "$COLLEGE_DIR/scripts/fix-college-nginx.sh"
 
 log "Deploy complete."
 log "Open: https://donboscocollege.ac.in/admin/login"
