@@ -1,10 +1,11 @@
 import { NextRequest, NextResponse } from "next/server"
 import { prisma } from "@/lib/prisma"
+import { redirectToPublicFile } from "@/lib/download-redirect"
 
 type RouteContext = { params: Promise<{ id: string }> }
 
 /** Public download — increments counter and redirects to PDF. */
-export async function GET(_request: NextRequest, { params }: RouteContext) {
+export async function GET(request: NextRequest, { params }: RouteContext) {
   try {
     const { id } = await params
     const item = await prisma.flashNews.findUnique({ where: { id } })
@@ -17,8 +18,7 @@ export async function GET(_request: NextRequest, { params }: RouteContext) {
       data: { downloadCount: { increment: 1 } },
     })
 
-    const origin = new URL(_request.url).origin
-    return NextResponse.redirect(`${origin}${item.file}`)
+    return redirectToPublicFile(item.file)
   } catch (error: unknown) {
     console.error("Flash news download error:", error)
     return NextResponse.json({ error: "Download failed" }, { status: 500 })
