@@ -9,6 +9,8 @@
 
 set -euo pipefail
 
+COLLEGE_DIR="${COLLEGE_DIR:-/opt/donboscocollege}"
+COMPOSE_FILE="${COMPOSE_FILE:-docker-compose.prod.yml}"
 NGINX_CONTAINER="${NGINX_CONTAINER:-nep-erp-nginx-1}"
 COLLEGE_CONTAINER="${COLLEGE_CONTAINER:-donboscocollege-web}"
 NGINX_CONF="${NGINX_CONF:-/opt/nep-erp/nginx/nginx.conf}"
@@ -20,21 +22,54 @@ command -v docker >/dev/null 2>&1 || die "docker not found"
 docker ps --format '{{.Names}}' | grep -qx "$NGINX_CONTAINER" || die "nginx container '$NGINX_CONTAINER' not running"
 [[ -f "$NGINX_CONF" ]] || die "nginx config not found: $NGINX_CONF"
 
+probe_from_nginx() {
+  local url="$1"
+  docker exec "$NGINX_CONTAINER" sh -c "wget -q --spider --timeout=5 '$url' 2>/dev/null || curl -sf --max-time 5 -o /dev/null '$url'" 2>/dev/null
+}
+
+log "Ensuring college app container is running..."
+cd "$COLLEGE_DIR" || die "Directory not found: $COLLEGE_DIR"
+if ! docker ps --format '{{.Names}}' | grep -qx "$COLLEGE_CONTAINER"; then
+  log "College container not running — starting it..."
+  docker compose -f "$COMPOSE_FILE" up -d web
+  sleep 5
+fi
+docker ps --format '{{.Names}}\t{{.Status}}' | grep "$COLLEGE_CONTAINER" || die "College container '$COLLEGE_CONTAINER' not running"
+
+log "Checking college app on host port 3002..."
+host_ok=0
+for ((i=1; i<=30; i++)); do
+  code=$(curl -s -o /dev/null -w '%{http_code}' http://127.0.0.1:3002/ 2>/dev/null || echo "000")
+  if [[ "$code" =~ ^(200|301|302|307|308)$ ]]; then
+    host_ok=1
+    log "Host port 3002: HTTP $code"
+    break
+  fi
+  sleep 1
+done
+[[ "$host_ok" -eq 1 ]] || die "College app not responding on http://127.0.0.1:3002 — run: docker compose -f $COMPOSE_FILE logs --tail=50 web"
+
 log "Connecting college container to ERP nginx network..."
 ERP_NET=$(docker inspect "$NGINX_CONTAINER" --format '{{range $k,$v := .NetworkSettings.Networks}}{{$k}} {{end}}' | awk '{print $1}')
 [[ -n "$ERP_NET" ]] || die "Could not detect ERP Docker network"
 docker network connect "$ERP_NET" "$COLLEGE_CONTAINER" 2>/dev/null || true
+log "ERP network: $ERP_NET"
 
 log "Choosing stable upstream (tested from inside nginx)..."
 UPSTREAM_HOST=""
 for candidate in "donboscocollege-web:3000" "host.docker.internal:3002" "172.17.0.1:3002"; do
-  if docker exec "$NGINX_CONTAINER" wget -qO- --timeout=5 "http://${candidate}/" 2>/dev/null | head -c 80 >/dev/null; then
+  log "  trying http://${candidate}/ ..."
+  if probe_from_nginx "http://${candidate}/"; then
     UPSTREAM_HOST="$candidate"
-    log "Selected: ${candidate}"
+    log "  selected: ${candidate}"
     break
   fi
 done
-[[ -n "$UPSTREAM_HOST" ]] || die "nginx cannot reach college app on any known upstream"
+
+if [[ -z "$UPSTREAM_HOST" ]]; then
+  log "WARN: nginx probe failed for all candidates — using host.docker.internal:3002 (host port is up)"
+  UPSTREAM_HOST="host.docker.internal:3002"
+fi
 
 log "Patching ${NGINX_CONF} (remove zone/resolve cache, set stable server)..."
 cp "$NGINX_CONF" "${NGINX_CONF}.bak.$(date +%Y%m%d%H%M%S)"
