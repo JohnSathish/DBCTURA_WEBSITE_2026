@@ -82,7 +82,7 @@ export default function NewsHighlights({ items }: { items: NewsItem[] }) {
                               No image
                             </div>
                           )}
-                          {date ? (
+                          {day && mon ? (
                             <div className="absolute left-3 top-3 flex flex-col items-center rounded-lg bg-white/95 px-2.5 py-1.5 text-center shadow-md ring-1 ring-slate-200/80">
                               <span className="text-[10px] font-bold leading-none text-amber-600">{mon}</span>
                               <span className="font-heading text-lg font-bold leading-none text-slate-900">{day}</span>
