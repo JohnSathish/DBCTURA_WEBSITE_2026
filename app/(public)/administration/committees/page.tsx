@@ -7,6 +7,8 @@ import {
   getExOfficioMembers,
 } from "@/lib/committees-service"
 
+export const dynamic = "force-dynamic"
+
 export const metadata: Metadata = {
   title: "Committees | Don Bosco College, Tura",
   description:

@@ -14,6 +14,7 @@ COPY . .
 ENV NEXT_TELEMETRY_DISABLED=1
 # Next.js collects route data at build time; prisma.ts requires DATABASE_URL.
 ENV DATABASE_URL="file:./prisma/dev.db"
+RUN npx prisma db push
 RUN npm run build
 
 FROM base AS runner
