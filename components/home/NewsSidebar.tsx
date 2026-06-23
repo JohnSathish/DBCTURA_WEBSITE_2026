@@ -74,8 +74,10 @@ export default function NewsSidebar({ items }: { items: NoticeBoardNotice[]; pag
   }, [items])
 
   const [hovered, setHovered] = useState(false)
-  const itemHeight = 108
-  const durationSec = Math.max(14, displayItems.length * 4)
+  const itemHeight = 132
+  const shouldScroll = displayItems.length >= 2
+  const marqueeItems = shouldScroll ? [...displayItems, ...displayItems] : displayItems
+  const durationSec = Math.max(14, displayItems.length * 5)
 
   return (
     <Card className="flex h-full flex-col w-full border border-brand-gold/35 shadow-md bg-card" suppressHydrationWarning>
@@ -103,20 +105,22 @@ export default function NewsSidebar({ items }: { items: NoticeBoardNotice[]; pag
           </div>
         ) : (
           <div
-            className={cn("h-full", hovered || displayItems.length <= 1 ? "dbc-marquee paused" : "dbc-marquee")}
+            className={cn("h-full", !shouldScroll || hovered ? "dbc-marquee paused" : "dbc-marquee")}
             style={
-              {
-                ["--dbc-duration" as any]: `${durationSec}s`,
-                ["--dbc-distance" as any]: `${displayItems.length * itemHeight}px`,
-              } as any
+              shouldScroll
+                ? ({
+                    ["--dbc-duration" as any]: `${durationSec}s`,
+                    ["--dbc-distance" as any]: `${displayItems.length * itemHeight}px`,
+                  } as any)
+                : undefined
             }
           >
             <div className="dbc-marquee-track divide-y divide-slate-100">
-              {[...displayItems, ...displayItems].map((notice, idx) => {
+              {marqueeItems.map((notice, idx) => {
               const meta = iconMeta(notice)
               const isNew = mounted && isNewNotice(notice.publishDate)
               const pubLabel = notice.publishDate ? formatDisplayDate(notice.publishDate) : ""
-              const key = `${notice.id}-${idx < displayItems.length ? "a" : "b"}`
+              const key = `${notice.id}-${idx}`
 
               return (
                 <div

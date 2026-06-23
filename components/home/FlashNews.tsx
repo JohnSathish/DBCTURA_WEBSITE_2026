@@ -61,6 +61,9 @@ export default function FlashNews({ items }: FlashNewsProps) {
   const safeIndex = mounted ? currentIndex : 0
   const currentItem = items[safeIndex] ?? items[0]
   const title = currentItem.title.trim()
+  // Duplicate only for seamless horizontal ticker on long single titles
+  const useTickerLoop = items.length === 1 && title.length > 48
+  const tickerCopies = useTickerLoop ? [0, 1] : [0]
 
   return (
     <div
@@ -85,9 +88,9 @@ export default function FlashNews({ items }: FlashNewsProps) {
               title={title}
             >
               <div
-                className={`flash-news-marquee flex w-max items-center whitespace-nowrap ${isHovered ? "pause-animation" : ""}`}
+                className={`flex w-max max-w-full items-center whitespace-nowrap ${useTickerLoop ? "flash-news-marquee" : ""} ${isHovered ? "pause-animation" : ""}`}
               >
-                {[0, 1].map((dup) => (
+                {tickerCopies.map((dup) => (
                   <span
                     key={dup}
                     className="inline-flex max-w-none items-center gap-2 pr-8 text-sm font-medium leading-snug md:pr-12 md:text-base"
