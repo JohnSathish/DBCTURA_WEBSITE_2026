@@ -105,6 +105,9 @@ export default async function NoticeBoardNoticesAdminPage() {
                         Publish
                       </TableHead>
                       <TableHead className="px-4 py-3 text-xs font-semibold uppercase tracking-wide text-slate-600">
+                        Downloads
+                      </TableHead>
+                      <TableHead className="px-4 py-3 text-xs font-semibold uppercase tracking-wide text-slate-600">
                         Status
                       </TableHead>
                       <TableHead className="px-4 py-3 text-right text-xs font-semibold uppercase tracking-wide text-slate-600">
@@ -156,6 +159,9 @@ export default async function NoticeBoardNoticesAdminPage() {
                           </TableCell>
                           <TableCell className="px-4 py-4 text-slate-700">
                             {pub.toLocaleDateString()}
+                          </TableCell>
+                          <TableCell className="px-4 py-4 text-slate-700">
+                            {n.noticeType === "document" ? n.downloadCount.toLocaleString() : "—"}
                           </TableCell>
                           <TableCell className="px-4 py-4">
                             <span

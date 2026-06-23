@@ -117,19 +117,20 @@ model NoticeBoardEvent {
 }
 
 model NoticeBoardNotice {
-  id          String   @id @default(cuid())
-  title       String
-  content     String?  // for Text notices (or extra description)
-  noticeType  String   // "document" | "image" | "text"
-  pdfUrl      String?  // required when noticeType == "document"
-  imageUrl    String?  // optional when noticeType == "image"
-  publishDate DateTime @default(now())
-  expiryDate  DateTime?
-  active      Boolean  @default(true)
-  important   Boolean  @default(false)
-  pinned      Boolean  @default(false)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id            String   @id @default(cuid())
+  title         String
+  content       String?  // for Text notices (or extra description)
+  noticeType    String   // "document" | "image" | "text"
+  pdfUrl        String?  // required when noticeType == "document"
+  imageUrl      String?  // optional when noticeType == "image"
+  publishDate   DateTime @default(now())
+  expiryDate    DateTime?
+  active        Boolean  @default(true)
+  important     Boolean  @default(false)
+  pinned        Boolean  @default(false)
+  downloadCount Int      @default(0)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
 }
 
 model CourseApplication {
@@ -152,15 +153,16 @@ model CourseApplication {
 }
 
 model FlashNews {
-  id          String   @id @default(cuid())
-  title       String
-  description String?
-  file        String?
-  fileType    String?  // "image" or "pdf"
-  displayOrder Int     @default(0)
-  published   Boolean  @default(true)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id            String   @id @default(cuid())
+  title         String
+  description   String?
+  file          String?
+  fileType      String?  // "image" or "pdf"
+  displayOrder  Int      @default(0)
+  published     Boolean  @default(true)
+  downloadCount Int      @default(0)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
 }
 
 model HeroSlide {
@@ -345,4 +347,47 @@ model AlumniRegistration {
 
   ipAddress  String?
   userAgent  String?
+}
+
+/// College committees page metadata (academic year, publish status).
+model CommitteeMeta {
+  id           String   @id @default("default")
+  academicYear String   @default("2026 – 2027")
+  published    Boolean  @default(true)
+  updatedAt    DateTime @updatedAt
+}
+
+/// Global ex-officio members shown at top of committees page.
+model CommitteeExOfficio {
+  id           String   @id @default(cuid())
+  name         String
+  role         String
+  displayOrder Int      @default(0)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+/// Individual college committee (IQAC, Academic Council, etc.).
+model Committee {
+  id           String            @id @default(cuid())
+  name         String
+  slug         String            @unique
+  description  String?
+  displayOrder Int               @default(0)
+  published    Boolean           @default(true)
+  members      CommitteeMember[]
+  createdAt    DateTime          @default(now())
+  updatedAt    DateTime          @updatedAt
+}
+
+model CommitteeMember {
+  id           String    @id @default(cuid())
+  committeeId  String
+  committee    Committee @relation(fields: [committeeId], references: [id], onDelete: Cascade)
+  slNo         Int?
+  name         String
+  role         String?
+  displayOrder Int       @default(0)
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
 }

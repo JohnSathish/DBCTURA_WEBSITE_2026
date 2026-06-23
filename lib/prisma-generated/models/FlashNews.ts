@@ -27,10 +27,12 @@ export type AggregateFlashNews = {
 
 export type FlashNewsAvgAggregateOutputType = {
   displayOrder: number | null
+  downloadCount: number | null
 }
 
 export type FlashNewsSumAggregateOutputType = {
   displayOrder: number | null
+  downloadCount: number | null
 }
 
 export type FlashNewsMinAggregateOutputType = {
@@ -41,6 +43,7 @@ export type FlashNewsMinAggregateOutputType = {
   fileType: string | null
   displayOrder: number | null
   published: boolean | null
+  downloadCount: number | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -53,6 +56,7 @@ export type FlashNewsMaxAggregateOutputType = {
   fileType: string | null
   displayOrder: number | null
   published: boolean | null
+  downloadCount: number | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -65,6 +69,7 @@ export type FlashNewsCountAggregateOutputType = {
   fileType: number
   displayOrder: number
   published: number
+  downloadCount: number
   createdAt: number
   updatedAt: number
   _all: number
@@ -73,10 +78,12 @@ export type FlashNewsCountAggregateOutputType = {
 
 export type FlashNewsAvgAggregateInputType = {
   displayOrder?: true
+  downloadCount?: true
 }
 
 export type FlashNewsSumAggregateInputType = {
   displayOrder?: true
+  downloadCount?: true
 }
 
 export type FlashNewsMinAggregateInputType = {
@@ -87,6 +94,7 @@ export type FlashNewsMinAggregateInputType = {
   fileType?: true
   displayOrder?: true
   published?: true
+  downloadCount?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -99,6 +107,7 @@ export type FlashNewsMaxAggregateInputType = {
   fileType?: true
   displayOrder?: true
   published?: true
+  downloadCount?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -111,6 +120,7 @@ export type FlashNewsCountAggregateInputType = {
   fileType?: true
   displayOrder?: true
   published?: true
+  downloadCount?: true
   createdAt?: true
   updatedAt?: true
   _all?: true
@@ -210,6 +220,7 @@ export type FlashNewsGroupByOutputType = {
   fileType: string | null
   displayOrder: number
   published: boolean
+  downloadCount: number
   createdAt: Date
   updatedAt: Date
   _count: FlashNewsCountAggregateOutputType | null
@@ -245,6 +256,7 @@ export type FlashNewsWhereInput = {
   fileType?: Prisma.StringNullableFilter<"FlashNews"> | string | null
   displayOrder?: Prisma.IntFilter<"FlashNews"> | number
   published?: Prisma.BoolFilter<"FlashNews"> | boolean
+  downloadCount?: Prisma.IntFilter<"FlashNews"> | number
   createdAt?: Prisma.DateTimeFilter<"FlashNews"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"FlashNews"> | Date | string
 }
@@ -257,6 +269,7 @@ export type FlashNewsOrderByWithRelationInput = {
   fileType?: Prisma.SortOrderInput | Prisma.SortOrder
   displayOrder?: Prisma.SortOrder
   published?: Prisma.SortOrder
+  downloadCount?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -272,6 +285,7 @@ export type FlashNewsWhereUniqueInput = Prisma.AtLeast<{
   fileType?: Prisma.StringNullableFilter<"FlashNews"> | string | null
   displayOrder?: Prisma.IntFilter<"FlashNews"> | number
   published?: Prisma.BoolFilter<"FlashNews"> | boolean
+  downloadCount?: Prisma.IntFilter<"FlashNews"> | number
   createdAt?: Prisma.DateTimeFilter<"FlashNews"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"FlashNews"> | Date | string
 }, "id">
@@ -284,6 +298,7 @@ export type FlashNewsOrderByWithAggregationInput = {
   fileType?: Prisma.SortOrderInput | Prisma.SortOrder
   displayOrder?: Prisma.SortOrder
   published?: Prisma.SortOrder
+  downloadCount?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.FlashNewsCountOrderByAggregateInput
@@ -304,6 +319,7 @@ export type FlashNewsScalarWhereWithAggregatesInput = {
   fileType?: Prisma.StringNullableWithAggregatesFilter<"FlashNews"> | string | null
   displayOrder?: Prisma.IntWithAggregatesFilter<"FlashNews"> | number
   published?: Prisma.BoolWithAggregatesFilter<"FlashNews"> | boolean
+  downloadCount?: Prisma.IntWithAggregatesFilter<"FlashNews"> | number
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"FlashNews"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"FlashNews"> | Date | string
 }
@@ -316,6 +332,7 @@ export type FlashNewsCreateInput = {
   fileType?: string | null
   displayOrder?: number
   published?: boolean
+  downloadCount?: number
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -328,6 +345,7 @@ export type FlashNewsUncheckedCreateInput = {
   fileType?: string | null
   displayOrder?: number
   published?: boolean
+  downloadCount?: number
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -340,6 +358,7 @@ export type FlashNewsUpdateInput = {
   fileType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   displayOrder?: Prisma.IntFieldUpdateOperationsInput | number
   published?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  downloadCount?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -352,6 +371,7 @@ export type FlashNewsUncheckedUpdateInput = {
   fileType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   displayOrder?: Prisma.IntFieldUpdateOperationsInput | number
   published?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  downloadCount?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -364,6 +384,7 @@ export type FlashNewsCreateManyInput = {
   fileType?: string | null
   displayOrder?: number
   published?: boolean
+  downloadCount?: number
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -376,6 +397,7 @@ export type FlashNewsUpdateManyMutationInput = {
   fileType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   displayOrder?: Prisma.IntFieldUpdateOperationsInput | number
   published?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  downloadCount?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -388,6 +410,7 @@ export type FlashNewsUncheckedUpdateManyInput = {
   fileType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   displayOrder?: Prisma.IntFieldUpdateOperationsInput | number
   published?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  downloadCount?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -400,12 +423,14 @@ export type FlashNewsCountOrderByAggregateInput = {
   fileType?: Prisma.SortOrder
   displayOrder?: Prisma.SortOrder
   published?: Prisma.SortOrder
+  downloadCount?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
 
 export type FlashNewsAvgOrderByAggregateInput = {
   displayOrder?: Prisma.SortOrder
+  downloadCount?: Prisma.SortOrder
 }
 
 export type FlashNewsMaxOrderByAggregateInput = {
@@ -416,6 +441,7 @@ export type FlashNewsMaxOrderByAggregateInput = {
   fileType?: Prisma.SortOrder
   displayOrder?: Prisma.SortOrder
   published?: Prisma.SortOrder
+  downloadCount?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -428,12 +454,14 @@ export type FlashNewsMinOrderByAggregateInput = {
   fileType?: Prisma.SortOrder
   displayOrder?: Prisma.SortOrder
   published?: Prisma.SortOrder
+  downloadCount?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
 
 export type FlashNewsSumOrderByAggregateInput = {
   displayOrder?: Prisma.SortOrder
+  downloadCount?: Prisma.SortOrder
 }
 
 
@@ -446,6 +474,7 @@ export type FlashNewsSelect<ExtArgs extends runtime.Types.Extensions.InternalArg
   fileType?: boolean
   displayOrder?: boolean
   published?: boolean
+  downloadCount?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }, ExtArgs["result"]["flashNews"]>
@@ -458,6 +487,7 @@ export type FlashNewsSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Ext
   fileType?: boolean
   displayOrder?: boolean
   published?: boolean
+  downloadCount?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }, ExtArgs["result"]["flashNews"]>
@@ -470,6 +500,7 @@ export type FlashNewsSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Ext
   fileType?: boolean
   displayOrder?: boolean
   published?: boolean
+  downloadCount?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }, ExtArgs["result"]["flashNews"]>
@@ -482,11 +513,12 @@ export type FlashNewsSelectScalar = {
   fileType?: boolean
   displayOrder?: boolean
   published?: boolean
+  downloadCount?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type FlashNewsOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "title" | "description" | "file" | "fileType" | "displayOrder" | "published" | "createdAt" | "updatedAt", ExtArgs["result"]["flashNews"]>
+export type FlashNewsOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "title" | "description" | "file" | "fileType" | "displayOrder" | "published" | "downloadCount" | "createdAt" | "updatedAt", ExtArgs["result"]["flashNews"]>
 
 export type $FlashNewsPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "FlashNews"
@@ -499,6 +531,7 @@ export type $FlashNewsPayload<ExtArgs extends runtime.Types.Extensions.InternalA
     fileType: string | null
     displayOrder: number
     published: boolean
+    downloadCount: number
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["flashNews"]>
@@ -931,6 +964,7 @@ export interface FlashNewsFieldRefs {
   readonly fileType: Prisma.FieldRef<"FlashNews", 'String'>
   readonly displayOrder: Prisma.FieldRef<"FlashNews", 'Int'>
   readonly published: Prisma.FieldRef<"FlashNews", 'Boolean'>
+  readonly downloadCount: Prisma.FieldRef<"FlashNews", 'Int'>
   readonly createdAt: Prisma.FieldRef<"FlashNews", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"FlashNews", 'DateTime'>
 }

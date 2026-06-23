@@ -21,6 +21,7 @@ export type Notice = {
   active: boolean
   important: boolean
   pinned: boolean
+  downloadCount?: number
 }
 
 function isNewNotice(publishDate: string | Date) {
@@ -186,7 +187,7 @@ export default function NoticeBoardClient({ notices }: { notices: Notice[] }) {
                 <div className="mt-5 flex flex-wrap gap-2">
                   {n.noticeType === "document" && n.pdfUrl ? (
                     <>
-                      <Link href={n.pdfUrl} target="_blank" rel="noreferrer">
+                      <Link href={`/api/notice-board/notices/${n.id}/download`}>
                         <Button className="rounded-xl bg-blue-600 hover:bg-blue-700 shadow-sm shadow-blue-600/20">
                           <Download className="h-4 w-4 mr-2" />
                           Download
@@ -198,6 +199,11 @@ export default function NoticeBoardClient({ notices }: { notices: Notice[] }) {
                           View
                         </Button>
                       </Link>
+                      {(n.downloadCount ?? 0) > 0 ? (
+                        <span className="self-center text-xs text-slate-500">
+                          {n.downloadCount!.toLocaleString()} download{n.downloadCount === 1 ? "" : "s"}
+                        </span>
+                      ) : null}
                     </>
                   ) : null}
 

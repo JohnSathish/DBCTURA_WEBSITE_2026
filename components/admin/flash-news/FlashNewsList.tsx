@@ -18,6 +18,7 @@ export interface FlashNewsListItem {
   fileType?: string | null
   published: boolean
   displayOrder: number
+  downloadCount?: number
 }
 
 function StatusBadge({ published }: { published: boolean }) {
@@ -100,7 +101,12 @@ export default function FlashNewsList({ items }: { items: FlashNewsListItem[] })
               <StatusBadge published={item.published} />
             </div>
             <div className="mt-3 flex flex-wrap items-center justify-between gap-2 border-t border-slate-100 pt-3">
-              <FileBadge file={item.file} fileType={item.fileType} />
+              <div className="flex flex-wrap items-center gap-2">
+                <FileBadge file={item.file} fileType={item.fileType} />
+                {item.fileType === "pdf" && (item.downloadCount ?? 0) > 0 ? (
+                  <span className="text-xs text-slate-500">{item.downloadCount} downloads</span>
+                ) : null}
+              </div>
               <RowActions id={item.id} />
             </div>
           </li>
@@ -120,6 +126,9 @@ export default function FlashNewsList({ items }: { items: FlashNewsListItem[] })
               </th>
               <th className="h-11 w-[10%] px-3 text-left align-middle text-xs font-semibold uppercase tracking-wide text-slate-500">
                 File
+              </th>
+              <th className="h-11 w-[8%] px-3 text-left align-middle text-xs font-semibold uppercase tracking-wide text-slate-500">
+                Downloads
               </th>
               <th className="h-11 w-[10%] px-3 text-left align-middle text-xs font-semibold uppercase tracking-wide text-slate-500">
                 Status
@@ -150,6 +159,9 @@ export default function FlashNewsList({ items }: { items: FlashNewsListItem[] })
                 </td>
                 <td className="px-3 py-3.5 align-middle">
                   <FileBadge file={item.file} fileType={item.fileType} />
+                </td>
+                <td className="px-3 py-3.5 align-middle text-sm text-slate-600">
+                  {item.fileType === "pdf" ? (item.downloadCount ?? 0).toLocaleString() : "—"}
                 </td>
                 <td className="px-3 py-3.5 align-middle">
                   <StatusBadge published={item.published} />

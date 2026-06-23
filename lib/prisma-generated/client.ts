@@ -153,3 +153,23 @@ export type BloodDonor = Prisma.BloodDonorModel
  * Public alumni registration submissions (exportable by admin).
  */
 export type AlumniRegistration = Prisma.AlumniRegistrationModel
+/**
+ * Model CommitteeMeta
+ * College committees page metadata (academic year, publish status).
+ */
+export type CommitteeMeta = Prisma.CommitteeMetaModel
+/**
+ * Model CommitteeExOfficio
+ * Global ex-officio members shown at top of committees page.
+ */
+export type CommitteeExOfficio = Prisma.CommitteeExOfficioModel
+/**
+ * Model Committee
+ * Individual college committee (IQAC, Academic Council, etc.).
+ */
+export type Committee = Prisma.CommitteeModel
+/**
+ * Model CommitteeMember
+ * 
+ */
+export type CommitteeMember = Prisma.CommitteeMemberModel

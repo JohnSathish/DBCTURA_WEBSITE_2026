@@ -19,8 +19,18 @@ export type NoticeBoardNoticeModel = runtime.Types.Result.DefaultSelection<Prism
 
 export type AggregateNoticeBoardNotice = {
   _count: NoticeBoardNoticeCountAggregateOutputType | null
+  _avg: NoticeBoardNoticeAvgAggregateOutputType | null
+  _sum: NoticeBoardNoticeSumAggregateOutputType | null
   _min: NoticeBoardNoticeMinAggregateOutputType | null
   _max: NoticeBoardNoticeMaxAggregateOutputType | null
+}
+
+export type NoticeBoardNoticeAvgAggregateOutputType = {
+  downloadCount: number | null
+}
+
+export type NoticeBoardNoticeSumAggregateOutputType = {
+  downloadCount: number | null
 }
 
 export type NoticeBoardNoticeMinAggregateOutputType = {
@@ -35,6 +45,7 @@ export type NoticeBoardNoticeMinAggregateOutputType = {
   active: boolean | null
   important: boolean | null
   pinned: boolean | null
+  downloadCount: number | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -51,6 +62,7 @@ export type NoticeBoardNoticeMaxAggregateOutputType = {
   active: boolean | null
   important: boolean | null
   pinned: boolean | null
+  downloadCount: number | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -67,11 +79,20 @@ export type NoticeBoardNoticeCountAggregateOutputType = {
   active: number
   important: number
   pinned: number
+  downloadCount: number
   createdAt: number
   updatedAt: number
   _all: number
 }
 
+
+export type NoticeBoardNoticeAvgAggregateInputType = {
+  downloadCount?: true
+}
+
+export type NoticeBoardNoticeSumAggregateInputType = {
+  downloadCount?: true
+}
 
 export type NoticeBoardNoticeMinAggregateInputType = {
   id?: true
@@ -85,6 +106,7 @@ export type NoticeBoardNoticeMinAggregateInputType = {
   active?: true
   important?: true
   pinned?: true
+  downloadCount?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -101,6 +123,7 @@ export type NoticeBoardNoticeMaxAggregateInputType = {
   active?: true
   important?: true
   pinned?: true
+  downloadCount?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -117,6 +140,7 @@ export type NoticeBoardNoticeCountAggregateInputType = {
   active?: true
   important?: true
   pinned?: true
+  downloadCount?: true
   createdAt?: true
   updatedAt?: true
   _all?: true
@@ -160,6 +184,18 @@ export type NoticeBoardNoticeAggregateArgs<ExtArgs extends runtime.Types.Extensi
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
    * 
+   * Select which fields to average
+  **/
+  _avg?: NoticeBoardNoticeAvgAggregateInputType
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+   * 
+   * Select which fields to sum
+  **/
+  _sum?: NoticeBoardNoticeSumAggregateInputType
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+   * 
    * Select which fields to find the minimum value
   **/
   _min?: NoticeBoardNoticeMinAggregateInputType
@@ -190,6 +226,8 @@ export type NoticeBoardNoticeGroupByArgs<ExtArgs extends runtime.Types.Extension
   take?: number
   skip?: number
   _count?: NoticeBoardNoticeCountAggregateInputType | true
+  _avg?: NoticeBoardNoticeAvgAggregateInputType
+  _sum?: NoticeBoardNoticeSumAggregateInputType
   _min?: NoticeBoardNoticeMinAggregateInputType
   _max?: NoticeBoardNoticeMaxAggregateInputType
 }
@@ -206,9 +244,12 @@ export type NoticeBoardNoticeGroupByOutputType = {
   active: boolean
   important: boolean
   pinned: boolean
+  downloadCount: number
   createdAt: Date
   updatedAt: Date
   _count: NoticeBoardNoticeCountAggregateOutputType | null
+  _avg: NoticeBoardNoticeAvgAggregateOutputType | null
+  _sum: NoticeBoardNoticeSumAggregateOutputType | null
   _min: NoticeBoardNoticeMinAggregateOutputType | null
   _max: NoticeBoardNoticeMaxAggregateOutputType | null
 }
@@ -243,6 +284,7 @@ export type NoticeBoardNoticeWhereInput = {
   active?: Prisma.BoolFilter<"NoticeBoardNotice"> | boolean
   important?: Prisma.BoolFilter<"NoticeBoardNotice"> | boolean
   pinned?: Prisma.BoolFilter<"NoticeBoardNotice"> | boolean
+  downloadCount?: Prisma.IntFilter<"NoticeBoardNotice"> | number
   createdAt?: Prisma.DateTimeFilter<"NoticeBoardNotice"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"NoticeBoardNotice"> | Date | string
 }
@@ -259,6 +301,7 @@ export type NoticeBoardNoticeOrderByWithRelationInput = {
   active?: Prisma.SortOrder
   important?: Prisma.SortOrder
   pinned?: Prisma.SortOrder
+  downloadCount?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -278,6 +321,7 @@ export type NoticeBoardNoticeWhereUniqueInput = Prisma.AtLeast<{
   active?: Prisma.BoolFilter<"NoticeBoardNotice"> | boolean
   important?: Prisma.BoolFilter<"NoticeBoardNotice"> | boolean
   pinned?: Prisma.BoolFilter<"NoticeBoardNotice"> | boolean
+  downloadCount?: Prisma.IntFilter<"NoticeBoardNotice"> | number
   createdAt?: Prisma.DateTimeFilter<"NoticeBoardNotice"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"NoticeBoardNotice"> | Date | string
 }, "id">
@@ -294,11 +338,14 @@ export type NoticeBoardNoticeOrderByWithAggregationInput = {
   active?: Prisma.SortOrder
   important?: Prisma.SortOrder
   pinned?: Prisma.SortOrder
+  downloadCount?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.NoticeBoardNoticeCountOrderByAggregateInput
+  _avg?: Prisma.NoticeBoardNoticeAvgOrderByAggregateInput
   _max?: Prisma.NoticeBoardNoticeMaxOrderByAggregateInput
   _min?: Prisma.NoticeBoardNoticeMinOrderByAggregateInput
+  _sum?: Prisma.NoticeBoardNoticeSumOrderByAggregateInput
 }
 
 export type NoticeBoardNoticeScalarWhereWithAggregatesInput = {
@@ -316,6 +363,7 @@ export type NoticeBoardNoticeScalarWhereWithAggregatesInput = {
   active?: Prisma.BoolWithAggregatesFilter<"NoticeBoardNotice"> | boolean
   important?: Prisma.BoolWithAggregatesFilter<"NoticeBoardNotice"> | boolean
   pinned?: Prisma.BoolWithAggregatesFilter<"NoticeBoardNotice"> | boolean
+  downloadCount?: Prisma.IntWithAggregatesFilter<"NoticeBoardNotice"> | number
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"NoticeBoardNotice"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"NoticeBoardNotice"> | Date | string
 }
@@ -332,6 +380,7 @@ export type NoticeBoardNoticeCreateInput = {
   active?: boolean
   important?: boolean
   pinned?: boolean
+  downloadCount?: number
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -348,6 +397,7 @@ export type NoticeBoardNoticeUncheckedCreateInput = {
   active?: boolean
   important?: boolean
   pinned?: boolean
+  downloadCount?: number
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -364,6 +414,7 @@ export type NoticeBoardNoticeUpdateInput = {
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   important?: Prisma.BoolFieldUpdateOperationsInput | boolean
   pinned?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  downloadCount?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -380,6 +431,7 @@ export type NoticeBoardNoticeUncheckedUpdateInput = {
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   important?: Prisma.BoolFieldUpdateOperationsInput | boolean
   pinned?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  downloadCount?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -396,6 +448,7 @@ export type NoticeBoardNoticeCreateManyInput = {
   active?: boolean
   important?: boolean
   pinned?: boolean
+  downloadCount?: number
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -412,6 +465,7 @@ export type NoticeBoardNoticeUpdateManyMutationInput = {
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   important?: Prisma.BoolFieldUpdateOperationsInput | boolean
   pinned?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  downloadCount?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -428,6 +482,7 @@ export type NoticeBoardNoticeUncheckedUpdateManyInput = {
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   important?: Prisma.BoolFieldUpdateOperationsInput | boolean
   pinned?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  downloadCount?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -444,8 +499,13 @@ export type NoticeBoardNoticeCountOrderByAggregateInput = {
   active?: Prisma.SortOrder
   important?: Prisma.SortOrder
   pinned?: Prisma.SortOrder
+  downloadCount?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+}
+
+export type NoticeBoardNoticeAvgOrderByAggregateInput = {
+  downloadCount?: Prisma.SortOrder
 }
 
 export type NoticeBoardNoticeMaxOrderByAggregateInput = {
@@ -460,6 +520,7 @@ export type NoticeBoardNoticeMaxOrderByAggregateInput = {
   active?: Prisma.SortOrder
   important?: Prisma.SortOrder
   pinned?: Prisma.SortOrder
+  downloadCount?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -476,8 +537,13 @@ export type NoticeBoardNoticeMinOrderByAggregateInput = {
   active?: Prisma.SortOrder
   important?: Prisma.SortOrder
   pinned?: Prisma.SortOrder
+  downloadCount?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+}
+
+export type NoticeBoardNoticeSumOrderByAggregateInput = {
+  downloadCount?: Prisma.SortOrder
 }
 
 
@@ -494,6 +560,7 @@ export type NoticeBoardNoticeSelect<ExtArgs extends runtime.Types.Extensions.Int
   active?: boolean
   important?: boolean
   pinned?: boolean
+  downloadCount?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }, ExtArgs["result"]["noticeBoardNotice"]>
@@ -510,6 +577,7 @@ export type NoticeBoardNoticeSelectCreateManyAndReturn<ExtArgs extends runtime.T
   active?: boolean
   important?: boolean
   pinned?: boolean
+  downloadCount?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }, ExtArgs["result"]["noticeBoardNotice"]>
@@ -526,6 +594,7 @@ export type NoticeBoardNoticeSelectUpdateManyAndReturn<ExtArgs extends runtime.T
   active?: boolean
   important?: boolean
   pinned?: boolean
+  downloadCount?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }, ExtArgs["result"]["noticeBoardNotice"]>
@@ -542,11 +611,12 @@ export type NoticeBoardNoticeSelectScalar = {
   active?: boolean
   important?: boolean
   pinned?: boolean
+  downloadCount?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type NoticeBoardNoticeOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "title" | "content" | "noticeType" | "pdfUrl" | "imageUrl" | "publishDate" | "expiryDate" | "active" | "important" | "pinned" | "createdAt" | "updatedAt", ExtArgs["result"]["noticeBoardNotice"]>
+export type NoticeBoardNoticeOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "title" | "content" | "noticeType" | "pdfUrl" | "imageUrl" | "publishDate" | "expiryDate" | "active" | "important" | "pinned" | "downloadCount" | "createdAt" | "updatedAt", ExtArgs["result"]["noticeBoardNotice"]>
 
 export type $NoticeBoardNoticePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "NoticeBoardNotice"
@@ -563,6 +633,7 @@ export type $NoticeBoardNoticePayload<ExtArgs extends runtime.Types.Extensions.I
     active: boolean
     important: boolean
     pinned: boolean
+    downloadCount: number
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["noticeBoardNotice"]>
@@ -999,6 +1070,7 @@ export interface NoticeBoardNoticeFieldRefs {
   readonly active: Prisma.FieldRef<"NoticeBoardNotice", 'Boolean'>
   readonly important: Prisma.FieldRef<"NoticeBoardNotice", 'Boolean'>
   readonly pinned: Prisma.FieldRef<"NoticeBoardNotice", 'Boolean'>
+  readonly downloadCount: Prisma.FieldRef<"NoticeBoardNotice", 'Int'>
   readonly createdAt: Prisma.FieldRef<"NoticeBoardNotice", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"NoticeBoardNotice", 'DateTime'>
 }

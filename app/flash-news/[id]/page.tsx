@@ -66,11 +66,15 @@ export default async function FlashNewsDetailPage({
                     <div className="flex-1">
                       <p className="font-medium text-gray-900">PDF Document</p>
                       <p className="text-sm text-gray-600">{flashNews.file.split("/").pop()}</p>
+                      {flashNews.downloadCount > 0 ? (
+                        <p className="mt-1 text-xs text-slate-500">
+                          Downloaded {flashNews.downloadCount.toLocaleString()} time
+                          {flashNews.downloadCount === 1 ? "" : "s"}
+                        </p>
+                      ) : null}
                     </div>
                     <a
-                      href={flashNews.file}
-                      target="_blank"
-                      rel="noopener noreferrer"
+                      href={`/api/flash-news/${flashNews.id}/download`}
                       className="flex items-center gap-2 px-4 py-2 bg-brand-hover text-white rounded-lg hover:opacity-90 transition-colors"
                     >
                       <Download className="h-4 w-4" />

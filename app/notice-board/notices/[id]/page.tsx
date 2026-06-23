@@ -84,19 +84,32 @@ export default async function NoticeDetailPage({
           <div className="px-6 py-6">
             {notice.noticeType === "document" && notice.pdfUrl ? (
               <div className="space-y-3">
-                <div className="flex flex-wrap gap-2">
-                  <Link href={notice.pdfUrl} target="_blank" rel="noreferrer">
-                    <Button className="rounded-xl bg-blue-600 hover:bg-blue-700 shadow-sm shadow-blue-600/20">
-                      <Download className="h-4 w-4 mr-2" />
-                      Download PDF
-                    </Button>
-                  </Link>
-                  <Link href={notice.pdfUrl} target="_blank" rel="noreferrer">
-                    <Button variant="outline" className="rounded-xl">
-                      <Eye className="h-4 w-4 mr-2" />
-                      View
-                    </Button>
-                  </Link>
+                <div className="flex flex-wrap items-center gap-4 rounded-2xl border border-slate-200 bg-slate-50 p-4">
+                  <FileText className="h-10 w-10 shrink-0 text-red-500" />
+                  <div className="min-w-0 flex-1">
+                    <p className="font-medium text-slate-900">PDF Document</p>
+                    <p className="truncate text-sm text-slate-600">{notice.pdfUrl.split("/").pop()}</p>
+                    {notice.downloadCount > 0 ? (
+                      <p className="mt-1 text-xs text-slate-500">
+                        Downloaded {notice.downloadCount.toLocaleString()} time
+                        {notice.downloadCount === 1 ? "" : "s"}
+                      </p>
+                    ) : null}
+                  </div>
+                  <div className="flex flex-wrap gap-2">
+                    <Link href={`/api/notice-board/notices/${notice.id}/download`}>
+                      <Button className="rounded-xl bg-blue-600 shadow-sm shadow-blue-600/20 hover:bg-blue-700">
+                        <Download className="mr-2 h-4 w-4" />
+                        Download PDF
+                      </Button>
+                    </Link>
+                    <Link href={notice.pdfUrl} target="_blank" rel="noreferrer">
+                      <Button variant="outline" className="rounded-xl">
+                        <Eye className="mr-2 h-4 w-4" />
+                        View
+                      </Button>
+                    </Link>
+                  </div>
                 </div>
                 <p className="text-sm text-slate-600">If your browser doesn’t preview PDFs, use Download.</p>
               </div>

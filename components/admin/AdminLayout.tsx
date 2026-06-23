@@ -32,6 +32,7 @@ import {
   ClipboardList,
   Droplet,
   ListTree,
+  UsersRound,
 } from "lucide-react"
 
 const adminMenuItems = [
@@ -55,6 +56,7 @@ const adminMenuItems = [
   { href: "/admin/navigation", label: "Navigation", icon: ListTree },
   { href: "/admin/alumni-registrations", label: "Alumni registrations", icon: Users },
   { href: "/admin/staff-profiles", label: "Staff Profiles", icon: GraduationCap },
+  { href: "/admin/committees", label: "Committees", icon: UsersRound },
   { href: "/admin/settings", label: "Settings", icon: Settings },
 ]
 

@@ -410,7 +410,11 @@ export const ModelName = {
   Syllabus: 'Syllabus',
   Grievance: 'Grievance',
   BloodDonor: 'BloodDonor',
-  AlumniRegistration: 'AlumniRegistration'
+  AlumniRegistration: 'AlumniRegistration',
+  CommitteeMeta: 'CommitteeMeta',
+  CommitteeExOfficio: 'CommitteeExOfficio',
+  Committee: 'Committee',
+  CommitteeMember: 'CommitteeMember'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -426,7 +430,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "page" | "news" | "galleryAlbum" | "galleryImage" | "download" | "setting" | "testimonial" | "noticeBoardEvent" | "noticeBoardNotice" | "courseApplication" | "flashNews" | "heroSlide" | "shortTermCourse" | "popupBanner" | "staffProfile" | "navigationMenu" | "questionPaper" | "syllabus" | "grievance" | "bloodDonor" | "alumniRegistration"
+    modelProps: "user" | "page" | "news" | "galleryAlbum" | "galleryImage" | "download" | "setting" | "testimonial" | "noticeBoardEvent" | "noticeBoardNotice" | "courseApplication" | "flashNews" | "heroSlide" | "shortTermCourse" | "popupBanner" | "staffProfile" | "navigationMenu" | "questionPaper" | "syllabus" | "grievance" | "bloodDonor" | "alumniRegistration" | "committeeMeta" | "committeeExOfficio" | "committee" | "committeeMember"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -2058,6 +2062,302 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    CommitteeMeta: {
+      payload: Prisma.$CommitteeMetaPayload<ExtArgs>
+      fields: Prisma.CommitteeMetaFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.CommitteeMetaFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CommitteeMetaPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.CommitteeMetaFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CommitteeMetaPayload>
+        }
+        findFirst: {
+          args: Prisma.CommitteeMetaFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CommitteeMetaPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.CommitteeMetaFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CommitteeMetaPayload>
+        }
+        findMany: {
+          args: Prisma.CommitteeMetaFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CommitteeMetaPayload>[]
+        }
+        create: {
+          args: Prisma.CommitteeMetaCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CommitteeMetaPayload>
+        }
+        createMany: {
+          args: Prisma.CommitteeMetaCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.CommitteeMetaCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CommitteeMetaPayload>[]
+        }
+        delete: {
+          args: Prisma.CommitteeMetaDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CommitteeMetaPayload>
+        }
+        update: {
+          args: Prisma.CommitteeMetaUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CommitteeMetaPayload>
+        }
+        deleteMany: {
+          args: Prisma.CommitteeMetaDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.CommitteeMetaUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.CommitteeMetaUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CommitteeMetaPayload>[]
+        }
+        upsert: {
+          args: Prisma.CommitteeMetaUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CommitteeMetaPayload>
+        }
+        aggregate: {
+          args: Prisma.CommitteeMetaAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateCommitteeMeta>
+        }
+        groupBy: {
+          args: Prisma.CommitteeMetaGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.CommitteeMetaGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.CommitteeMetaCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.CommitteeMetaCountAggregateOutputType> | number
+        }
+      }
+    }
+    CommitteeExOfficio: {
+      payload: Prisma.$CommitteeExOfficioPayload<ExtArgs>
+      fields: Prisma.CommitteeExOfficioFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.CommitteeExOfficioFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CommitteeExOfficioPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.CommitteeExOfficioFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CommitteeExOfficioPayload>
+        }
+        findFirst: {
+          args: Prisma.CommitteeExOfficioFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CommitteeExOfficioPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.CommitteeExOfficioFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CommitteeExOfficioPayload>
+        }
+        findMany: {
+          args: Prisma.CommitteeExOfficioFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CommitteeExOfficioPayload>[]
+        }
+        create: {
+          args: Prisma.CommitteeExOfficioCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CommitteeExOfficioPayload>
+        }
+        createMany: {
+          args: Prisma.CommitteeExOfficioCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.CommitteeExOfficioCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CommitteeExOfficioPayload>[]
+        }
+        delete: {
+          args: Prisma.CommitteeExOfficioDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CommitteeExOfficioPayload>
+        }
+        update: {
+          args: Prisma.CommitteeExOfficioUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CommitteeExOfficioPayload>
+        }
+        deleteMany: {
+          args: Prisma.CommitteeExOfficioDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.CommitteeExOfficioUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.CommitteeExOfficioUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CommitteeExOfficioPayload>[]
+        }
+        upsert: {
+          args: Prisma.CommitteeExOfficioUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CommitteeExOfficioPayload>
+        }
+        aggregate: {
+          args: Prisma.CommitteeExOfficioAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateCommitteeExOfficio>
+        }
+        groupBy: {
+          args: Prisma.CommitteeExOfficioGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.CommitteeExOfficioGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.CommitteeExOfficioCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.CommitteeExOfficioCountAggregateOutputType> | number
+        }
+      }
+    }
+    Committee: {
+      payload: Prisma.$CommitteePayload<ExtArgs>
+      fields: Prisma.CommitteeFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.CommitteeFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CommitteePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.CommitteeFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CommitteePayload>
+        }
+        findFirst: {
+          args: Prisma.CommitteeFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CommitteePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.CommitteeFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CommitteePayload>
+        }
+        findMany: {
+          args: Prisma.CommitteeFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CommitteePayload>[]
+        }
+        create: {
+          args: Prisma.CommitteeCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CommitteePayload>
+        }
+        createMany: {
+          args: Prisma.CommitteeCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.CommitteeCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CommitteePayload>[]
+        }
+        delete: {
+          args: Prisma.CommitteeDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CommitteePayload>
+        }
+        update: {
+          args: Prisma.CommitteeUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CommitteePayload>
+        }
+        deleteMany: {
+          args: Prisma.CommitteeDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.CommitteeUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.CommitteeUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CommitteePayload>[]
+        }
+        upsert: {
+          args: Prisma.CommitteeUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CommitteePayload>
+        }
+        aggregate: {
+          args: Prisma.CommitteeAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateCommittee>
+        }
+        groupBy: {
+          args: Prisma.CommitteeGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.CommitteeGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.CommitteeCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.CommitteeCountAggregateOutputType> | number
+        }
+      }
+    }
+    CommitteeMember: {
+      payload: Prisma.$CommitteeMemberPayload<ExtArgs>
+      fields: Prisma.CommitteeMemberFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.CommitteeMemberFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CommitteeMemberPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.CommitteeMemberFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CommitteeMemberPayload>
+        }
+        findFirst: {
+          args: Prisma.CommitteeMemberFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CommitteeMemberPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.CommitteeMemberFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CommitteeMemberPayload>
+        }
+        findMany: {
+          args: Prisma.CommitteeMemberFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CommitteeMemberPayload>[]
+        }
+        create: {
+          args: Prisma.CommitteeMemberCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CommitteeMemberPayload>
+        }
+        createMany: {
+          args: Prisma.CommitteeMemberCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.CommitteeMemberCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CommitteeMemberPayload>[]
+        }
+        delete: {
+          args: Prisma.CommitteeMemberDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CommitteeMemberPayload>
+        }
+        update: {
+          args: Prisma.CommitteeMemberUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CommitteeMemberPayload>
+        }
+        deleteMany: {
+          args: Prisma.CommitteeMemberDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.CommitteeMemberUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.CommitteeMemberUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CommitteeMemberPayload>[]
+        }
+        upsert: {
+          args: Prisma.CommitteeMemberUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CommitteeMemberPayload>
+        }
+        aggregate: {
+          args: Prisma.CommitteeMemberAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateCommitteeMember>
+        }
+        groupBy: {
+          args: Prisma.CommitteeMemberGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.CommitteeMemberGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.CommitteeMemberCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.CommitteeMemberCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -2231,6 +2531,7 @@ export const NoticeBoardNoticeScalarFieldEnum = {
   active: 'active',
   important: 'important',
   pinned: 'pinned',
+  downloadCount: 'downloadCount',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -2268,6 +2569,7 @@ export const FlashNewsScalarFieldEnum = {
   fileType: 'fileType',
   displayOrder: 'displayOrder',
   published: 'published',
+  downloadCount: 'downloadCount',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -2469,6 +2771,56 @@ export const AlumniRegistrationScalarFieldEnum = {
 export type AlumniRegistrationScalarFieldEnum = (typeof AlumniRegistrationScalarFieldEnum)[keyof typeof AlumniRegistrationScalarFieldEnum]
 
 
+export const CommitteeMetaScalarFieldEnum = {
+  id: 'id',
+  academicYear: 'academicYear',
+  published: 'published',
+  updatedAt: 'updatedAt'
+} as const
+
+export type CommitteeMetaScalarFieldEnum = (typeof CommitteeMetaScalarFieldEnum)[keyof typeof CommitteeMetaScalarFieldEnum]
+
+
+export const CommitteeExOfficioScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  role: 'role',
+  displayOrder: 'displayOrder',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type CommitteeExOfficioScalarFieldEnum = (typeof CommitteeExOfficioScalarFieldEnum)[keyof typeof CommitteeExOfficioScalarFieldEnum]
+
+
+export const CommitteeScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  slug: 'slug',
+  description: 'description',
+  displayOrder: 'displayOrder',
+  published: 'published',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type CommitteeScalarFieldEnum = (typeof CommitteeScalarFieldEnum)[keyof typeof CommitteeScalarFieldEnum]
+
+
+export const CommitteeMemberScalarFieldEnum = {
+  id: 'id',
+  committeeId: 'committeeId',
+  slNo: 'slNo',
+  name: 'name',
+  role: 'role',
+  displayOrder: 'displayOrder',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type CommitteeMemberScalarFieldEnum = (typeof CommitteeMemberScalarFieldEnum)[keyof typeof CommitteeMemberScalarFieldEnum]
+
+
 export const SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -2634,6 +2986,10 @@ export type GlobalOmitConfig = {
   grievance?: Prisma.GrievanceOmit
   bloodDonor?: Prisma.BloodDonorOmit
   alumniRegistration?: Prisma.AlumniRegistrationOmit
+  committeeMeta?: Prisma.CommitteeMetaOmit
+  committeeExOfficio?: Prisma.CommitteeExOfficioOmit
+  committee?: Prisma.CommitteeOmit
+  committeeMember?: Prisma.CommitteeMemberOmit
 }
 
 /* Types for Logging */

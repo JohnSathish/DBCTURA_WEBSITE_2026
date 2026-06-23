@@ -69,7 +69,11 @@ export const ModelName = {
   Syllabus: 'Syllabus',
   Grievance: 'Grievance',
   BloodDonor: 'BloodDonor',
-  AlumniRegistration: 'AlumniRegistration'
+  AlumniRegistration: 'AlumniRegistration',
+  CommitteeMeta: 'CommitteeMeta',
+  CommitteeExOfficio: 'CommitteeExOfficio',
+  Committee: 'Committee',
+  CommitteeMember: 'CommitteeMember'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -222,6 +226,7 @@ export const NoticeBoardNoticeScalarFieldEnum = {
   active: 'active',
   important: 'important',
   pinned: 'pinned',
+  downloadCount: 'downloadCount',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -259,6 +264,7 @@ export const FlashNewsScalarFieldEnum = {
   fileType: 'fileType',
   displayOrder: 'displayOrder',
   published: 'published',
+  downloadCount: 'downloadCount',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -458,6 +464,56 @@ export const AlumniRegistrationScalarFieldEnum = {
 } as const
 
 export type AlumniRegistrationScalarFieldEnum = (typeof AlumniRegistrationScalarFieldEnum)[keyof typeof AlumniRegistrationScalarFieldEnum]
+
+
+export const CommitteeMetaScalarFieldEnum = {
+  id: 'id',
+  academicYear: 'academicYear',
+  published: 'published',
+  updatedAt: 'updatedAt'
+} as const
+
+export type CommitteeMetaScalarFieldEnum = (typeof CommitteeMetaScalarFieldEnum)[keyof typeof CommitteeMetaScalarFieldEnum]
+
+
+export const CommitteeExOfficioScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  role: 'role',
+  displayOrder: 'displayOrder',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type CommitteeExOfficioScalarFieldEnum = (typeof CommitteeExOfficioScalarFieldEnum)[keyof typeof CommitteeExOfficioScalarFieldEnum]
+
+
+export const CommitteeScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  slug: 'slug',
+  description: 'description',
+  displayOrder: 'displayOrder',
+  published: 'published',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type CommitteeScalarFieldEnum = (typeof CommitteeScalarFieldEnum)[keyof typeof CommitteeScalarFieldEnum]
+
+
+export const CommitteeMemberScalarFieldEnum = {
+  id: 'id',
+  committeeId: 'committeeId',
+  slNo: 'slNo',
+  name: 'name',
+  role: 'role',
+  displayOrder: 'displayOrder',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type CommitteeMemberScalarFieldEnum = (typeof CommitteeMemberScalarFieldEnum)[keyof typeof CommitteeMemberScalarFieldEnum]
 
 
 export const SortOrder = {
