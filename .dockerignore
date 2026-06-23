@@ -10,3 +10,7 @@ node_modules
 **/*.tmp*
 coverage
 .DS_Store
+# Local SQLite — must not be used during Docker build (stale schema breaks db push).
+prisma/dev.db
+prisma/prisma/dev.db
+prisma/build.db

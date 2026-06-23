@@ -12,10 +12,11 @@ FROM base AS builder
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 ENV NEXT_TELEMETRY_DISABLED=1
-# Next.js collects route data at build time; prisma.ts requires DATABASE_URL.
-ENV DATABASE_URL="file:./prisma/dev.db"
+# Ephemeral empty SQLite for build-time prerender only (never use committed dev.db).
+ENV DATABASE_URL="file:./prisma/build.db"
 RUN npx prisma db push
 RUN npm run build
+RUN rm -f prisma/build.db
 
 FROM base AS runner
 ENV NODE_ENV=production
