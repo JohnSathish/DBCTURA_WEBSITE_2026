@@ -1,11 +1,11 @@
 import { NextRequest, NextResponse } from "next/server"
 import { prisma } from "@/lib/prisma"
-import { redirectToPublicFile } from "@/lib/download-redirect"
+import { servePublicFile } from "@/lib/serve-public-file"
 
 type RouteContext = { params: Promise<{ id: string }> }
 
-/** Public download — increments counter and redirects to PDF. */
-export async function GET(request: NextRequest, { params }: RouteContext) {
+/** Public download — increments counter and streams the PDF. */
+export async function GET(_request: NextRequest, { params }: RouteContext) {
   try {
     const { id } = await params
     const notice = await prisma.noticeBoardNotice.findUnique({ where: { id } })
@@ -23,7 +23,9 @@ export async function GET(request: NextRequest, { params }: RouteContext) {
       data: { downloadCount: { increment: 1 } },
     })
 
-    return redirectToPublicFile(notice.pdfUrl)
+    return servePublicFile(notice.pdfUrl, {
+      downloadName: notice.pdfUrl.split("/").pop() || "notice.pdf",
+    })
   } catch (error: unknown) {
     console.error("Notice download error:", error)
     return NextResponse.json({ error: "Download failed" }, { status: 500 })

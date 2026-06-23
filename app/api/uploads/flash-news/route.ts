@@ -36,8 +36,8 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Create flash-news directory if it doesn't exist
-    const uploadDir = path.join(process.cwd(), "public", "flash-news")
+    // Persist under /public/uploads (Docker volume) — not /flash-news (conflicts with app/flash-news/[id]).
+    const uploadDir = path.join(process.cwd(), "public", "uploads", "flash-news")
     await fs.mkdir(uploadDir, { recursive: true })
 
     const bytes = await file.arrayBuffer()
@@ -51,7 +51,7 @@ export async function POST(request: NextRequest) {
 
     await fs.writeFile(filepath, buffer)
 
-    const publicPath = `/flash-news/${filename}`
+    const publicPath = `/uploads/flash-news/${filename}`
     const fileType = file.type === "application/pdf" ? "pdf" : "image"
 
     return NextResponse.json({

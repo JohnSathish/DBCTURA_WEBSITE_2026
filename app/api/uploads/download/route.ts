@@ -26,8 +26,8 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "File size exceeds 10MB limit" }, { status: 400 })
     }
 
-    // Create downloads directory if it doesn't exist
-    const uploadDir = join(process.cwd(), "public", "downloads")
+    // Persist under /public/uploads (Docker volume).
+    const uploadDir = join(process.cwd(), "public", "uploads", "downloads")
     if (!existsSync(uploadDir)) {
       await mkdir(uploadDir, { recursive: true })
     }
@@ -44,7 +44,7 @@ export async function POST(request: NextRequest) {
     await writeFile(filepath, buffer)
 
     // Return the public URL path
-    const publicPath = `/downloads/${filename}`
+    const publicPath = `/uploads/downloads/${filename}`
 
     return NextResponse.json({ 
       success: true, 

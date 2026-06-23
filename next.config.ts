@@ -56,6 +56,16 @@ const nextConfig: NextConfig = {
         destination: "/site-map",
         permanent: true,
       },
+      {
+        source: "/flash-news/:file(.*\\.pdf)",
+        destination: "/uploads/flash-news/:file",
+        permanent: false,
+      },
+      {
+        source: "/downloads/:file(.*\\.pdf)",
+        destination: "/uploads/downloads/:file",
+        permanent: false,
+      },
     ]
   },
 }
