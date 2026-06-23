@@ -2,24 +2,22 @@ import { NextRequest, NextResponse } from "next/server"
 import { getServerSession } from "next-auth"
 import { authOptions } from "@/lib/auth"
 import { prisma } from "@/lib/prisma"
+import {
+  disableOtherPopups,
+  getActivePublicPopup,
+  parsePopupPayload,
+} from "@/lib/popup-service"
 
 export async function GET() {
   try {
-    const popup = await prisma.popupBanner.findFirst({
-      orderBy: { updatedAt: "desc" },
-    })
-
-    if (!popup || !popup.enabled) {
+    const popup = await getActivePublicPopup()
+    if (!popup) {
       return NextResponse.json({ popup: null })
     }
-
     return NextResponse.json({ popup })
   } catch (error) {
     console.error("Error fetching popup:", error)
-    return NextResponse.json(
-      { error: "Failed to fetch popup" },
-      { status: 500 }
-    )
+    return NextResponse.json({ error: "Failed to fetch popup" }, { status: 500 })
   }
 }
 
@@ -30,34 +28,22 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
     }
 
-    const data = await request.json()
-    const { title, content, enabled } = data
-
-    // Disable all other popups if this one is enabled
-    if (enabled) {
-      await prisma.popupBanner.updateMany({
-        where: { enabled: true },
-        data: { enabled: false },
-      })
+    const payload = parsePopupPayload(await request.json())
+    if (!payload.title) {
+      return NextResponse.json({ error: "Title is required" }, { status: 400 })
+    }
+    if (!payload.content) {
+      return NextResponse.json({ error: "Content is required" }, { status: 400 })
     }
 
-    const popup = await prisma.popupBanner.create({
-      data: {
-        title,
-        content,
-        enabled: enabled || false,
-      },
-    })
+    if (payload.enabled) {
+      await disableOtherPopups()
+    }
 
-    return NextResponse.json({ popup })
+    const popup = await prisma.popupBanner.create({ data: payload })
+    return NextResponse.json({ popup }, { status: 201 })
   } catch (error) {
     console.error("Error creating popup:", error)
-    return NextResponse.json(
-      { error: "Failed to create popup" },
-      { status: 500 }
-    )
+    return NextResponse.json({ error: "Failed to create popup" }, { status: 500 })
   }
 }
-
-
-

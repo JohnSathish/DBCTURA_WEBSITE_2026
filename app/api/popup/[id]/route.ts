@@ -2,11 +2,12 @@ import { NextRequest, NextResponse } from "next/server"
 import { getServerSession } from "next-auth"
 import { authOptions } from "@/lib/auth"
 import { prisma } from "@/lib/prisma"
+import { disableOtherPopups, parsePopupPayload } from "@/lib/popup-service"
+import { popupAnalyticsSummary } from "@/lib/popup-analytics"
 
-export async function GET(
-  request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-) {
+type RouteContext = { params: Promise<{ id: string }> }
+
+export async function GET(_request: NextRequest, { params }: RouteContext) {
   try {
     const session = await getServerSession(authOptions)
     if (!session) {
@@ -16,26 +17,24 @@ export async function GET(
     const { id } = await params
     const popup = await prisma.popupBanner.findUnique({
       where: { id },
+      include: { images: { orderBy: { createdAt: "desc" } } },
     })
 
     if (!popup) {
       return NextResponse.json({ error: "Popup not found" }, { status: 404 })
     }
 
-    return NextResponse.json({ popup })
+    return NextResponse.json({
+      popup,
+      analytics: popupAnalyticsSummary(popup),
+    })
   } catch (error) {
     console.error("Error fetching popup:", error)
-    return NextResponse.json(
-      { error: "Failed to fetch popup" },
-      { status: 500 }
-    )
+    return NextResponse.json({ error: "Failed to fetch popup" }, { status: 500 })
   }
 }
 
-export async function PUT(
-  request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-) {
+export async function PUT(request: NextRequest, { params }: RouteContext) {
   try {
     const session = await getServerSession(authOptions)
     if (!session) {
@@ -43,43 +42,25 @@ export async function PUT(
     }
 
     const { id } = await params
-    const data = await request.json()
-    const { title, content, enabled } = data
+    const payload = parsePopupPayload(await request.json())
 
-    // If enabling this popup, disable all others
-    if (enabled) {
-      await prisma.popupBanner.updateMany({
-        where: {
-          enabled: true,
-          id: { not: id },
-        },
-        data: { enabled: false },
-      })
+    if (payload.enabled) {
+      await disableOtherPopups(id)
     }
 
     const popup = await prisma.popupBanner.update({
       where: { id },
-      data: {
-        title,
-        content,
-        enabled: enabled || false,
-      },
+      data: payload,
     })
 
     return NextResponse.json({ popup })
   } catch (error) {
     console.error("Error updating popup:", error)
-    return NextResponse.json(
-      { error: "Failed to update popup" },
-      { status: 500 }
-    )
+    return NextResponse.json({ error: "Failed to update popup" }, { status: 500 })
   }
 }
 
-export async function DELETE(
-  request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-) {
+export async function DELETE(_request: NextRequest, { params }: RouteContext) {
   try {
     const session = await getServerSession(authOptions)
     if (!session) {
@@ -87,19 +68,10 @@ export async function DELETE(
     }
 
     const { id } = await params
-    await prisma.popupBanner.delete({
-      where: { id },
-    })
-
+    await prisma.popupBanner.delete({ where: { id } })
     return NextResponse.json({ success: true })
   } catch (error) {
     console.error("Error deleting popup:", error)
-    return NextResponse.json(
-      { error: "Failed to delete popup" },
-      { status: 500 }
-    )
+    return NextResponse.json({ error: "Failed to delete popup" }, { status: 500 })
   }
 }
-
-
-

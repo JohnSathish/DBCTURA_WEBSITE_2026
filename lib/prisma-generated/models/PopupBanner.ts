@@ -19,15 +19,51 @@ export type PopupBannerModel = runtime.Types.Result.DefaultSelection<Prisma.$Pop
 
 export type AggregatePopupBanner = {
   _count: PopupBannerCountAggregateOutputType | null
+  _avg: PopupBannerAvgAggregateOutputType | null
+  _sum: PopupBannerSumAggregateOutputType | null
   _min: PopupBannerMinAggregateOutputType | null
   _max: PopupBannerMaxAggregateOutputType | null
+}
+
+export type PopupBannerAvgAggregateOutputType = {
+  autoCloseSeconds: number | null
+  displayOrder: number | null
+  totalViews: number | null
+  uniqueViews: number | null
+  totalClicks: number | null
+  buttonClicks: number | null
+  closeCount: number | null
+}
+
+export type PopupBannerSumAggregateOutputType = {
+  autoCloseSeconds: number | null
+  displayOrder: number | null
+  totalViews: number | null
+  uniqueViews: number | null
+  totalClicks: number | null
+  buttonClicks: number | null
+  closeCount: number | null
 }
 
 export type PopupBannerMinAggregateOutputType = {
   id: string | null
   title: string | null
   content: string | null
+  popupType: string | null
+  displayPosition: string | null
+  popupSize: string | null
+  overlayEnabled: boolean | null
+  autoCloseSeconds: number | null
+  startDate: Date | null
+  endDate: Date | null
+  displayOrder: number | null
   enabled: boolean | null
+  published: boolean | null
+  totalViews: number | null
+  uniqueViews: number | null
+  totalClicks: number | null
+  buttonClicks: number | null
+  closeCount: number | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -36,7 +72,21 @@ export type PopupBannerMaxAggregateOutputType = {
   id: string | null
   title: string | null
   content: string | null
+  popupType: string | null
+  displayPosition: string | null
+  popupSize: string | null
+  overlayEnabled: boolean | null
+  autoCloseSeconds: number | null
+  startDate: Date | null
+  endDate: Date | null
+  displayOrder: number | null
   enabled: boolean | null
+  published: boolean | null
+  totalViews: number | null
+  uniqueViews: number | null
+  totalClicks: number | null
+  buttonClicks: number | null
+  closeCount: number | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -45,18 +95,66 @@ export type PopupBannerCountAggregateOutputType = {
   id: number
   title: number
   content: number
+  popupType: number
+  displayPosition: number
+  popupSize: number
+  overlayEnabled: number
+  autoCloseSeconds: number
+  startDate: number
+  endDate: number
+  displayOrder: number
   enabled: number
+  published: number
+  totalViews: number
+  uniqueViews: number
+  totalClicks: number
+  buttonClicks: number
+  closeCount: number
   createdAt: number
   updatedAt: number
   _all: number
 }
 
 
+export type PopupBannerAvgAggregateInputType = {
+  autoCloseSeconds?: true
+  displayOrder?: true
+  totalViews?: true
+  uniqueViews?: true
+  totalClicks?: true
+  buttonClicks?: true
+  closeCount?: true
+}
+
+export type PopupBannerSumAggregateInputType = {
+  autoCloseSeconds?: true
+  displayOrder?: true
+  totalViews?: true
+  uniqueViews?: true
+  totalClicks?: true
+  buttonClicks?: true
+  closeCount?: true
+}
+
 export type PopupBannerMinAggregateInputType = {
   id?: true
   title?: true
   content?: true
+  popupType?: true
+  displayPosition?: true
+  popupSize?: true
+  overlayEnabled?: true
+  autoCloseSeconds?: true
+  startDate?: true
+  endDate?: true
+  displayOrder?: true
   enabled?: true
+  published?: true
+  totalViews?: true
+  uniqueViews?: true
+  totalClicks?: true
+  buttonClicks?: true
+  closeCount?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -65,7 +163,21 @@ export type PopupBannerMaxAggregateInputType = {
   id?: true
   title?: true
   content?: true
+  popupType?: true
+  displayPosition?: true
+  popupSize?: true
+  overlayEnabled?: true
+  autoCloseSeconds?: true
+  startDate?: true
+  endDate?: true
+  displayOrder?: true
   enabled?: true
+  published?: true
+  totalViews?: true
+  uniqueViews?: true
+  totalClicks?: true
+  buttonClicks?: true
+  closeCount?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -74,7 +186,21 @@ export type PopupBannerCountAggregateInputType = {
   id?: true
   title?: true
   content?: true
+  popupType?: true
+  displayPosition?: true
+  popupSize?: true
+  overlayEnabled?: true
+  autoCloseSeconds?: true
+  startDate?: true
+  endDate?: true
+  displayOrder?: true
   enabled?: true
+  published?: true
+  totalViews?: true
+  uniqueViews?: true
+  totalClicks?: true
+  buttonClicks?: true
+  closeCount?: true
   createdAt?: true
   updatedAt?: true
   _all?: true
@@ -118,6 +244,18 @@ export type PopupBannerAggregateArgs<ExtArgs extends runtime.Types.Extensions.In
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
    * 
+   * Select which fields to average
+  **/
+  _avg?: PopupBannerAvgAggregateInputType
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+   * 
+   * Select which fields to sum
+  **/
+  _sum?: PopupBannerSumAggregateInputType
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+   * 
    * Select which fields to find the minimum value
   **/
   _min?: PopupBannerMinAggregateInputType
@@ -148,6 +286,8 @@ export type PopupBannerGroupByArgs<ExtArgs extends runtime.Types.Extensions.Inte
   take?: number
   skip?: number
   _count?: PopupBannerCountAggregateInputType | true
+  _avg?: PopupBannerAvgAggregateInputType
+  _sum?: PopupBannerSumAggregateInputType
   _min?: PopupBannerMinAggregateInputType
   _max?: PopupBannerMaxAggregateInputType
 }
@@ -156,10 +296,26 @@ export type PopupBannerGroupByOutputType = {
   id: string
   title: string
   content: string
+  popupType: string
+  displayPosition: string
+  popupSize: string
+  overlayEnabled: boolean
+  autoCloseSeconds: number | null
+  startDate: Date | null
+  endDate: Date | null
+  displayOrder: number
   enabled: boolean
+  published: boolean
+  totalViews: number
+  uniqueViews: number
+  totalClicks: number
+  buttonClicks: number
+  closeCount: number
   createdAt: Date
   updatedAt: Date
   _count: PopupBannerCountAggregateOutputType | null
+  _avg: PopupBannerAvgAggregateOutputType | null
+  _sum: PopupBannerSumAggregateOutputType | null
   _min: PopupBannerMinAggregateOutputType | null
   _max: PopupBannerMaxAggregateOutputType | null
 }
@@ -186,18 +342,50 @@ export type PopupBannerWhereInput = {
   id?: Prisma.StringFilter<"PopupBanner"> | string
   title?: Prisma.StringFilter<"PopupBanner"> | string
   content?: Prisma.StringFilter<"PopupBanner"> | string
+  popupType?: Prisma.StringFilter<"PopupBanner"> | string
+  displayPosition?: Prisma.StringFilter<"PopupBanner"> | string
+  popupSize?: Prisma.StringFilter<"PopupBanner"> | string
+  overlayEnabled?: Prisma.BoolFilter<"PopupBanner"> | boolean
+  autoCloseSeconds?: Prisma.IntNullableFilter<"PopupBanner"> | number | null
+  startDate?: Prisma.DateTimeNullableFilter<"PopupBanner"> | Date | string | null
+  endDate?: Prisma.DateTimeNullableFilter<"PopupBanner"> | Date | string | null
+  displayOrder?: Prisma.IntFilter<"PopupBanner"> | number
   enabled?: Prisma.BoolFilter<"PopupBanner"> | boolean
+  published?: Prisma.BoolFilter<"PopupBanner"> | boolean
+  totalViews?: Prisma.IntFilter<"PopupBanner"> | number
+  uniqueViews?: Prisma.IntFilter<"PopupBanner"> | number
+  totalClicks?: Prisma.IntFilter<"PopupBanner"> | number
+  buttonClicks?: Prisma.IntFilter<"PopupBanner"> | number
+  closeCount?: Prisma.IntFilter<"PopupBanner"> | number
   createdAt?: Prisma.DateTimeFilter<"PopupBanner"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"PopupBanner"> | Date | string
+  images?: Prisma.PopupImageListRelationFilter
+  viewSessions?: Prisma.PopupViewSessionListRelationFilter
 }
 
 export type PopupBannerOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   title?: Prisma.SortOrder
   content?: Prisma.SortOrder
+  popupType?: Prisma.SortOrder
+  displayPosition?: Prisma.SortOrder
+  popupSize?: Prisma.SortOrder
+  overlayEnabled?: Prisma.SortOrder
+  autoCloseSeconds?: Prisma.SortOrderInput | Prisma.SortOrder
+  startDate?: Prisma.SortOrderInput | Prisma.SortOrder
+  endDate?: Prisma.SortOrderInput | Prisma.SortOrder
+  displayOrder?: Prisma.SortOrder
   enabled?: Prisma.SortOrder
+  published?: Prisma.SortOrder
+  totalViews?: Prisma.SortOrder
+  uniqueViews?: Prisma.SortOrder
+  totalClicks?: Prisma.SortOrder
+  buttonClicks?: Prisma.SortOrder
+  closeCount?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  images?: Prisma.PopupImageOrderByRelationAggregateInput
+  viewSessions?: Prisma.PopupViewSessionOrderByRelationAggregateInput
 }
 
 export type PopupBannerWhereUniqueInput = Prisma.AtLeast<{
@@ -207,21 +395,53 @@ export type PopupBannerWhereUniqueInput = Prisma.AtLeast<{
   NOT?: Prisma.PopupBannerWhereInput | Prisma.PopupBannerWhereInput[]
   title?: Prisma.StringFilter<"PopupBanner"> | string
   content?: Prisma.StringFilter<"PopupBanner"> | string
+  popupType?: Prisma.StringFilter<"PopupBanner"> | string
+  displayPosition?: Prisma.StringFilter<"PopupBanner"> | string
+  popupSize?: Prisma.StringFilter<"PopupBanner"> | string
+  overlayEnabled?: Prisma.BoolFilter<"PopupBanner"> | boolean
+  autoCloseSeconds?: Prisma.IntNullableFilter<"PopupBanner"> | number | null
+  startDate?: Prisma.DateTimeNullableFilter<"PopupBanner"> | Date | string | null
+  endDate?: Prisma.DateTimeNullableFilter<"PopupBanner"> | Date | string | null
+  displayOrder?: Prisma.IntFilter<"PopupBanner"> | number
   enabled?: Prisma.BoolFilter<"PopupBanner"> | boolean
+  published?: Prisma.BoolFilter<"PopupBanner"> | boolean
+  totalViews?: Prisma.IntFilter<"PopupBanner"> | number
+  uniqueViews?: Prisma.IntFilter<"PopupBanner"> | number
+  totalClicks?: Prisma.IntFilter<"PopupBanner"> | number
+  buttonClicks?: Prisma.IntFilter<"PopupBanner"> | number
+  closeCount?: Prisma.IntFilter<"PopupBanner"> | number
   createdAt?: Prisma.DateTimeFilter<"PopupBanner"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"PopupBanner"> | Date | string
+  images?: Prisma.PopupImageListRelationFilter
+  viewSessions?: Prisma.PopupViewSessionListRelationFilter
 }, "id">
 
 export type PopupBannerOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   title?: Prisma.SortOrder
   content?: Prisma.SortOrder
+  popupType?: Prisma.SortOrder
+  displayPosition?: Prisma.SortOrder
+  popupSize?: Prisma.SortOrder
+  overlayEnabled?: Prisma.SortOrder
+  autoCloseSeconds?: Prisma.SortOrderInput | Prisma.SortOrder
+  startDate?: Prisma.SortOrderInput | Prisma.SortOrder
+  endDate?: Prisma.SortOrderInput | Prisma.SortOrder
+  displayOrder?: Prisma.SortOrder
   enabled?: Prisma.SortOrder
+  published?: Prisma.SortOrder
+  totalViews?: Prisma.SortOrder
+  uniqueViews?: Prisma.SortOrder
+  totalClicks?: Prisma.SortOrder
+  buttonClicks?: Prisma.SortOrder
+  closeCount?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.PopupBannerCountOrderByAggregateInput
+  _avg?: Prisma.PopupBannerAvgOrderByAggregateInput
   _max?: Prisma.PopupBannerMaxOrderByAggregateInput
   _min?: Prisma.PopupBannerMinOrderByAggregateInput
+  _sum?: Prisma.PopupBannerSumOrderByAggregateInput
 }
 
 export type PopupBannerScalarWhereWithAggregatesInput = {
@@ -231,7 +451,21 @@ export type PopupBannerScalarWhereWithAggregatesInput = {
   id?: Prisma.StringWithAggregatesFilter<"PopupBanner"> | string
   title?: Prisma.StringWithAggregatesFilter<"PopupBanner"> | string
   content?: Prisma.StringWithAggregatesFilter<"PopupBanner"> | string
+  popupType?: Prisma.StringWithAggregatesFilter<"PopupBanner"> | string
+  displayPosition?: Prisma.StringWithAggregatesFilter<"PopupBanner"> | string
+  popupSize?: Prisma.StringWithAggregatesFilter<"PopupBanner"> | string
+  overlayEnabled?: Prisma.BoolWithAggregatesFilter<"PopupBanner"> | boolean
+  autoCloseSeconds?: Prisma.IntNullableWithAggregatesFilter<"PopupBanner"> | number | null
+  startDate?: Prisma.DateTimeNullableWithAggregatesFilter<"PopupBanner"> | Date | string | null
+  endDate?: Prisma.DateTimeNullableWithAggregatesFilter<"PopupBanner"> | Date | string | null
+  displayOrder?: Prisma.IntWithAggregatesFilter<"PopupBanner"> | number
   enabled?: Prisma.BoolWithAggregatesFilter<"PopupBanner"> | boolean
+  published?: Prisma.BoolWithAggregatesFilter<"PopupBanner"> | boolean
+  totalViews?: Prisma.IntWithAggregatesFilter<"PopupBanner"> | number
+  uniqueViews?: Prisma.IntWithAggregatesFilter<"PopupBanner"> | number
+  totalClicks?: Prisma.IntWithAggregatesFilter<"PopupBanner"> | number
+  buttonClicks?: Prisma.IntWithAggregatesFilter<"PopupBanner"> | number
+  closeCount?: Prisma.IntWithAggregatesFilter<"PopupBanner"> | number
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"PopupBanner"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"PopupBanner"> | Date | string
 }
@@ -240,43 +474,121 @@ export type PopupBannerCreateInput = {
   id?: string
   title: string
   content: string
+  popupType?: string
+  displayPosition?: string
+  popupSize?: string
+  overlayEnabled?: boolean
+  autoCloseSeconds?: number | null
+  startDate?: Date | string | null
+  endDate?: Date | string | null
+  displayOrder?: number
   enabled?: boolean
+  published?: boolean
+  totalViews?: number
+  uniqueViews?: number
+  totalClicks?: number
+  buttonClicks?: number
+  closeCount?: number
   createdAt?: Date | string
   updatedAt?: Date | string
+  images?: Prisma.PopupImageCreateNestedManyWithoutPopupInput
+  viewSessions?: Prisma.PopupViewSessionCreateNestedManyWithoutPopupInput
 }
 
 export type PopupBannerUncheckedCreateInput = {
   id?: string
   title: string
   content: string
+  popupType?: string
+  displayPosition?: string
+  popupSize?: string
+  overlayEnabled?: boolean
+  autoCloseSeconds?: number | null
+  startDate?: Date | string | null
+  endDate?: Date | string | null
+  displayOrder?: number
   enabled?: boolean
+  published?: boolean
+  totalViews?: number
+  uniqueViews?: number
+  totalClicks?: number
+  buttonClicks?: number
+  closeCount?: number
   createdAt?: Date | string
   updatedAt?: Date | string
+  images?: Prisma.PopupImageUncheckedCreateNestedManyWithoutPopupInput
+  viewSessions?: Prisma.PopupViewSessionUncheckedCreateNestedManyWithoutPopupInput
 }
 
 export type PopupBannerUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   content?: Prisma.StringFieldUpdateOperationsInput | string
+  popupType?: Prisma.StringFieldUpdateOperationsInput | string
+  displayPosition?: Prisma.StringFieldUpdateOperationsInput | string
+  popupSize?: Prisma.StringFieldUpdateOperationsInput | string
+  overlayEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  autoCloseSeconds?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  startDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  endDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  displayOrder?: Prisma.IntFieldUpdateOperationsInput | number
   enabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  published?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  totalViews?: Prisma.IntFieldUpdateOperationsInput | number
+  uniqueViews?: Prisma.IntFieldUpdateOperationsInput | number
+  totalClicks?: Prisma.IntFieldUpdateOperationsInput | number
+  buttonClicks?: Prisma.IntFieldUpdateOperationsInput | number
+  closeCount?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  images?: Prisma.PopupImageUpdateManyWithoutPopupNestedInput
+  viewSessions?: Prisma.PopupViewSessionUpdateManyWithoutPopupNestedInput
 }
 
 export type PopupBannerUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   content?: Prisma.StringFieldUpdateOperationsInput | string
+  popupType?: Prisma.StringFieldUpdateOperationsInput | string
+  displayPosition?: Prisma.StringFieldUpdateOperationsInput | string
+  popupSize?: Prisma.StringFieldUpdateOperationsInput | string
+  overlayEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  autoCloseSeconds?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  startDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  endDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  displayOrder?: Prisma.IntFieldUpdateOperationsInput | number
   enabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  published?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  totalViews?: Prisma.IntFieldUpdateOperationsInput | number
+  uniqueViews?: Prisma.IntFieldUpdateOperationsInput | number
+  totalClicks?: Prisma.IntFieldUpdateOperationsInput | number
+  buttonClicks?: Prisma.IntFieldUpdateOperationsInput | number
+  closeCount?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  images?: Prisma.PopupImageUncheckedUpdateManyWithoutPopupNestedInput
+  viewSessions?: Prisma.PopupViewSessionUncheckedUpdateManyWithoutPopupNestedInput
 }
 
 export type PopupBannerCreateManyInput = {
   id?: string
   title: string
   content: string
+  popupType?: string
+  displayPosition?: string
+  popupSize?: string
+  overlayEnabled?: boolean
+  autoCloseSeconds?: number | null
+  startDate?: Date | string | null
+  endDate?: Date | string | null
+  displayOrder?: number
   enabled?: boolean
+  published?: boolean
+  totalViews?: number
+  uniqueViews?: number
+  totalClicks?: number
+  buttonClicks?: number
+  closeCount?: number
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -285,7 +597,21 @@ export type PopupBannerUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   content?: Prisma.StringFieldUpdateOperationsInput | string
+  popupType?: Prisma.StringFieldUpdateOperationsInput | string
+  displayPosition?: Prisma.StringFieldUpdateOperationsInput | string
+  popupSize?: Prisma.StringFieldUpdateOperationsInput | string
+  overlayEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  autoCloseSeconds?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  startDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  endDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  displayOrder?: Prisma.IntFieldUpdateOperationsInput | number
   enabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  published?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  totalViews?: Prisma.IntFieldUpdateOperationsInput | number
+  uniqueViews?: Prisma.IntFieldUpdateOperationsInput | number
+  totalClicks?: Prisma.IntFieldUpdateOperationsInput | number
+  buttonClicks?: Prisma.IntFieldUpdateOperationsInput | number
+  closeCount?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -294,7 +620,21 @@ export type PopupBannerUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   content?: Prisma.StringFieldUpdateOperationsInput | string
+  popupType?: Prisma.StringFieldUpdateOperationsInput | string
+  displayPosition?: Prisma.StringFieldUpdateOperationsInput | string
+  popupSize?: Prisma.StringFieldUpdateOperationsInput | string
+  overlayEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  autoCloseSeconds?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  startDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  endDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  displayOrder?: Prisma.IntFieldUpdateOperationsInput | number
   enabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  published?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  totalViews?: Prisma.IntFieldUpdateOperationsInput | number
+  uniqueViews?: Prisma.IntFieldUpdateOperationsInput | number
+  totalClicks?: Prisma.IntFieldUpdateOperationsInput | number
+  buttonClicks?: Prisma.IntFieldUpdateOperationsInput | number
+  closeCount?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -303,16 +643,54 @@ export type PopupBannerCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   title?: Prisma.SortOrder
   content?: Prisma.SortOrder
+  popupType?: Prisma.SortOrder
+  displayPosition?: Prisma.SortOrder
+  popupSize?: Prisma.SortOrder
+  overlayEnabled?: Prisma.SortOrder
+  autoCloseSeconds?: Prisma.SortOrder
+  startDate?: Prisma.SortOrder
+  endDate?: Prisma.SortOrder
+  displayOrder?: Prisma.SortOrder
   enabled?: Prisma.SortOrder
+  published?: Prisma.SortOrder
+  totalViews?: Prisma.SortOrder
+  uniqueViews?: Prisma.SortOrder
+  totalClicks?: Prisma.SortOrder
+  buttonClicks?: Prisma.SortOrder
+  closeCount?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+}
+
+export type PopupBannerAvgOrderByAggregateInput = {
+  autoCloseSeconds?: Prisma.SortOrder
+  displayOrder?: Prisma.SortOrder
+  totalViews?: Prisma.SortOrder
+  uniqueViews?: Prisma.SortOrder
+  totalClicks?: Prisma.SortOrder
+  buttonClicks?: Prisma.SortOrder
+  closeCount?: Prisma.SortOrder
 }
 
 export type PopupBannerMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   title?: Prisma.SortOrder
   content?: Prisma.SortOrder
+  popupType?: Prisma.SortOrder
+  displayPosition?: Prisma.SortOrder
+  popupSize?: Prisma.SortOrder
+  overlayEnabled?: Prisma.SortOrder
+  autoCloseSeconds?: Prisma.SortOrder
+  startDate?: Prisma.SortOrder
+  endDate?: Prisma.SortOrder
+  displayOrder?: Prisma.SortOrder
   enabled?: Prisma.SortOrder
+  published?: Prisma.SortOrder
+  totalViews?: Prisma.SortOrder
+  uniqueViews?: Prisma.SortOrder
+  totalClicks?: Prisma.SortOrder
+  buttonClicks?: Prisma.SortOrder
+  closeCount?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -321,27 +699,392 @@ export type PopupBannerMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   title?: Prisma.SortOrder
   content?: Prisma.SortOrder
+  popupType?: Prisma.SortOrder
+  displayPosition?: Prisma.SortOrder
+  popupSize?: Prisma.SortOrder
+  overlayEnabled?: Prisma.SortOrder
+  autoCloseSeconds?: Prisma.SortOrder
+  startDate?: Prisma.SortOrder
+  endDate?: Prisma.SortOrder
+  displayOrder?: Prisma.SortOrder
   enabled?: Prisma.SortOrder
+  published?: Prisma.SortOrder
+  totalViews?: Prisma.SortOrder
+  uniqueViews?: Prisma.SortOrder
+  totalClicks?: Prisma.SortOrder
+  buttonClicks?: Prisma.SortOrder
+  closeCount?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
 
+export type PopupBannerSumOrderByAggregateInput = {
+  autoCloseSeconds?: Prisma.SortOrder
+  displayOrder?: Prisma.SortOrder
+  totalViews?: Prisma.SortOrder
+  uniqueViews?: Prisma.SortOrder
+  totalClicks?: Prisma.SortOrder
+  buttonClicks?: Prisma.SortOrder
+  closeCount?: Prisma.SortOrder
+}
+
+export type PopupBannerNullableScalarRelationFilter = {
+  is?: Prisma.PopupBannerWhereInput | null
+  isNot?: Prisma.PopupBannerWhereInput | null
+}
+
+export type PopupBannerScalarRelationFilter = {
+  is?: Prisma.PopupBannerWhereInput
+  isNot?: Prisma.PopupBannerWhereInput
+}
+
+export type NullableIntFieldUpdateOperationsInput = {
+  set?: number | null
+  increment?: number
+  decrement?: number
+  multiply?: number
+  divide?: number
+}
+
+export type PopupBannerCreateNestedOneWithoutImagesInput = {
+  create?: Prisma.XOR<Prisma.PopupBannerCreateWithoutImagesInput, Prisma.PopupBannerUncheckedCreateWithoutImagesInput>
+  connectOrCreate?: Prisma.PopupBannerCreateOrConnectWithoutImagesInput
+  connect?: Prisma.PopupBannerWhereUniqueInput
+}
+
+export type PopupBannerUpdateOneWithoutImagesNestedInput = {
+  create?: Prisma.XOR<Prisma.PopupBannerCreateWithoutImagesInput, Prisma.PopupBannerUncheckedCreateWithoutImagesInput>
+  connectOrCreate?: Prisma.PopupBannerCreateOrConnectWithoutImagesInput
+  upsert?: Prisma.PopupBannerUpsertWithoutImagesInput
+  disconnect?: Prisma.PopupBannerWhereInput | boolean
+  delete?: Prisma.PopupBannerWhereInput | boolean
+  connect?: Prisma.PopupBannerWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.PopupBannerUpdateToOneWithWhereWithoutImagesInput, Prisma.PopupBannerUpdateWithoutImagesInput>, Prisma.PopupBannerUncheckedUpdateWithoutImagesInput>
+}
+
+export type PopupBannerCreateNestedOneWithoutViewSessionsInput = {
+  create?: Prisma.XOR<Prisma.PopupBannerCreateWithoutViewSessionsInput, Prisma.PopupBannerUncheckedCreateWithoutViewSessionsInput>
+  connectOrCreate?: Prisma.PopupBannerCreateOrConnectWithoutViewSessionsInput
+  connect?: Prisma.PopupBannerWhereUniqueInput
+}
+
+export type PopupBannerUpdateOneRequiredWithoutViewSessionsNestedInput = {
+  create?: Prisma.XOR<Prisma.PopupBannerCreateWithoutViewSessionsInput, Prisma.PopupBannerUncheckedCreateWithoutViewSessionsInput>
+  connectOrCreate?: Prisma.PopupBannerCreateOrConnectWithoutViewSessionsInput
+  upsert?: Prisma.PopupBannerUpsertWithoutViewSessionsInput
+  connect?: Prisma.PopupBannerWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.PopupBannerUpdateToOneWithWhereWithoutViewSessionsInput, Prisma.PopupBannerUpdateWithoutViewSessionsInput>, Prisma.PopupBannerUncheckedUpdateWithoutViewSessionsInput>
+}
+
+export type PopupBannerCreateWithoutImagesInput = {
+  id?: string
+  title: string
+  content: string
+  popupType?: string
+  displayPosition?: string
+  popupSize?: string
+  overlayEnabled?: boolean
+  autoCloseSeconds?: number | null
+  startDate?: Date | string | null
+  endDate?: Date | string | null
+  displayOrder?: number
+  enabled?: boolean
+  published?: boolean
+  totalViews?: number
+  uniqueViews?: number
+  totalClicks?: number
+  buttonClicks?: number
+  closeCount?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  viewSessions?: Prisma.PopupViewSessionCreateNestedManyWithoutPopupInput
+}
+
+export type PopupBannerUncheckedCreateWithoutImagesInput = {
+  id?: string
+  title: string
+  content: string
+  popupType?: string
+  displayPosition?: string
+  popupSize?: string
+  overlayEnabled?: boolean
+  autoCloseSeconds?: number | null
+  startDate?: Date | string | null
+  endDate?: Date | string | null
+  displayOrder?: number
+  enabled?: boolean
+  published?: boolean
+  totalViews?: number
+  uniqueViews?: number
+  totalClicks?: number
+  buttonClicks?: number
+  closeCount?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  viewSessions?: Prisma.PopupViewSessionUncheckedCreateNestedManyWithoutPopupInput
+}
+
+export type PopupBannerCreateOrConnectWithoutImagesInput = {
+  where: Prisma.PopupBannerWhereUniqueInput
+  create: Prisma.XOR<Prisma.PopupBannerCreateWithoutImagesInput, Prisma.PopupBannerUncheckedCreateWithoutImagesInput>
+}
+
+export type PopupBannerUpsertWithoutImagesInput = {
+  update: Prisma.XOR<Prisma.PopupBannerUpdateWithoutImagesInput, Prisma.PopupBannerUncheckedUpdateWithoutImagesInput>
+  create: Prisma.XOR<Prisma.PopupBannerCreateWithoutImagesInput, Prisma.PopupBannerUncheckedCreateWithoutImagesInput>
+  where?: Prisma.PopupBannerWhereInput
+}
+
+export type PopupBannerUpdateToOneWithWhereWithoutImagesInput = {
+  where?: Prisma.PopupBannerWhereInput
+  data: Prisma.XOR<Prisma.PopupBannerUpdateWithoutImagesInput, Prisma.PopupBannerUncheckedUpdateWithoutImagesInput>
+}
+
+export type PopupBannerUpdateWithoutImagesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  content?: Prisma.StringFieldUpdateOperationsInput | string
+  popupType?: Prisma.StringFieldUpdateOperationsInput | string
+  displayPosition?: Prisma.StringFieldUpdateOperationsInput | string
+  popupSize?: Prisma.StringFieldUpdateOperationsInput | string
+  overlayEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  autoCloseSeconds?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  startDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  endDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  displayOrder?: Prisma.IntFieldUpdateOperationsInput | number
+  enabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  published?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  totalViews?: Prisma.IntFieldUpdateOperationsInput | number
+  uniqueViews?: Prisma.IntFieldUpdateOperationsInput | number
+  totalClicks?: Prisma.IntFieldUpdateOperationsInput | number
+  buttonClicks?: Prisma.IntFieldUpdateOperationsInput | number
+  closeCount?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  viewSessions?: Prisma.PopupViewSessionUpdateManyWithoutPopupNestedInput
+}
+
+export type PopupBannerUncheckedUpdateWithoutImagesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  content?: Prisma.StringFieldUpdateOperationsInput | string
+  popupType?: Prisma.StringFieldUpdateOperationsInput | string
+  displayPosition?: Prisma.StringFieldUpdateOperationsInput | string
+  popupSize?: Prisma.StringFieldUpdateOperationsInput | string
+  overlayEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  autoCloseSeconds?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  startDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  endDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  displayOrder?: Prisma.IntFieldUpdateOperationsInput | number
+  enabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  published?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  totalViews?: Prisma.IntFieldUpdateOperationsInput | number
+  uniqueViews?: Prisma.IntFieldUpdateOperationsInput | number
+  totalClicks?: Prisma.IntFieldUpdateOperationsInput | number
+  buttonClicks?: Prisma.IntFieldUpdateOperationsInput | number
+  closeCount?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  viewSessions?: Prisma.PopupViewSessionUncheckedUpdateManyWithoutPopupNestedInput
+}
+
+export type PopupBannerCreateWithoutViewSessionsInput = {
+  id?: string
+  title: string
+  content: string
+  popupType?: string
+  displayPosition?: string
+  popupSize?: string
+  overlayEnabled?: boolean
+  autoCloseSeconds?: number | null
+  startDate?: Date | string | null
+  endDate?: Date | string | null
+  displayOrder?: number
+  enabled?: boolean
+  published?: boolean
+  totalViews?: number
+  uniqueViews?: number
+  totalClicks?: number
+  buttonClicks?: number
+  closeCount?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  images?: Prisma.PopupImageCreateNestedManyWithoutPopupInput
+}
+
+export type PopupBannerUncheckedCreateWithoutViewSessionsInput = {
+  id?: string
+  title: string
+  content: string
+  popupType?: string
+  displayPosition?: string
+  popupSize?: string
+  overlayEnabled?: boolean
+  autoCloseSeconds?: number | null
+  startDate?: Date | string | null
+  endDate?: Date | string | null
+  displayOrder?: number
+  enabled?: boolean
+  published?: boolean
+  totalViews?: number
+  uniqueViews?: number
+  totalClicks?: number
+  buttonClicks?: number
+  closeCount?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  images?: Prisma.PopupImageUncheckedCreateNestedManyWithoutPopupInput
+}
+
+export type PopupBannerCreateOrConnectWithoutViewSessionsInput = {
+  where: Prisma.PopupBannerWhereUniqueInput
+  create: Prisma.XOR<Prisma.PopupBannerCreateWithoutViewSessionsInput, Prisma.PopupBannerUncheckedCreateWithoutViewSessionsInput>
+}
+
+export type PopupBannerUpsertWithoutViewSessionsInput = {
+  update: Prisma.XOR<Prisma.PopupBannerUpdateWithoutViewSessionsInput, Prisma.PopupBannerUncheckedUpdateWithoutViewSessionsInput>
+  create: Prisma.XOR<Prisma.PopupBannerCreateWithoutViewSessionsInput, Prisma.PopupBannerUncheckedCreateWithoutViewSessionsInput>
+  where?: Prisma.PopupBannerWhereInput
+}
+
+export type PopupBannerUpdateToOneWithWhereWithoutViewSessionsInput = {
+  where?: Prisma.PopupBannerWhereInput
+  data: Prisma.XOR<Prisma.PopupBannerUpdateWithoutViewSessionsInput, Prisma.PopupBannerUncheckedUpdateWithoutViewSessionsInput>
+}
+
+export type PopupBannerUpdateWithoutViewSessionsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  content?: Prisma.StringFieldUpdateOperationsInput | string
+  popupType?: Prisma.StringFieldUpdateOperationsInput | string
+  displayPosition?: Prisma.StringFieldUpdateOperationsInput | string
+  popupSize?: Prisma.StringFieldUpdateOperationsInput | string
+  overlayEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  autoCloseSeconds?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  startDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  endDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  displayOrder?: Prisma.IntFieldUpdateOperationsInput | number
+  enabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  published?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  totalViews?: Prisma.IntFieldUpdateOperationsInput | number
+  uniqueViews?: Prisma.IntFieldUpdateOperationsInput | number
+  totalClicks?: Prisma.IntFieldUpdateOperationsInput | number
+  buttonClicks?: Prisma.IntFieldUpdateOperationsInput | number
+  closeCount?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  images?: Prisma.PopupImageUpdateManyWithoutPopupNestedInput
+}
+
+export type PopupBannerUncheckedUpdateWithoutViewSessionsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  content?: Prisma.StringFieldUpdateOperationsInput | string
+  popupType?: Prisma.StringFieldUpdateOperationsInput | string
+  displayPosition?: Prisma.StringFieldUpdateOperationsInput | string
+  popupSize?: Prisma.StringFieldUpdateOperationsInput | string
+  overlayEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  autoCloseSeconds?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  startDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  endDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  displayOrder?: Prisma.IntFieldUpdateOperationsInput | number
+  enabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  published?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  totalViews?: Prisma.IntFieldUpdateOperationsInput | number
+  uniqueViews?: Prisma.IntFieldUpdateOperationsInput | number
+  totalClicks?: Prisma.IntFieldUpdateOperationsInput | number
+  buttonClicks?: Prisma.IntFieldUpdateOperationsInput | number
+  closeCount?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  images?: Prisma.PopupImageUncheckedUpdateManyWithoutPopupNestedInput
+}
+
+
+/**
+ * Count Type PopupBannerCountOutputType
+ */
+
+export type PopupBannerCountOutputType = {
+  images: number
+  viewSessions: number
+}
+
+export type PopupBannerCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  images?: boolean | PopupBannerCountOutputTypeCountImagesArgs
+  viewSessions?: boolean | PopupBannerCountOutputTypeCountViewSessionsArgs
+}
+
+/**
+ * PopupBannerCountOutputType without action
+ */
+export type PopupBannerCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the PopupBannerCountOutputType
+   */
+  select?: Prisma.PopupBannerCountOutputTypeSelect<ExtArgs> | null
+}
+
+/**
+ * PopupBannerCountOutputType without action
+ */
+export type PopupBannerCountOutputTypeCountImagesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.PopupImageWhereInput
+}
+
+/**
+ * PopupBannerCountOutputType without action
+ */
+export type PopupBannerCountOutputTypeCountViewSessionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.PopupViewSessionWhereInput
+}
 
 
 export type PopupBannerSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   title?: boolean
   content?: boolean
+  popupType?: boolean
+  displayPosition?: boolean
+  popupSize?: boolean
+  overlayEnabled?: boolean
+  autoCloseSeconds?: boolean
+  startDate?: boolean
+  endDate?: boolean
+  displayOrder?: boolean
   enabled?: boolean
+  published?: boolean
+  totalViews?: boolean
+  uniqueViews?: boolean
+  totalClicks?: boolean
+  buttonClicks?: boolean
+  closeCount?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  images?: boolean | Prisma.PopupBanner$imagesArgs<ExtArgs>
+  viewSessions?: boolean | Prisma.PopupBanner$viewSessionsArgs<ExtArgs>
+  _count?: boolean | Prisma.PopupBannerCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["popupBanner"]>
 
 export type PopupBannerSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   title?: boolean
   content?: boolean
+  popupType?: boolean
+  displayPosition?: boolean
+  popupSize?: boolean
+  overlayEnabled?: boolean
+  autoCloseSeconds?: boolean
+  startDate?: boolean
+  endDate?: boolean
+  displayOrder?: boolean
   enabled?: boolean
+  published?: boolean
+  totalViews?: boolean
+  uniqueViews?: boolean
+  totalClicks?: boolean
+  buttonClicks?: boolean
+  closeCount?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }, ExtArgs["result"]["popupBanner"]>
@@ -350,7 +1093,21 @@ export type PopupBannerSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.E
   id?: boolean
   title?: boolean
   content?: boolean
+  popupType?: boolean
+  displayPosition?: boolean
+  popupSize?: boolean
+  overlayEnabled?: boolean
+  autoCloseSeconds?: boolean
+  startDate?: boolean
+  endDate?: boolean
+  displayOrder?: boolean
   enabled?: boolean
+  published?: boolean
+  totalViews?: boolean
+  uniqueViews?: boolean
+  totalClicks?: boolean
+  buttonClicks?: boolean
+  closeCount?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }, ExtArgs["result"]["popupBanner"]>
@@ -359,21 +1116,59 @@ export type PopupBannerSelectScalar = {
   id?: boolean
   title?: boolean
   content?: boolean
+  popupType?: boolean
+  displayPosition?: boolean
+  popupSize?: boolean
+  overlayEnabled?: boolean
+  autoCloseSeconds?: boolean
+  startDate?: boolean
+  endDate?: boolean
+  displayOrder?: boolean
   enabled?: boolean
+  published?: boolean
+  totalViews?: boolean
+  uniqueViews?: boolean
+  totalClicks?: boolean
+  buttonClicks?: boolean
+  closeCount?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type PopupBannerOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "title" | "content" | "enabled" | "createdAt" | "updatedAt", ExtArgs["result"]["popupBanner"]>
+export type PopupBannerOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "title" | "content" | "popupType" | "displayPosition" | "popupSize" | "overlayEnabled" | "autoCloseSeconds" | "startDate" | "endDate" | "displayOrder" | "enabled" | "published" | "totalViews" | "uniqueViews" | "totalClicks" | "buttonClicks" | "closeCount" | "createdAt" | "updatedAt", ExtArgs["result"]["popupBanner"]>
+export type PopupBannerInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  images?: boolean | Prisma.PopupBanner$imagesArgs<ExtArgs>
+  viewSessions?: boolean | Prisma.PopupBanner$viewSessionsArgs<ExtArgs>
+  _count?: boolean | Prisma.PopupBannerCountOutputTypeDefaultArgs<ExtArgs>
+}
+export type PopupBannerIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
+export type PopupBannerIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
 
 export type $PopupBannerPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "PopupBanner"
-  objects: {}
+  objects: {
+    images: Prisma.$PopupImagePayload<ExtArgs>[]
+    viewSessions: Prisma.$PopupViewSessionPayload<ExtArgs>[]
+  }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     title: string
     content: string
+    popupType: string
+    displayPosition: string
+    popupSize: string
+    overlayEnabled: boolean
+    autoCloseSeconds: number | null
+    startDate: Date | null
+    endDate: Date | null
+    displayOrder: number
     enabled: boolean
+    published: boolean
+    totalViews: number
+    uniqueViews: number
+    totalClicks: number
+    buttonClicks: number
+    closeCount: number
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["popupBanner"]>
@@ -770,6 +1565,8 @@ readonly fields: PopupBannerFieldRefs;
  */
 export interface Prisma__PopupBannerClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
+  images<T extends Prisma.PopupBanner$imagesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.PopupBanner$imagesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PopupImagePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  viewSessions<T extends Prisma.PopupBanner$viewSessionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.PopupBanner$viewSessionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PopupViewSessionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -802,7 +1599,21 @@ export interface PopupBannerFieldRefs {
   readonly id: Prisma.FieldRef<"PopupBanner", 'String'>
   readonly title: Prisma.FieldRef<"PopupBanner", 'String'>
   readonly content: Prisma.FieldRef<"PopupBanner", 'String'>
+  readonly popupType: Prisma.FieldRef<"PopupBanner", 'String'>
+  readonly displayPosition: Prisma.FieldRef<"PopupBanner", 'String'>
+  readonly popupSize: Prisma.FieldRef<"PopupBanner", 'String'>
+  readonly overlayEnabled: Prisma.FieldRef<"PopupBanner", 'Boolean'>
+  readonly autoCloseSeconds: Prisma.FieldRef<"PopupBanner", 'Int'>
+  readonly startDate: Prisma.FieldRef<"PopupBanner", 'DateTime'>
+  readonly endDate: Prisma.FieldRef<"PopupBanner", 'DateTime'>
+  readonly displayOrder: Prisma.FieldRef<"PopupBanner", 'Int'>
   readonly enabled: Prisma.FieldRef<"PopupBanner", 'Boolean'>
+  readonly published: Prisma.FieldRef<"PopupBanner", 'Boolean'>
+  readonly totalViews: Prisma.FieldRef<"PopupBanner", 'Int'>
+  readonly uniqueViews: Prisma.FieldRef<"PopupBanner", 'Int'>
+  readonly totalClicks: Prisma.FieldRef<"PopupBanner", 'Int'>
+  readonly buttonClicks: Prisma.FieldRef<"PopupBanner", 'Int'>
+  readonly closeCount: Prisma.FieldRef<"PopupBanner", 'Int'>
   readonly createdAt: Prisma.FieldRef<"PopupBanner", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"PopupBanner", 'DateTime'>
 }
@@ -822,6 +1633,10 @@ export type PopupBannerFindUniqueArgs<ExtArgs extends runtime.Types.Extensions.I
    */
   omit?: Prisma.PopupBannerOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.PopupBannerInclude<ExtArgs> | null
+  /**
    * Filter, which PopupBanner to fetch.
    */
   where: Prisma.PopupBannerWhereUniqueInput
@@ -840,6 +1655,10 @@ export type PopupBannerFindUniqueOrThrowArgs<ExtArgs extends runtime.Types.Exten
    */
   omit?: Prisma.PopupBannerOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.PopupBannerInclude<ExtArgs> | null
+  /**
    * Filter, which PopupBanner to fetch.
    */
   where: Prisma.PopupBannerWhereUniqueInput
@@ -857,6 +1676,10 @@ export type PopupBannerFindFirstArgs<ExtArgs extends runtime.Types.Extensions.In
    * Omit specific fields from the PopupBanner
    */
   omit?: Prisma.PopupBannerOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.PopupBannerInclude<ExtArgs> | null
   /**
    * Filter, which PopupBanner to fetch.
    */
@@ -906,6 +1729,10 @@ export type PopupBannerFindFirstOrThrowArgs<ExtArgs extends runtime.Types.Extens
    */
   omit?: Prisma.PopupBannerOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.PopupBannerInclude<ExtArgs> | null
+  /**
    * Filter, which PopupBanner to fetch.
    */
   where?: Prisma.PopupBannerWhereInput
@@ -954,6 +1781,10 @@ export type PopupBannerFindManyArgs<ExtArgs extends runtime.Types.Extensions.Int
    */
   omit?: Prisma.PopupBannerOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.PopupBannerInclude<ExtArgs> | null
+  /**
    * Filter, which PopupBanners to fetch.
    */
   where?: Prisma.PopupBannerWhereInput
@@ -996,6 +1827,10 @@ export type PopupBannerCreateArgs<ExtArgs extends runtime.Types.Extensions.Inter
    * Omit specific fields from the PopupBanner
    */
   omit?: Prisma.PopupBannerOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.PopupBannerInclude<ExtArgs> | null
   /**
    * The data needed to create a PopupBanner.
    */
@@ -1042,6 +1877,10 @@ export type PopupBannerUpdateArgs<ExtArgs extends runtime.Types.Extensions.Inter
    * Omit specific fields from the PopupBanner
    */
   omit?: Prisma.PopupBannerOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.PopupBannerInclude<ExtArgs> | null
   /**
    * The data needed to update a PopupBanner.
    */
@@ -1109,6 +1948,10 @@ export type PopupBannerUpsertArgs<ExtArgs extends runtime.Types.Extensions.Inter
    */
   omit?: Prisma.PopupBannerOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.PopupBannerInclude<ExtArgs> | null
+  /**
    * The filter to search for the PopupBanner to update in case it exists.
    */
   where: Prisma.PopupBannerWhereUniqueInput
@@ -1135,6 +1978,10 @@ export type PopupBannerDeleteArgs<ExtArgs extends runtime.Types.Extensions.Inter
    */
   omit?: Prisma.PopupBannerOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.PopupBannerInclude<ExtArgs> | null
+  /**
    * Filter which PopupBanner to delete.
    */
   where: Prisma.PopupBannerWhereUniqueInput
@@ -1155,6 +2002,54 @@ export type PopupBannerDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.I
 }
 
 /**
+ * PopupBanner.images
+ */
+export type PopupBanner$imagesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the PopupImage
+   */
+  select?: Prisma.PopupImageSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the PopupImage
+   */
+  omit?: Prisma.PopupImageOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.PopupImageInclude<ExtArgs> | null
+  where?: Prisma.PopupImageWhereInput
+  orderBy?: Prisma.PopupImageOrderByWithRelationInput | Prisma.PopupImageOrderByWithRelationInput[]
+  cursor?: Prisma.PopupImageWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.PopupImageScalarFieldEnum | Prisma.PopupImageScalarFieldEnum[]
+}
+
+/**
+ * PopupBanner.viewSessions
+ */
+export type PopupBanner$viewSessionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the PopupViewSession
+   */
+  select?: Prisma.PopupViewSessionSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the PopupViewSession
+   */
+  omit?: Prisma.PopupViewSessionOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.PopupViewSessionInclude<ExtArgs> | null
+  where?: Prisma.PopupViewSessionWhereInput
+  orderBy?: Prisma.PopupViewSessionOrderByWithRelationInput | Prisma.PopupViewSessionOrderByWithRelationInput[]
+  cursor?: Prisma.PopupViewSessionWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.PopupViewSessionScalarFieldEnum | Prisma.PopupViewSessionScalarFieldEnum[]
+}
+
+/**
  * PopupBanner without action
  */
 export type PopupBannerDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1166,4 +2061,8 @@ export type PopupBannerDefaultArgs<ExtArgs extends runtime.Types.Extensions.Inte
    * Omit specific fields from the PopupBanner
    */
   omit?: Prisma.PopupBannerOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.PopupBannerInclude<ExtArgs> | null
 }

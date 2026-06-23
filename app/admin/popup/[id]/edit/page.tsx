@@ -19,6 +19,7 @@ export default async function EditPopupPage({
   const { id } = await params
   const popup = await prisma.popupBanner.findUnique({
     where: { id },
+    include: { images: { orderBy: { createdAt: "desc" } } },
   })
 
   if (!popup) {

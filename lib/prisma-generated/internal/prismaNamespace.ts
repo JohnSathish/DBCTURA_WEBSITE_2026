@@ -404,6 +404,8 @@ export const ModelName = {
   HeroSlide: 'HeroSlide',
   ShortTermCourse: 'ShortTermCourse',
   PopupBanner: 'PopupBanner',
+  PopupImage: 'PopupImage',
+  PopupViewSession: 'PopupViewSession',
   StaffProfile: 'StaffProfile',
   NavigationMenu: 'NavigationMenu',
   QuestionPaper: 'QuestionPaper',
@@ -430,7 +432,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "page" | "news" | "galleryAlbum" | "galleryImage" | "download" | "setting" | "testimonial" | "noticeBoardEvent" | "noticeBoardNotice" | "courseApplication" | "flashNews" | "heroSlide" | "shortTermCourse" | "popupBanner" | "staffProfile" | "navigationMenu" | "questionPaper" | "syllabus" | "grievance" | "bloodDonor" | "alumniRegistration" | "committeeMeta" | "committeeExOfficio" | "committee" | "committeeMember"
+    modelProps: "user" | "page" | "news" | "galleryAlbum" | "galleryImage" | "download" | "setting" | "testimonial" | "noticeBoardEvent" | "noticeBoardNotice" | "courseApplication" | "flashNews" | "heroSlide" | "shortTermCourse" | "popupBanner" | "popupImage" | "popupViewSession" | "staffProfile" | "navigationMenu" | "questionPaper" | "syllabus" | "grievance" | "bloodDonor" | "alumniRegistration" | "committeeMeta" | "committeeExOfficio" | "committee" | "committeeMember"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1544,6 +1546,154 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    PopupImage: {
+      payload: Prisma.$PopupImagePayload<ExtArgs>
+      fields: Prisma.PopupImageFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.PopupImageFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PopupImagePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.PopupImageFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PopupImagePayload>
+        }
+        findFirst: {
+          args: Prisma.PopupImageFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PopupImagePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.PopupImageFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PopupImagePayload>
+        }
+        findMany: {
+          args: Prisma.PopupImageFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PopupImagePayload>[]
+        }
+        create: {
+          args: Prisma.PopupImageCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PopupImagePayload>
+        }
+        createMany: {
+          args: Prisma.PopupImageCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.PopupImageCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PopupImagePayload>[]
+        }
+        delete: {
+          args: Prisma.PopupImageDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PopupImagePayload>
+        }
+        update: {
+          args: Prisma.PopupImageUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PopupImagePayload>
+        }
+        deleteMany: {
+          args: Prisma.PopupImageDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.PopupImageUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.PopupImageUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PopupImagePayload>[]
+        }
+        upsert: {
+          args: Prisma.PopupImageUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PopupImagePayload>
+        }
+        aggregate: {
+          args: Prisma.PopupImageAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregatePopupImage>
+        }
+        groupBy: {
+          args: Prisma.PopupImageGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.PopupImageGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.PopupImageCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.PopupImageCountAggregateOutputType> | number
+        }
+      }
+    }
+    PopupViewSession: {
+      payload: Prisma.$PopupViewSessionPayload<ExtArgs>
+      fields: Prisma.PopupViewSessionFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.PopupViewSessionFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PopupViewSessionPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.PopupViewSessionFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PopupViewSessionPayload>
+        }
+        findFirst: {
+          args: Prisma.PopupViewSessionFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PopupViewSessionPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.PopupViewSessionFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PopupViewSessionPayload>
+        }
+        findMany: {
+          args: Prisma.PopupViewSessionFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PopupViewSessionPayload>[]
+        }
+        create: {
+          args: Prisma.PopupViewSessionCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PopupViewSessionPayload>
+        }
+        createMany: {
+          args: Prisma.PopupViewSessionCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.PopupViewSessionCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PopupViewSessionPayload>[]
+        }
+        delete: {
+          args: Prisma.PopupViewSessionDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PopupViewSessionPayload>
+        }
+        update: {
+          args: Prisma.PopupViewSessionUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PopupViewSessionPayload>
+        }
+        deleteMany: {
+          args: Prisma.PopupViewSessionDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.PopupViewSessionUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.PopupViewSessionUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PopupViewSessionPayload>[]
+        }
+        upsert: {
+          args: Prisma.PopupViewSessionUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PopupViewSessionPayload>
+        }
+        aggregate: {
+          args: Prisma.PopupViewSessionAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregatePopupViewSession>
+        }
+        groupBy: {
+          args: Prisma.PopupViewSessionGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.PopupViewSessionGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.PopupViewSessionCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.PopupViewSessionCountAggregateOutputType> | number
+        }
+      }
+    }
     StaffProfile: {
       payload: Prisma.$StaffProfilePayload<ExtArgs>
       fields: Prisma.StaffProfileFieldRefs
@@ -2611,12 +2761,46 @@ export const PopupBannerScalarFieldEnum = {
   id: 'id',
   title: 'title',
   content: 'content',
+  popupType: 'popupType',
+  displayPosition: 'displayPosition',
+  popupSize: 'popupSize',
+  overlayEnabled: 'overlayEnabled',
+  autoCloseSeconds: 'autoCloseSeconds',
+  startDate: 'startDate',
+  endDate: 'endDate',
+  displayOrder: 'displayOrder',
   enabled: 'enabled',
+  published: 'published',
+  totalViews: 'totalViews',
+  uniqueViews: 'uniqueViews',
+  totalClicks: 'totalClicks',
+  buttonClicks: 'buttonClicks',
+  closeCount: 'closeCount',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
 
 export type PopupBannerScalarFieldEnum = (typeof PopupBannerScalarFieldEnum)[keyof typeof PopupBannerScalarFieldEnum]
+
+
+export const PopupImageScalarFieldEnum = {
+  id: 'id',
+  popupId: 'popupId',
+  imageUrl: 'imageUrl',
+  createdAt: 'createdAt'
+} as const
+
+export type PopupImageScalarFieldEnum = (typeof PopupImageScalarFieldEnum)[keyof typeof PopupImageScalarFieldEnum]
+
+
+export const PopupViewSessionScalarFieldEnum = {
+  id: 'id',
+  popupId: 'popupId',
+  sessionId: 'sessionId',
+  createdAt: 'createdAt'
+} as const
+
+export type PopupViewSessionScalarFieldEnum = (typeof PopupViewSessionScalarFieldEnum)[keyof typeof PopupViewSessionScalarFieldEnum]
 
 
 export const StaffProfileScalarFieldEnum = {
@@ -2979,6 +3163,8 @@ export type GlobalOmitConfig = {
   heroSlide?: Prisma.HeroSlideOmit
   shortTermCourse?: Prisma.ShortTermCourseOmit
   popupBanner?: Prisma.PopupBannerOmit
+  popupImage?: Prisma.PopupImageOmit
+  popupViewSession?: Prisma.PopupViewSessionOmit
   staffProfile?: Prisma.StaffProfileOmit
   navigationMenu?: Prisma.NavigationMenuOmit
   questionPaper?: Prisma.QuestionPaperOmit

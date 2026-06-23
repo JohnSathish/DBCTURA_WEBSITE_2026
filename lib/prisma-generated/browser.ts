@@ -92,6 +92,16 @@ export type ShortTermCourse = Prisma.ShortTermCourseModel
  */
 export type PopupBanner = Prisma.PopupBannerModel
 /**
+ * Model PopupImage
+ * 
+ */
+export type PopupImage = Prisma.PopupImageModel
+/**
+ * Model PopupViewSession
+ * 
+ */
+export type PopupViewSession = Prisma.PopupViewSessionModel
+/**
  * Model StaffProfile
  * 
  */

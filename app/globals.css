@@ -407,3 +407,26 @@
   word-break: break-word;
 }
 
+/* Popup CTA buttons inside editor preview and live popup */
+.popup-content .popup-btn,
+.popup-content a.popup-btn {
+  display: inline-block;
+  margin-top: 0.75rem;
+  border-radius: 0.5rem;
+  background: #7b1e3a;
+  padding: 0.625rem 1.25rem;
+  font-weight: 600;
+  color: #fff !important;
+  text-decoration: none !important;
+}
+
+.popup-content .popup-btn-secondary {
+  background: #1e3a5f;
+}
+
+.popup-content img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 0.5rem;
+}
+

@@ -190,12 +190,46 @@ model ShortTermCourse {
 }
 
 model PopupBanner {
-  id          String   @id @default(cuid())
-  title       String
-  content     String   // HTML content
-  enabled     Boolean  @default(false)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id               String        @id @default(cuid())
+  title            String
+  content          String        // Rich HTML content
+  popupType        String        @default("information") // information | admission | announcement | event | notice
+  displayPosition  String        @default("center") // center | top | bottom
+  popupSize        String        @default("medium") // small | medium | large | fullscreen
+  overlayEnabled   Boolean       @default(true)
+  autoCloseSeconds Int?          // null = never close automatically
+  startDate        DateTime?
+  endDate          DateTime?
+  displayOrder     Int           @default(0)
+  enabled          Boolean       @default(false)
+  published        Boolean       @default(false)
+  totalViews       Int           @default(0)
+  uniqueViews      Int           @default(0)
+  totalClicks      Int           @default(0)
+  buttonClicks     Int           @default(0)
+  closeCount       Int           @default(0)
+  createdAt        DateTime      @default(now())
+  updatedAt        DateTime      @updatedAt
+  images           PopupImage[]
+  viewSessions     PopupViewSession[]
+}
+
+model PopupImage {
+  id        String       @id @default(cuid())
+  popupId   String?
+  popup     PopupBanner? @relation(fields: [popupId], references: [id], onDelete: SetNull)
+  imageUrl  String
+  createdAt DateTime     @default(now())
+}
+
+model PopupViewSession {
+  id        String      @id @default(cuid())
+  popupId   String
+  popup     PopupBanner @relation(fields: [popupId], references: [id], onDelete: Cascade)
+  sessionId String
+  createdAt DateTime    @default(now())
+
+  @@unique([popupId, sessionId])
 }
 
 model StaffProfile {

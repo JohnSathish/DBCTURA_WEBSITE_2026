@@ -63,6 +63,8 @@ export const ModelName = {
   HeroSlide: 'HeroSlide',
   ShortTermCourse: 'ShortTermCourse',
   PopupBanner: 'PopupBanner',
+  PopupImage: 'PopupImage',
+  PopupViewSession: 'PopupViewSession',
   StaffProfile: 'StaffProfile',
   NavigationMenu: 'NavigationMenu',
   QuestionPaper: 'QuestionPaper',
@@ -306,12 +308,46 @@ export const PopupBannerScalarFieldEnum = {
   id: 'id',
   title: 'title',
   content: 'content',
+  popupType: 'popupType',
+  displayPosition: 'displayPosition',
+  popupSize: 'popupSize',
+  overlayEnabled: 'overlayEnabled',
+  autoCloseSeconds: 'autoCloseSeconds',
+  startDate: 'startDate',
+  endDate: 'endDate',
+  displayOrder: 'displayOrder',
   enabled: 'enabled',
+  published: 'published',
+  totalViews: 'totalViews',
+  uniqueViews: 'uniqueViews',
+  totalClicks: 'totalClicks',
+  buttonClicks: 'buttonClicks',
+  closeCount: 'closeCount',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
 
 export type PopupBannerScalarFieldEnum = (typeof PopupBannerScalarFieldEnum)[keyof typeof PopupBannerScalarFieldEnum]
+
+
+export const PopupImageScalarFieldEnum = {
+  id: 'id',
+  popupId: 'popupId',
+  imageUrl: 'imageUrl',
+  createdAt: 'createdAt'
+} as const
+
+export type PopupImageScalarFieldEnum = (typeof PopupImageScalarFieldEnum)[keyof typeof PopupImageScalarFieldEnum]
+
+
+export const PopupViewSessionScalarFieldEnum = {
+  id: 'id',
+  popupId: 'popupId',
+  sessionId: 'sessionId',
+  createdAt: 'createdAt'
+} as const
+
+export type PopupViewSessionScalarFieldEnum = (typeof PopupViewSessionScalarFieldEnum)[keyof typeof PopupViewSessionScalarFieldEnum]
 
 
 export const StaffProfileScalarFieldEnum = {
