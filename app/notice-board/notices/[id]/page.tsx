@@ -103,10 +103,10 @@ export default async function NoticeDetailPage({
                         Download PDF
                       </Button>
                     </Link>
-                    <Link href={notice.pdfUrl} target="_blank" rel="noreferrer">
+                    <Link href={`/api/notice-board/notices/${notice.id}/download?inline=1`} target="_blank" rel="noreferrer">
                       <Button variant="outline" className="rounded-xl">
                         <Eye className="mr-2 h-4 w-4" />
-                        View
+                        View PDF
                       </Button>
                     </Link>
                   </div>

@@ -178,7 +178,7 @@ export default function NewsSidebar({ items }: { items: NoticeBoardNotice[]; pag
                           </Button>
                         </Link>
                         {notice.pdfUrl ? (
-                          <Link href={notice.pdfUrl} target="_blank" rel="noreferrer">
+                          <Link href={`/api/notice-board/notices/${notice.id}/download`}>
                             <Button className="h-8 rounded-xl bg-blue-600 hover:bg-blue-700 px-2.5 text-xs shadow-sm shadow-blue-600/20">
                               <Download className="h-3.5 w-3.5 mr-1.5" />
                               Download
