@@ -47,6 +47,11 @@ const nextConfig: NextConfig = {
   async redirects() {
     return [
       {
+        source: "/login",
+        destination: "/admin/login",
+        permanent: false,
+      },
+      {
         source: "/sitemap",
         destination: "/site-map",
         permanent: true,

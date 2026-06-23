@@ -7,6 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { ChevronRight, Search } from "lucide-react"
+import { formatNewsCardDate } from "@/lib/format-date"
 
 type NewsItem = {
   id: string
@@ -59,11 +60,7 @@ export default function NewsHighlights({ items }: { items: NewsItem[] }) {
 
                 <div className="flex gap-4 overflow-x-auto pb-2 pt-1 scrollbar-thin [-ms-overflow-style:none] [scrollbar-width:thin] [&::-webkit-scrollbar]:h-2 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-slate-300">
                   {filteredItems.map((item) => {
-                    const date = item.publishedAt ? new Date(item.publishedAt) : null
-                    const day = date ? date.getDate().toString().padStart(2, "0") : ""
-                    const mon = date
-                      ? date.toLocaleDateString("en-US", { month: "short" }).toUpperCase()
-                      : ""
+                    const { day, month: mon } = formatNewsCardDate(item.publishedAt)
 
                     return (
                       <Link

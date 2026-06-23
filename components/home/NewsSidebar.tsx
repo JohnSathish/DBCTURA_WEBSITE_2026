@@ -1,11 +1,12 @@
 "use client"
 
-import { useMemo, useState } from "react"
+import { useEffect, useMemo, useState } from "react"
 import Link from "next/link"
 import { Card } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
+import { formatDisplayDate, isRecentNotice } from "@/lib/format-date"
 import { Bell, Download, Eye, FileText, Megaphone, Pin } from "lucide-react"
 
 export type NoticeBoardNotice = {
@@ -20,11 +21,7 @@ export type NoticeBoardNotice = {
 }
 
 function isNewNotice(publishDate?: string | Date) {
-  if (!publishDate) return false
-  const pub = new Date(publishDate).getTime()
-  const now = Date.now()
-  const diff = now - pub
-  return diff >= 0 && diff <= 3 * 24 * 60 * 60 * 1000
+  return isRecentNotice(publishDate, 3)
 }
 
 function iconMeta(n: NoticeBoardNotice) {
@@ -64,6 +61,9 @@ function iconMeta(n: NoticeBoardNotice) {
 }
 
 export default function NewsSidebar({ items }: { items: NoticeBoardNotice[]; pageSize?: number }) {
+  const [mounted, setMounted] = useState(false)
+  useEffect(() => setMounted(true), [])
+
   // Limit to first 5 notices
   const displayItems = useMemo(() => {
     if (!items || items.length === 0) {
@@ -114,8 +114,8 @@ export default function NewsSidebar({ items }: { items: NoticeBoardNotice[]; pag
             <div className="dbc-marquee-track divide-y divide-slate-100">
               {[...displayItems, ...displayItems].map((notice, idx) => {
               const meta = iconMeta(notice)
-              const isNew = isNewNotice(notice.publishDate)
-              const pub = notice.publishDate ? new Date(notice.publishDate) : null
+              const isNew = mounted && isNewNotice(notice.publishDate)
+              const pubLabel = notice.publishDate ? formatDisplayDate(notice.publishDate) : ""
               const key = `${notice.id}-${idx < displayItems.length ? "a" : "b"}`
 
               return (
@@ -161,7 +161,7 @@ export default function NewsSidebar({ items }: { items: NoticeBoardNotice[]; pag
 
                         <div className="shrink-0 text-right">
                           <div className="text-[11px] font-semibold text-slate-500">
-                            {pub ? pub.toLocaleDateString() : ""}
+                            {pubLabel}
                           </div>
                         </div>
                       </div>
