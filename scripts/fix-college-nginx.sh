@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Fix nginx routing for donboscocollege.ac.in ONLY.
-# Safe for ERP: reloads nginx only — does NOT restart nep-erp-web or nep-erp-api.
+# Safe for ERP: restarts nginx container only — does NOT restart nep-erp-web or nep-erp-api.
 #
 # Run on server:
 #   bash /opt/donboscocollege/scripts/fix-college-nginx.sh
@@ -14,6 +14,12 @@ COMPOSE_FILE="${COMPOSE_FILE:-docker-compose.prod.yml}"
 NGINX_CONTAINER="${NGINX_CONTAINER:-nep-erp-nginx-1}"
 COLLEGE_CONTAINER="${COLLEGE_CONTAINER:-donboscocollege-web}"
 NGINX_CONF="${NGINX_CONF:-/opt/nep-erp/nginx/nginx.conf}"
+
+# Use the host path actually mounted into the nginx container (if different).
+MOUNTED_CONF=$(docker inspect "$NGINX_CONTAINER" --format '{{ range .Mounts }}{{ if eq .Destination "/etc/nginx/nginx.conf" }}{{ .Source }}{{ end }}{{ end }}' 2>/dev/null || true)
+if [[ -n "$MOUNTED_CONF" && -f "$MOUNTED_CONF" ]]; then
+  NGINX_CONF="$MOUNTED_CONF"
+fi
 
 log() { printf '\n[%s] %s\n' "$(date +%H:%M:%S)" "$*"; }
 die() { printf '\nERROR: %s\n' "$*" >&2; exit 1; }
@@ -96,25 +102,16 @@ open(path, "w", encoding="utf-8").write(new)
 print(f"Replaced upstream block with server {host};")
 PY
 
-log "Reloading nginx (ERP web/api untouched)..."
+log "Restarting nginx container (reload alone keeps stale zone cache; ERP web/api untouched)..."
 docker exec "$NGINX_CONTAINER" nginx -t
-docker exec "$NGINX_CONTAINER" nginx -s reload
-
-sleep 2
+docker restart "$NGINX_CONTAINER"
+sleep 4
 
 log "Active upstream in running nginx:"
 docker exec "$NGINX_CONTAINER" nginx -T 2>/dev/null | grep -A4 'upstream donboscocollege_upstream'
 
 code=$(curl -sk --resolve donboscocollege.ac.in:443:127.0.0.1 -o /dev/null -w '%{http_code}' https://donboscocollege.ac.in/ 2>/dev/null || echo "000")
 log "College site (local HTTPS): HTTP ${code}"
-
-if [[ "$code" != "200" ]]; then
-  log "Still failing — restarting nginx container only (not ERP)..."
-  docker restart "$NGINX_CONTAINER"
-  sleep 4
-  code=$(curl -sk --resolve donboscocollege.ac.in:443:127.0.0.1 -o /dev/null -w '%{http_code}' https://donboscocollege.ac.in/ 2>/dev/null || echo "000")
-  log "College site after nginx restart: HTTP ${code}"
-fi
 
 [[ "$code" == "200" ]] || die "College site still HTTP ${code}. Check: docker logs ${NGINX_CONTAINER} --tail=30"
 
