@@ -127,32 +127,49 @@ Alternative if `host.docker.internal` fails: use Docker bridge IP `172.17.0.1:30
 
 ### 4a — HTTP routing first (recommended)
 
+**Note:** On this server, nginx uses a **single file** `/opt/nep-erp/nginx/nginx.conf` — there is **no** `conf.d/` folder. Do **not** copy to `/opt/nep-erp/nginx/conf.d/` (that path does not exist).
+
+Check where nginx config lives:
+
 ```bash
-# College app must respond locally
-curl -I http://127.0.0.1:3002/
+docker inspect nep-erp-nginx-1 --format '{{ range .Mounts }}{{ .Source }} → {{ .Destination }}{{ "\n" }}{{ end }}'
+docker exec nep-erp-nginx-1 nginx -T 2>/dev/null | grep -A20 'server_name donboscocollege.ac.in'
+```
 
-cp /opt/donboscocollege/docker/nginx/donboscocollege.ac.in.http-only.conf \
-   /opt/nep-erp/nginx/conf.d/donboscocollege.ac.in.conf
+If college blocks are **not** in `nginx.conf` yet, merge from `docker/nginx/nep-erp-with-college.conf` (upstream + port 80/443 server blocks) into `/opt/nep-erp/nginx/nginx.conf`, then:
 
+```bash
 docker exec nep-erp-nginx-1 nginx -t
 docker exec nep-erp-nginx-1 nginx -s reload
 ```
 
 Open **http://donboscocollege.ac.in** — you should see the Don Bosco College homepage (not ERP).
 
-If upstream fails, edit the conf and replace `host.docker.internal` with `172.17.0.1`.
+If upstream fails, edit nginx.conf and replace `host.docker.internal` with `172.17.0.1` or use `donboscocollege-web:3000` after connecting the container to the ERP network (`bash scripts/fix-college-nginx.sh`).
 
 ### 4b — HTTPS (after HTTP works)
 
 ```bash
 certbot certonly --webroot -w /var/www/certbot \
   -d donboscocollege.ac.in -d www.donboscocollege.ac.in
+```
 
-cp /opt/donboscocollege/docker/nginx/donboscocollege.ac.in.conf \
-   /opt/nep-erp/nginx/conf.d/donboscocollege.ac.in.conf
+Ensure `/opt/nep-erp/nginx/nginx.conf` has **both** college server blocks:
 
+- **Port 80:** `return 301 https://$host$request_uri;`
+- **Port 443 ssl:** proxy to `donboscocollege_upstream` with cert paths under `/etc/letsencrypt/live/donboscocollege.ac.in/`
+
+Use `docker/nginx/nep-erp-with-college.conf` as the reference template. Then:
+
+```bash
 docker exec nep-erp-nginx-1 nginx -t
 docker exec nep-erp-nginx-1 nginx -s reload
+```
+
+Or run the checker script:
+
+```bash
+bash /opt/donboscocollege/scripts/enable-college-https.sh
 ```
 
 Verify ERP vhost uses its **own** `server_name` (not `_` / `default_server` for every domain). List configs:
@@ -228,8 +245,8 @@ ERP containers are not affected.
 
 ```bash
 docker compose -f /opt/donboscocollege/docker-compose.prod.yml down
-docker exec nep-erp-nginx-1 rm /etc/nginx/conf.d/donboscocollege.ac.in.conf
-docker exec nep-erp-nginx-1 nginx -s reload
+# Remove college server blocks from /opt/nep-erp/nginx/nginx.conf manually, then:
+docker exec nep-erp-nginx-1 nginx -t && docker exec nep-erp-nginx-1 nginx -s reload
 ```
 
 ERP keeps running on 3000/3001.
