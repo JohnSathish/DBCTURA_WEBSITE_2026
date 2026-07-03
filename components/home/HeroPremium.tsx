@@ -85,6 +85,8 @@ export default function HeroPremium({
     preload(list[(index - 1 + list.length) % list.length]?.src)
   }, [list, index])
 
+  const showHeroContent = index === 0
+
   if (!current?.src) return null
 
   return (
@@ -117,53 +119,67 @@ export default function HeroPremium({
           </div>
         </div>
 
-        <div className="pointer-events-none absolute inset-0 z-[3] bg-gradient-to-r from-[#0a1628]/92 via-[#0a1628]/55 to-[#0a1628]/25" />
-        <div className="pointer-events-none absolute inset-0 z-[3] bg-gradient-to-t from-[#0a1628]/80 via-transparent to-[#0a1628]/20" />
+        {showHeroContent ? (
+          <>
+            <div className="pointer-events-none absolute inset-0 z-[3] bg-gradient-to-r from-[#0a1628]/45 via-[#0a1628]/18 to-transparent" />
+            <div className="pointer-events-none absolute inset-0 z-[3] bg-gradient-to-t from-[#0a1628]/35 via-transparent to-transparent" />
+          </>
+        ) : (
+          <div className="pointer-events-none absolute inset-0 z-[3] bg-gradient-to-t from-black/25 via-transparent to-transparent" />
+        )}
 
-        <div className="relative z-10 flex h-full items-center">
-          <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
-            <div className="max-w-2xl">
-              <p className="font-heading text-xs font-semibold uppercase tracking-[0.3em] text-amber-300/95 sm:text-sm">
-                Don Bosco College, Tura
-              </p>
-              <h1 className="font-heading mt-4 text-4xl font-bold leading-[1.08] tracking-tight text-white sm:text-5xl md:text-6xl">
-                Empowering Minds.
-              </h1>
-              <p className="font-heading mt-1 text-4xl font-bold leading-[1.08] tracking-tight text-amber-400 sm:text-5xl md:text-6xl">
-                Transforming Futures.
-              </p>
-              <p className="mt-5 max-w-xl text-sm leading-relaxed text-white/85 sm:text-base md:text-lg">
-                A premier institution dedicated to academic excellence, character formation, and holistic development
-                in the heart of Meghalaya.
-              </p>
+        {showHeroContent ? (
+          <div
+            className="relative z-10 flex h-full items-center transition-opacity ease-in-out motion-reduce:transition-none"
+            style={{
+              opacity: visible ? 1 : 0,
+              transitionDuration: `${FADE_MS}ms`,
+            }}
+          >
+            <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
+              <div className="max-w-2xl">
+                <p className="font-heading text-xs font-semibold uppercase tracking-[0.3em] text-amber-300/95 sm:text-sm">
+                  Don Bosco College, Tura
+                </p>
+                <h1 className="font-heading mt-4 text-4xl font-bold leading-[1.08] tracking-tight text-white sm:text-5xl md:text-6xl drop-shadow-sm">
+                  Empowering Minds.
+                </h1>
+                <p className="font-heading mt-1 text-4xl font-bold leading-[1.08] tracking-tight text-amber-400 sm:text-5xl md:text-6xl drop-shadow-sm">
+                  Transforming Futures.
+                </p>
+                <p className="mt-5 max-w-xl text-sm leading-relaxed text-white/90 sm:text-base md:text-lg drop-shadow-sm">
+                  A premier institution dedicated to academic excellence, character formation, and holistic development
+                  in the heart of Meghalaya.
+                </p>
 
-              <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center">
-                <Link
-                  href="/explore-courses"
-                  className="inline-flex items-center justify-center gap-2 rounded-xl bg-amber-400 px-6 py-3.5 text-sm font-bold text-slate-900 shadow-lg shadow-amber-500/30 transition hover:bg-amber-300 sm:text-base"
-                >
-                  <GraduationCap className="h-5 w-5" aria-hidden />
-                  Explore Programs
-                </Link>
-                <Link
-                  href="/gallery"
-                  className="inline-flex items-center justify-center gap-2 rounded-xl border-2 border-white/50 bg-white/10 px-6 py-3.5 text-sm font-bold text-white backdrop-blur-sm transition hover:bg-white/20 sm:text-base"
-                >
-                  <PlayCircle className="h-5 w-5" aria-hidden />
-                  Discover Campus
-                </Link>
-                <Link
-                  href={applyNowUrl}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="hidden sm:inline-flex items-center justify-center rounded-xl border border-amber-400/50 px-5 py-3.5 text-sm font-semibold text-amber-300 transition hover:bg-amber-400/10"
-                >
-                  Apply Now →
-                </Link>
+                <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center">
+                  <Link
+                    href="/explore-courses"
+                    className="inline-flex items-center justify-center gap-2 rounded-xl bg-amber-400 px-6 py-3.5 text-sm font-bold text-slate-900 shadow-lg shadow-amber-500/30 transition hover:bg-amber-300 sm:text-base"
+                  >
+                    <GraduationCap className="h-5 w-5" aria-hidden />
+                    Explore Programs
+                  </Link>
+                  <Link
+                    href="/gallery"
+                    className="inline-flex items-center justify-center gap-2 rounded-xl border-2 border-white/50 bg-white/10 px-6 py-3.5 text-sm font-bold text-white backdrop-blur-sm transition hover:bg-white/20 sm:text-base"
+                  >
+                    <PlayCircle className="h-5 w-5" aria-hidden />
+                    Discover Campus
+                  </Link>
+                  <Link
+                    href={applyNowUrl}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="hidden sm:inline-flex items-center justify-center rounded-xl border border-amber-400/50 px-5 py-3.5 text-sm font-semibold text-amber-300 transition hover:bg-amber-400/10"
+                  >
+                    Apply Now →
+                  </Link>
+                </div>
               </div>
             </div>
           </div>
-        </div>
+        ) : null}
 
         {list.length > 1 ? (
           <>
