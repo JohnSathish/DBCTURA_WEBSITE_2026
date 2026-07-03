@@ -17,6 +17,15 @@ export type PopupPayload = {
 }
 
 export function parsePopupPayload(data: PopupPayload) {
+  const endDateRaw = data.endDate != null ? String(data.endDate).trim() : ""
+  let endDate: Date | null = null
+  if (endDateRaw) {
+    endDate = new Date(endDateRaw)
+    if (!Number.isNaN(endDate.getTime()) && !endDateRaw.includes("T")) {
+      endDate.setHours(23, 59, 59, 999)
+    }
+  }
+
   return {
     title: data.title?.trim() ?? "",
     content: sanitizePopupHtml(data.content ?? ""),
@@ -29,7 +38,7 @@ export function parsePopupPayload(data: PopupPayload) {
         ? null
         : Number(data.autoCloseSeconds) || null,
     startDate: data.startDate ? new Date(data.startDate) : null,
-    endDate: data.endDate ? new Date(data.endDate) : null,
+    endDate,
     displayOrder: Number(data.displayOrder) || 0,
     enabled: Boolean(data.enabled),
     published: Boolean(data.published),

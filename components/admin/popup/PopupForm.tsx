@@ -130,6 +130,7 @@ export default function PopupForm({ popup }: { popup?: PopupRecord }) {
     try {
       const payload = {
         ...data,
+        enabled: publish ? true : data.enabled,
         published: publish,
         autoCloseSeconds: data.autoCloseSeconds || null,
         startDate: data.startDate || null,
@@ -232,8 +233,16 @@ export default function PopupForm({ popup }: { popup?: PopupRecord }) {
                 </div>
               </div>
               {values.enabled ? (
-                <p className="text-sm text-amber-600">Enabling this popup disables other enabled popups.</p>
-              ) : null}
+                <p className="text-sm text-amber-600">
+                  Enabling this popup disables other enabled popups. Use <strong>Publish Popup</strong> to
+                  go live (auto-enables).
+                </p>
+              ) : (
+                <p className="text-sm text-slate-500">
+                  Turn on <strong>Enable popup on website</strong>, or click <strong>Publish Popup</strong> to
+                  enable automatically.
+                </p>
+              )}
             </CardContent>
           </Card>
 

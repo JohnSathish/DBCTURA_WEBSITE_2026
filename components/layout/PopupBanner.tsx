@@ -9,10 +9,29 @@ interface Popup {
   id: string
   title: string
   content: string
+  updatedAt?: string
   popupSize?: string
   displayPosition?: string
   overlayEnabled?: boolean
   autoCloseSeconds?: number | null
+}
+
+function isPopupDismissed(popup: Popup) {
+  if (typeof window === "undefined") return false
+  const legacyId = sessionStorage.getItem("closedPopupId")
+  const dismissKey = `popup_closed_${popup.id}`
+  const dismissedVersion = sessionStorage.getItem(dismissKey)
+  const version = popup.updatedAt || popup.id
+  if (dismissedVersion === version) return true
+  // Legacy: only id stored — still allow re-show after admin republishes (updatedAt changes)
+  if (legacyId === popup.id && !dismissedVersion) return true
+  return false
+}
+
+function rememberPopupDismissed(popup: Popup) {
+  const version = popup.updatedAt || popup.id
+  sessionStorage.setItem(`popup_closed_${popup.id}`, version)
+  sessionStorage.removeItem("closedPopupId")
 }
 
 function getSessionId() {
@@ -32,12 +51,12 @@ export default function PopupBanner() {
   const trackedView = useRef(false)
 
   useEffect(() => {
-    const closedPopupId = sessionStorage.getItem("closedPopupId")
-    fetch("/api/popup")
+    fetch("/api/popup", { cache: "no-store" })
       .then((res) => res.json())
       .then((data) => {
-        if (data.popup && data.popup.id !== closedPopupId) {
-          setPopup(data.popup)
+        const active = data.popup as Popup | null
+        if (active?.id && active.content?.trim() && !isPopupDismissed(active)) {
+          setPopup(active)
           setIsVisible(true)
         }
       })
@@ -58,7 +77,7 @@ export default function PopupBanner() {
     if (!popup?.autoCloseSeconds || !isVisible) return
     const timer = window.setTimeout(() => {
       if (popup) {
-        sessionStorage.setItem("closedPopupId", popup.id)
+        rememberPopupDismissed(popup)
         fetch(`/api/popup/${popup.id}/analytics`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -80,7 +99,7 @@ export default function PopupBanner() {
   }
 
   const handleClose = (trackClose = true) => {
-    if (popup) sessionStorage.setItem("closedPopupId", popup.id)
+    if (popup) rememberPopupDismissed(popup)
     if (trackClose) track("close")
     setIsVisible(false)
   }

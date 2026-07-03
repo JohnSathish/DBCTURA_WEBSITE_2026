@@ -12,9 +12,15 @@ export async function GET() {
   try {
     const popup = await getActivePublicPopup()
     if (!popup) {
-      return NextResponse.json({ popup: null })
+      return NextResponse.json(
+        { popup: null },
+        { headers: { "Cache-Control": "no-store, max-age=0" } }
+      )
     }
-    return NextResponse.json({ popup })
+    return NextResponse.json(
+      { popup },
+      { headers: { "Cache-Control": "no-store, max-age=0" } }
+    )
   } catch (error) {
     console.error("Error fetching popup:", error)
     return NextResponse.json({ error: "Failed to fetch popup" }, { status: 500 })
