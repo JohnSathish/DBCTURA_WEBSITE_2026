@@ -29,6 +29,8 @@ export function getStaticPublicPaths(): string[] {
     "/blood-donors",
     "/career-placement",
     "/admission-closed",
+    "/admissions/fyug-2026",
+    "/admissions/fyug-2026/status",
   ]
   const fromNav = collectNavPaths(defaultNavigation)
   return Array.from(new Set([...fromNav, ...extra])).sort()

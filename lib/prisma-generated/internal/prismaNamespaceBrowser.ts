@@ -75,7 +75,10 @@ export const ModelName = {
   CommitteeMeta: 'CommitteeMeta',
   CommitteeExOfficio: 'CommitteeExOfficio',
   Committee: 'Committee',
-  CommitteeMember: 'CommitteeMember'
+  CommitteeMember: 'CommitteeMember',
+  FyugAdmissionApplication: 'FyugAdmissionApplication',
+  FyugAdmissionSequence: 'FyugAdmissionSequence',
+  FyugAdmissionAuditLog: 'FyugAdmissionAuditLog'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -550,6 +553,74 @@ export const CommitteeMemberScalarFieldEnum = {
 } as const
 
 export type CommitteeMemberScalarFieldEnum = (typeof CommitteeMemberScalarFieldEnum)[keyof typeof CommitteeMemberScalarFieldEnum]
+
+
+export const FyugAdmissionApplicationScalarFieldEnum = {
+  id: 'id',
+  applicationNo: 'applicationNo',
+  academicSession: 'academicSession',
+  draftToken: 'draftToken',
+  fullName: 'fullName',
+  gender: 'gender',
+  dob: 'dob',
+  mobile: 'mobile',
+  whatsapp: 'whatsapp',
+  email: 'email',
+  state: 'state',
+  photoUrl: 'photoUrl',
+  fatherName: 'fatherName',
+  fatherMobile: 'fatherMobile',
+  motherName: 'motherName',
+  motherMobile: 'motherMobile',
+  collegeName: 'collegeName',
+  affiliatedUniversity: 'affiliatedUniversity',
+  otherUniversityName: 'otherUniversityName',
+  majorSubject: 'majorSubject',
+  minorSubject: 'minorSubject',
+  honoursSubject: 'honoursSubject',
+  cuetScore: 'cuetScore',
+  cgpa: 'cgpa',
+  percentage: 'percentage',
+  hasBackPaper: 'hasBackPaper',
+  backPaperDetails: 'backPaperDetails',
+  signatureUrl: 'signatureUrl',
+  signatureTypedName: 'signatureTypedName',
+  declarationAccepted: 'declarationAccepted',
+  status: 'status',
+  eligible: 'eligible',
+  remarks: 'remarks',
+  pdfUrl: 'pdfUrl',
+  submittedAt: 'submittedAt',
+  ipAddress: 'ipAddress',
+  userAgent: 'userAgent',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type FyugAdmissionApplicationScalarFieldEnum = (typeof FyugAdmissionApplicationScalarFieldEnum)[keyof typeof FyugAdmissionApplicationScalarFieldEnum]
+
+
+export const FyugAdmissionSequenceScalarFieldEnum = {
+  id: 'id',
+  prefix: 'prefix',
+  lastValue: 'lastValue',
+  updatedAt: 'updatedAt'
+} as const
+
+export type FyugAdmissionSequenceScalarFieldEnum = (typeof FyugAdmissionSequenceScalarFieldEnum)[keyof typeof FyugAdmissionSequenceScalarFieldEnum]
+
+
+export const FyugAdmissionAuditLogScalarFieldEnum = {
+  id: 'id',
+  applicationId: 'applicationId',
+  action: 'action',
+  adminUserId: 'adminUserId',
+  adminEmail: 'adminEmail',
+  details: 'details',
+  createdAt: 'createdAt'
+} as const
+
+export type FyugAdmissionAuditLogScalarFieldEnum = (typeof FyugAdmissionAuditLogScalarFieldEnum)[keyof typeof FyugAdmissionAuditLogScalarFieldEnum]
 
 
 export const SortOrder = {

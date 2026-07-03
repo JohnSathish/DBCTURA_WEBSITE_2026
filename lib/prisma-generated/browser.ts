@@ -156,3 +156,18 @@ export type Committee = Prisma.CommitteeModel
  * 
  */
 export type CommitteeMember = Prisma.CommitteeMemberModel
+/**
+ * Model FyugAdmissionApplication
+ * Fourth-Year UG Honours (NEP 2020) admission applications.
+ */
+export type FyugAdmissionApplication = Prisma.FyugAdmissionApplicationModel
+/**
+ * Model FyugAdmissionSequence
+ * Atomic counter for FYUG application numbers (e.g. FYUG26-000001).
+ */
+export type FyugAdmissionSequence = Prisma.FyugAdmissionSequenceModel
+/**
+ * Model FyugAdmissionAuditLog
+ * Admin audit trail for FYUG admission actions.
+ */
+export type FyugAdmissionAuditLog = Prisma.FyugAdmissionAuditLogModel

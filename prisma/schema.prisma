@@ -425,3 +425,86 @@ model CommitteeMember {
   createdAt    DateTime  @default(now())
   updatedAt    DateTime  @updatedAt
 }
+
+/// Fourth-Year UG Honours (NEP 2020) admission applications.
+model FyugAdmissionApplication {
+  id               String    @id @default(cuid())
+  applicationNo    String?   @unique
+  academicSession  String    @default("2026-2027")
+  draftToken       String?   @unique
+
+  fullName         String?
+  gender           String?
+  dob              DateTime?
+  mobile           String?
+  whatsapp         String?
+  email            String?
+  state            String?
+  photoUrl         String?
+
+  fatherName       String?
+  fatherMobile     String?
+  motherName       String?
+  motherMobile     String?
+
+  collegeName            String?
+  affiliatedUniversity   String?
+  otherUniversityName    String?
+
+  majorSubject     String?
+  minorSubject     String?
+  honoursSubject   String?
+  cuetScore        Float?
+  cgpa             Float?
+  percentage       Float?
+
+  hasBackPaper     Boolean   @default(false)
+  backPaperDetails String?
+
+  signatureUrl         String?
+  signatureTypedName   String?
+  declarationAccepted  Boolean @default(false)
+
+  status     String  @default("DRAFT")
+  eligible   Boolean @default(true)
+  remarks    String?
+  pdfUrl     String?
+
+  submittedAt DateTime?
+  ipAddress   String?
+  userAgent   String?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  auditLogs FyugAdmissionAuditLog[]
+
+  @@index([mobile])
+  @@index([email])
+  @@index([status])
+  @@index([honoursSubject])
+  @@index([collegeName])
+  @@index([state])
+  @@index([academicSession])
+}
+
+/// Atomic counter for FYUG application numbers (e.g. FYUG26-000001).
+model FyugAdmissionSequence {
+  id        String   @id @default(cuid())
+  prefix    String   @unique
+  lastValue Int      @default(0)
+  updatedAt DateTime @updatedAt
+}
+
+/// Admin audit trail for FYUG admission actions.
+model FyugAdmissionAuditLog {
+  id            String   @id @default(cuid())
+  applicationId String
+  application   FyugAdmissionApplication @relation(fields: [applicationId], references: [id], onDelete: Cascade)
+  action        String
+  adminUserId   String?
+  adminEmail    String?
+  details       String?
+  createdAt     DateTime @default(now())
+
+  @@index([applicationId])
+}

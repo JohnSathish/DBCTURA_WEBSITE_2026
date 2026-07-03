@@ -15,6 +15,7 @@ import {
   Calendar,
   GraduationCap,
   BookOpen,
+  School,
 } from "lucide-react"
 
 function startOfMonth() {
@@ -58,6 +59,7 @@ export default async function DashboardPage() {
     syllabusPublished,
     syllabusDraft,
     recentSyllabus,
+    fyugAdmissionsCount,
   ] = await Promise.all([
     prisma.page.count(),
     prisma.news.count(),
@@ -87,6 +89,9 @@ export default async function DashboardPage() {
         select: { id: true, courseName: true, courseCode: true, updatedAt: true, published: true },
       })
       .catch(() => []),
+    prisma.fyugAdmissionApplication
+      .count({ where: { status: { not: "DRAFT" } } })
+      .catch(() => 0),
   ])
 
   const totalContent = pagesCount + newsCount + galleryCount + downloadsCount
@@ -184,6 +189,14 @@ export default async function DashboardPage() {
       icon: Download,
       className: "from-amber-500/10 to-orange-500/5 border-amber-200/60 hover:border-amber-300",
       iconClass: "bg-amber-600 text-white",
+    },
+    {
+      href: "/admin/fyug-admissions",
+      label: "FYUG Admissions",
+      sub: `${fyugAdmissionsCount} applications`,
+      icon: School,
+      className: "from-rose-500/10 to-pink-500/5 border-rose-200/60 hover:border-rose-300",
+      iconClass: "bg-rose-600 text-white",
     },
     {
       href: "/admin/syllabus",

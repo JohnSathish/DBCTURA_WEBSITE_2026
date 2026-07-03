@@ -33,6 +33,7 @@ import {
   Droplet,
   ListTree,
   UsersRound,
+  School,
 } from "lucide-react"
 
 const adminMenuItems = [
@@ -47,6 +48,7 @@ const adminMenuItems = [
   { href: "/admin/short-term-courses", label: "Short-Term Courses", icon: FileText },
   { href: "/admin/syllabus", label: "Syllabus Management", icon: BookOpen },
   { href: "/admin/course-applications", label: "Course Applications", icon: ClipboardList },
+  { href: "/admin/fyug-admissions", label: "FYUG Admissions", icon: School },
   { href: "/admin/downloads", label: "Downloads", icon: Download },
   { href: "/admin/popup", label: "Popup Banners", icon: Bell },
   { href: "/admin/file-manager", label: "File Manager", icon: FolderOpen },

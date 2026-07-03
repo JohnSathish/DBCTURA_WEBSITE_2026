@@ -416,7 +416,10 @@ export const ModelName = {
   CommitteeMeta: 'CommitteeMeta',
   CommitteeExOfficio: 'CommitteeExOfficio',
   Committee: 'Committee',
-  CommitteeMember: 'CommitteeMember'
+  CommitteeMember: 'CommitteeMember',
+  FyugAdmissionApplication: 'FyugAdmissionApplication',
+  FyugAdmissionSequence: 'FyugAdmissionSequence',
+  FyugAdmissionAuditLog: 'FyugAdmissionAuditLog'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -432,7 +435,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "page" | "news" | "galleryAlbum" | "galleryImage" | "download" | "setting" | "testimonial" | "noticeBoardEvent" | "noticeBoardNotice" | "courseApplication" | "flashNews" | "heroSlide" | "shortTermCourse" | "popupBanner" | "popupImage" | "popupViewSession" | "staffProfile" | "navigationMenu" | "questionPaper" | "syllabus" | "grievance" | "bloodDonor" | "alumniRegistration" | "committeeMeta" | "committeeExOfficio" | "committee" | "committeeMember"
+    modelProps: "user" | "page" | "news" | "galleryAlbum" | "galleryImage" | "download" | "setting" | "testimonial" | "noticeBoardEvent" | "noticeBoardNotice" | "courseApplication" | "flashNews" | "heroSlide" | "shortTermCourse" | "popupBanner" | "popupImage" | "popupViewSession" | "staffProfile" | "navigationMenu" | "questionPaper" | "syllabus" | "grievance" | "bloodDonor" | "alumniRegistration" | "committeeMeta" | "committeeExOfficio" | "committee" | "committeeMember" | "fyugAdmissionApplication" | "fyugAdmissionSequence" | "fyugAdmissionAuditLog"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -2508,6 +2511,228 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    FyugAdmissionApplication: {
+      payload: Prisma.$FyugAdmissionApplicationPayload<ExtArgs>
+      fields: Prisma.FyugAdmissionApplicationFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.FyugAdmissionApplicationFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FyugAdmissionApplicationPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.FyugAdmissionApplicationFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FyugAdmissionApplicationPayload>
+        }
+        findFirst: {
+          args: Prisma.FyugAdmissionApplicationFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FyugAdmissionApplicationPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.FyugAdmissionApplicationFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FyugAdmissionApplicationPayload>
+        }
+        findMany: {
+          args: Prisma.FyugAdmissionApplicationFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FyugAdmissionApplicationPayload>[]
+        }
+        create: {
+          args: Prisma.FyugAdmissionApplicationCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FyugAdmissionApplicationPayload>
+        }
+        createMany: {
+          args: Prisma.FyugAdmissionApplicationCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.FyugAdmissionApplicationCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FyugAdmissionApplicationPayload>[]
+        }
+        delete: {
+          args: Prisma.FyugAdmissionApplicationDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FyugAdmissionApplicationPayload>
+        }
+        update: {
+          args: Prisma.FyugAdmissionApplicationUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FyugAdmissionApplicationPayload>
+        }
+        deleteMany: {
+          args: Prisma.FyugAdmissionApplicationDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.FyugAdmissionApplicationUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.FyugAdmissionApplicationUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FyugAdmissionApplicationPayload>[]
+        }
+        upsert: {
+          args: Prisma.FyugAdmissionApplicationUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FyugAdmissionApplicationPayload>
+        }
+        aggregate: {
+          args: Prisma.FyugAdmissionApplicationAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateFyugAdmissionApplication>
+        }
+        groupBy: {
+          args: Prisma.FyugAdmissionApplicationGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.FyugAdmissionApplicationGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.FyugAdmissionApplicationCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.FyugAdmissionApplicationCountAggregateOutputType> | number
+        }
+      }
+    }
+    FyugAdmissionSequence: {
+      payload: Prisma.$FyugAdmissionSequencePayload<ExtArgs>
+      fields: Prisma.FyugAdmissionSequenceFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.FyugAdmissionSequenceFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FyugAdmissionSequencePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.FyugAdmissionSequenceFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FyugAdmissionSequencePayload>
+        }
+        findFirst: {
+          args: Prisma.FyugAdmissionSequenceFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FyugAdmissionSequencePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.FyugAdmissionSequenceFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FyugAdmissionSequencePayload>
+        }
+        findMany: {
+          args: Prisma.FyugAdmissionSequenceFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FyugAdmissionSequencePayload>[]
+        }
+        create: {
+          args: Prisma.FyugAdmissionSequenceCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FyugAdmissionSequencePayload>
+        }
+        createMany: {
+          args: Prisma.FyugAdmissionSequenceCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.FyugAdmissionSequenceCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FyugAdmissionSequencePayload>[]
+        }
+        delete: {
+          args: Prisma.FyugAdmissionSequenceDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FyugAdmissionSequencePayload>
+        }
+        update: {
+          args: Prisma.FyugAdmissionSequenceUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FyugAdmissionSequencePayload>
+        }
+        deleteMany: {
+          args: Prisma.FyugAdmissionSequenceDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.FyugAdmissionSequenceUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.FyugAdmissionSequenceUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FyugAdmissionSequencePayload>[]
+        }
+        upsert: {
+          args: Prisma.FyugAdmissionSequenceUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FyugAdmissionSequencePayload>
+        }
+        aggregate: {
+          args: Prisma.FyugAdmissionSequenceAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateFyugAdmissionSequence>
+        }
+        groupBy: {
+          args: Prisma.FyugAdmissionSequenceGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.FyugAdmissionSequenceGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.FyugAdmissionSequenceCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.FyugAdmissionSequenceCountAggregateOutputType> | number
+        }
+      }
+    }
+    FyugAdmissionAuditLog: {
+      payload: Prisma.$FyugAdmissionAuditLogPayload<ExtArgs>
+      fields: Prisma.FyugAdmissionAuditLogFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.FyugAdmissionAuditLogFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FyugAdmissionAuditLogPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.FyugAdmissionAuditLogFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FyugAdmissionAuditLogPayload>
+        }
+        findFirst: {
+          args: Prisma.FyugAdmissionAuditLogFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FyugAdmissionAuditLogPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.FyugAdmissionAuditLogFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FyugAdmissionAuditLogPayload>
+        }
+        findMany: {
+          args: Prisma.FyugAdmissionAuditLogFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FyugAdmissionAuditLogPayload>[]
+        }
+        create: {
+          args: Prisma.FyugAdmissionAuditLogCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FyugAdmissionAuditLogPayload>
+        }
+        createMany: {
+          args: Prisma.FyugAdmissionAuditLogCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.FyugAdmissionAuditLogCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FyugAdmissionAuditLogPayload>[]
+        }
+        delete: {
+          args: Prisma.FyugAdmissionAuditLogDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FyugAdmissionAuditLogPayload>
+        }
+        update: {
+          args: Prisma.FyugAdmissionAuditLogUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FyugAdmissionAuditLogPayload>
+        }
+        deleteMany: {
+          args: Prisma.FyugAdmissionAuditLogDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.FyugAdmissionAuditLogUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.FyugAdmissionAuditLogUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FyugAdmissionAuditLogPayload>[]
+        }
+        upsert: {
+          args: Prisma.FyugAdmissionAuditLogUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FyugAdmissionAuditLogPayload>
+        }
+        aggregate: {
+          args: Prisma.FyugAdmissionAuditLogAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateFyugAdmissionAuditLog>
+        }
+        groupBy: {
+          args: Prisma.FyugAdmissionAuditLogGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.FyugAdmissionAuditLogGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.FyugAdmissionAuditLogCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.FyugAdmissionAuditLogCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -3005,6 +3230,74 @@ export const CommitteeMemberScalarFieldEnum = {
 export type CommitteeMemberScalarFieldEnum = (typeof CommitteeMemberScalarFieldEnum)[keyof typeof CommitteeMemberScalarFieldEnum]
 
 
+export const FyugAdmissionApplicationScalarFieldEnum = {
+  id: 'id',
+  applicationNo: 'applicationNo',
+  academicSession: 'academicSession',
+  draftToken: 'draftToken',
+  fullName: 'fullName',
+  gender: 'gender',
+  dob: 'dob',
+  mobile: 'mobile',
+  whatsapp: 'whatsapp',
+  email: 'email',
+  state: 'state',
+  photoUrl: 'photoUrl',
+  fatherName: 'fatherName',
+  fatherMobile: 'fatherMobile',
+  motherName: 'motherName',
+  motherMobile: 'motherMobile',
+  collegeName: 'collegeName',
+  affiliatedUniversity: 'affiliatedUniversity',
+  otherUniversityName: 'otherUniversityName',
+  majorSubject: 'majorSubject',
+  minorSubject: 'minorSubject',
+  honoursSubject: 'honoursSubject',
+  cuetScore: 'cuetScore',
+  cgpa: 'cgpa',
+  percentage: 'percentage',
+  hasBackPaper: 'hasBackPaper',
+  backPaperDetails: 'backPaperDetails',
+  signatureUrl: 'signatureUrl',
+  signatureTypedName: 'signatureTypedName',
+  declarationAccepted: 'declarationAccepted',
+  status: 'status',
+  eligible: 'eligible',
+  remarks: 'remarks',
+  pdfUrl: 'pdfUrl',
+  submittedAt: 'submittedAt',
+  ipAddress: 'ipAddress',
+  userAgent: 'userAgent',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type FyugAdmissionApplicationScalarFieldEnum = (typeof FyugAdmissionApplicationScalarFieldEnum)[keyof typeof FyugAdmissionApplicationScalarFieldEnum]
+
+
+export const FyugAdmissionSequenceScalarFieldEnum = {
+  id: 'id',
+  prefix: 'prefix',
+  lastValue: 'lastValue',
+  updatedAt: 'updatedAt'
+} as const
+
+export type FyugAdmissionSequenceScalarFieldEnum = (typeof FyugAdmissionSequenceScalarFieldEnum)[keyof typeof FyugAdmissionSequenceScalarFieldEnum]
+
+
+export const FyugAdmissionAuditLogScalarFieldEnum = {
+  id: 'id',
+  applicationId: 'applicationId',
+  action: 'action',
+  adminUserId: 'adminUserId',
+  adminEmail: 'adminEmail',
+  details: 'details',
+  createdAt: 'createdAt'
+} as const
+
+export type FyugAdmissionAuditLogScalarFieldEnum = (typeof FyugAdmissionAuditLogScalarFieldEnum)[keyof typeof FyugAdmissionAuditLogScalarFieldEnum]
+
+
 export const SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -3176,6 +3469,9 @@ export type GlobalOmitConfig = {
   committeeExOfficio?: Prisma.CommitteeExOfficioOmit
   committee?: Prisma.CommitteeOmit
   committeeMember?: Prisma.CommitteeMemberOmit
+  fyugAdmissionApplication?: Prisma.FyugAdmissionApplicationOmit
+  fyugAdmissionSequence?: Prisma.FyugAdmissionSequenceOmit
+  fyugAdmissionAuditLog?: Prisma.FyugAdmissionAuditLogOmit
 }
 
 /* Types for Logging */

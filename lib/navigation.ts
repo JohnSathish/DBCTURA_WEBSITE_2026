@@ -75,6 +75,7 @@ export const defaultNavigation: NavigationItem[] = [
         href: "/academics/admission",
         label: "Admission",
         children: [
+          { href: "/admissions/fyug-2026", label: "FYUG Honours Registration 2026–27" },
           { href: "/academics/admission/reservation-policy", label: "Admission Reservation Policy" },
           { href: "/academics/admission/cuet", label: "Central Universities Entrance Test (CUET)" },
           { href: "/academics/admission/dbct-reservation-policy", label: "DBCT Admission Reservation Policy" },
