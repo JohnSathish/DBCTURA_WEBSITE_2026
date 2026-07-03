@@ -9,6 +9,15 @@ export const fyug = {
   border: "#DCE3EC",
 } as const
 
+/** Compact control height — matches standard form inputs (~36px) */
+export const FYUG_INPUT_HEIGHT = "h-9"
+
+/** 8px gap between label and control */
+export const FYUG_LABEL_GAP = "space-y-2"
+
+/** ~20px gap between field groups */
+export const FYUG_FIELD_GAP = "space-y-5"
+
 export const sectionIcons = {
   personal: "User",
   parents: "Users",

@@ -18,6 +18,19 @@ const optionalMobileSchema = z
   .optional()
   .refine((v) => !v || /^[6-9]\d{9}$/.test(v), "Mobile number must be 10 digits")
 
+/** Treat empty / missing form values as undefined — avoids z.coerce.number() NaN errors */
+function toOptionalNumber(val: unknown): number | undefined {
+  if (val === "" || val === null || val === undefined) return undefined
+  const n = typeof val === "number" ? val : Number(val)
+  return Number.isFinite(n) ? n : undefined
+}
+
+function optionalNumber(min: number, max?: number) {
+  let schema = z.number().min(min)
+  if (max != null) schema = schema.max(max)
+  return z.preprocess(toOptionalNumber, schema.optional())
+}
+
 export const fyugDraftSchema = z.object({
   id: z.string().optional(),
   draftToken: z.string().optional(),
@@ -39,9 +52,9 @@ export const fyugDraftSchema = z.object({
   majorSubject: z.enum(FYUG_MAJOR_MINOR_SUBJECTS).optional(),
   minorSubject: z.enum(FYUG_MAJOR_MINOR_SUBJECTS).optional(),
   honoursSubject: z.enum(FYUG_HONOURS_SUBJECTS).optional(),
-  cuetScore: z.coerce.number().min(0).optional(),
-  cgpa: z.coerce.number().min(0).max(10).optional(),
-  percentage: z.coerce.number().min(0).max(100).optional(),
+  cuetScore: optionalNumber(0),
+  cgpa: optionalNumber(0, 10),
+  percentage: optionalNumber(0, 100),
   hasBackPaper: z.boolean().optional(),
   backPaperDetails: z.string().trim().optional(),
   signatureUrl: z.string().optional(),
@@ -75,9 +88,9 @@ export const fyugSubmitSchema = z
     honoursSubject: z.enum(FYUG_HONOURS_SUBJECTS, {
       message: "Honours subject is required",
     }),
-    cuetScore: z.coerce.number().min(0, "CUET score is required"),
-    cgpa: z.coerce.number().min(0).max(10, "CGPA must be between 0 and 10"),
-    percentage: z.coerce.number().min(0).max(100).optional(),
+    cuetScore: optionalNumber(0),
+    cgpa: optionalNumber(0, 10),
+    percentage: optionalNumber(0, 100),
     hasBackPaper: z.boolean(),
     backPaperDetails: z.string().trim().optional(),
     signatureUrl: z.string().optional(),
@@ -112,6 +125,18 @@ export const fyugSubmitSchema = z
 
 export type FyugDraftInput = z.infer<typeof fyugDraftSchema>
 export type FyugSubmitInput = z.infer<typeof fyugSubmitSchema>
+
+export function formatFyugValidationErrors(details?: {
+  fieldErrors?: Record<string, string[]>
+  formErrors?: string[]
+}) {
+  if (!details) return "Validation failed"
+  const messages = [
+    ...(details.formErrors ?? []),
+    ...Object.values(details.fieldErrors ?? {}).flat(),
+  ].filter(Boolean)
+  return messages.length > 0 ? messages.join("; ") : "Validation failed"
+}
 
 export function parseFyugDraft(body: unknown) {
   return fyugDraftSchema.safeParse(body)

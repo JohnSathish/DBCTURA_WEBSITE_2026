@@ -38,17 +38,17 @@ const FyugSectionCard = forwardRef<HTMLElement, Props>(function FyugSectionCard(
       viewport={{ once: true, margin: "-40px" }}
       transition={{ duration: 0.3 }}
       className={cn(
-        "scroll-mt-28 rounded-[18px] border border-[#DCE3EC]/60 bg-white p-8 shadow-lg shadow-slate-200/50 sm:p-9",
+        "scroll-mt-28 rounded-[18px] border border-[#DCE3EC]/60 bg-white p-6 shadow-lg shadow-slate-200/50 sm:p-7",
         className
       )}
     >
-      <header className="mb-8 border-b border-[#DCE3EC]/80 pb-5">
-        <div className="flex items-start gap-4">
-          <div className={cn("flex h-12 w-12 shrink-0 items-center justify-center rounded-xl", colors.icon)}>
-            <Icon className="h-6 w-6" aria-hidden />
+      <header className="mb-6 border-b border-[#DCE3EC]/80 pb-4">
+        <div className="flex items-start gap-3">
+          <div className={cn("flex h-10 w-10 shrink-0 items-center justify-center rounded-lg", colors.icon)}>
+            <Icon className="h-5 w-5" aria-hidden />
           </div>
           <div>
-            <h2 className={cn("font-heading text-xl font-semibold sm:text-[26px]", colors.title)}>{title}</h2>
+            <h2 className={cn("font-heading text-lg font-semibold sm:text-xl", colors.title)}>{title}</h2>
             {subtitle && <p className="mt-1 text-sm text-slate-500">{subtitle}</p>}
           </div>
         </div>

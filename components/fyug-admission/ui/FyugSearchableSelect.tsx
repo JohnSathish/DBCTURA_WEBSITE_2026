@@ -3,6 +3,7 @@
 import { cn } from "@/lib/utils"
 import { Check, ChevronDown, Search } from "lucide-react"
 import { useEffect, useId, useRef, useState } from "react"
+import { FYUG_INPUT_HEIGHT, FYUG_LABEL_GAP } from "./fyug-theme"
 
 type Option = { value: string; label: string }
 
@@ -48,8 +49,8 @@ export default function FyugSearchableSelect({
   }, [])
 
   return (
-    <div ref={rootRef} className="relative space-y-2">
-      <span className="block text-[15px] font-medium text-slate-700">
+    <div ref={rootRef} className={cn("relative", FYUG_LABEL_GAP)}>
+      <span className="block text-sm font-medium text-slate-700">
         {label}
         {required && <span className="ml-0.5 text-[#EF4444]">*</span>}
       </span>
@@ -61,8 +62,9 @@ export default function FyugSearchableSelect({
         aria-controls={listId}
         onClick={() => setOpen((o) => !o)}
         className={cn(
-          "flex h-[52px] w-full items-center gap-3 rounded-xl border bg-white px-4 text-left text-base transition-all",
-          "border-[#DCE3EC] hover:border-[#2563EB]/60 focus:border-[#2563EB] focus:outline-none focus:ring-4 focus:ring-[#2563EB]/12",
+          "flex w-full items-center gap-2 rounded-lg border bg-white px-3 text-left text-sm transition-all",
+          FYUG_INPUT_HEIGHT,
+          "border-[#DCE3EC] hover:border-[#2563EB]/60 focus:border-[#2563EB] focus:outline-none focus:ring-2 focus:ring-[#2563EB]/15",
           error && "border-[#EF4444]",
           !selected && "text-slate-400"
         )}

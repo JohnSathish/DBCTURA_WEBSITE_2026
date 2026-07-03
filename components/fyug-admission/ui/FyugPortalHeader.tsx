@@ -32,7 +32,9 @@ export default function FyugPortalHeader() {
             <p className="mt-2 text-sm text-blue-100/90 sm:text-base">
               Affiliated to North Eastern Hill University (NEHU), Shillong
             </p>
-            <p className="mt-1 text-xs text-blue-200/80">NAAC Accredited College</p>
+            <p className="mt-1 text-xs text-blue-200/80">
+              Re-accredited with &apos;B&apos; Grade by NAAC, Bangalore
+            </p>
           </div>
         </div>
 

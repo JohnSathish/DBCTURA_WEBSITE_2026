@@ -26,6 +26,7 @@ import {
   FYUG_MAJOR_MINOR_SUBJECTS,
   INDIAN_STATES,
 } from "@/lib/fyug-admission-constants"
+import { formatFyugValidationErrors } from "@/lib/fyug-admission-validate"
 import SignaturePad from "./SignaturePad"
 import FyugPreviewModal from "./FyugPreviewModal"
 import FyugPortalHeader from "./ui/FyugPortalHeader"
@@ -39,6 +40,7 @@ import FyugPhotoUpload from "./ui/FyugPhotoUpload"
 import FyugSearchableSelect from "./ui/FyugSearchableSelect"
 import FyugSegmentedControl from "./ui/FyugSegmentedControl"
 import { cn } from "@/lib/utils"
+import { FYUG_FIELD_GAP } from "./ui/fyug-theme"
 
 const DRAFT_KEY = "fyug_admission_draft_token"
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
@@ -178,7 +180,7 @@ export default function FyugAdmissionForm() {
     if (fatherName && fatherMobile && motherName && motherMobile) done.add("parents")
     if (collegeName && affiliatedUniversity && (affiliatedUniversity !== "OTHER" || otherUniversityName))
       done.add("college")
-    if (majorSubject && minorSubject && honoursSubject && cuetScore && cgpa) done.add("academic")
+    if (majorSubject && minorSubject && honoursSubject) done.add("academic")
     if (hasBackPaper === false && declarationAccepted) done.add("declaration")
     return done
   }, [
@@ -291,7 +293,7 @@ export default function FyugAdmissionForm() {
           body: JSON.stringify(buildPayload()),
         })
         const data = await res.json()
-        if (!res.ok) throw new Error(data.error || "Failed to save draft")
+        if (!res.ok) throw new Error(formatFyugValidationErrors(data.details) || data.error || "Failed to save draft")
         setRecordId(data.id)
         setDraftToken(data.draftToken)
         localStorage.setItem(DRAFT_KEY, data.draftToken)
@@ -370,9 +372,7 @@ export default function FyugAdmissionForm() {
       })
       const data = await res.json()
       if (!res.ok) {
-        const detail = data.details?.fieldErrors
-          ? Object.values(data.details.fieldErrors).flat().join("; ")
-          : data.error
+        const detail = formatFyugValidationErrors(data.details) || data.error
         throw new Error(detail || "Submission failed")
       }
       localStorage.removeItem(DRAFT_KEY)
@@ -443,7 +443,7 @@ export default function FyugAdmissionForm() {
           subtitle="Basic details of the applicant"
           accent="blue"
         >
-          <div className="space-y-6">
+          <div className={FYUG_FIELD_GAP}>
             <FyugField
               label="Full Name (Block Letters)"
               icon={User}
@@ -455,7 +455,7 @@ export default function FyugAdmissionForm() {
               placeholder="JOHN WILLIAM SMITH"
             />
 
-            <div className="grid gap-6 md:grid-cols-2">
+            <div className="grid gap-5 md:grid-cols-2">
               <div className="relative">
                 <FyugPhotoUpload
                   value={photoFile}
@@ -486,7 +486,7 @@ export default function FyugAdmissionForm() {
               onChange={(e) => setDob(e.target.value)}
             />
 
-            <div className="grid gap-6 md:grid-cols-2">
+            <div className="grid gap-5 md:grid-cols-2">
               <FyugField
                 label="Mobile Number"
                 icon={Phone}
@@ -525,7 +525,7 @@ export default function FyugAdmissionForm() {
               </div>
             </div>
 
-            <div className="grid gap-6 md:grid-cols-2">
+            <div className="grid gap-5 md:grid-cols-2">
               <FyugField
                 label="Email Address"
                 icon={Mail}
@@ -560,7 +560,7 @@ export default function FyugAdmissionForm() {
           subtitle="Contact information of parents or guardians"
           accent="green"
         >
-          <div className="grid gap-6 md:grid-cols-2">
+          <div className="grid gap-5 md:grid-cols-2">
             <FyugField
               label="Father's Name"
               icon={User}
@@ -604,7 +604,7 @@ export default function FyugAdmissionForm() {
           subtitle="Institution where you completed Semester V"
           accent="violet"
         >
-          <div className="space-y-6">
+          <div className={FYUG_FIELD_GAP}>
             <FyugField
               label="Name of College Last Attended"
               icon={School}
@@ -640,9 +640,9 @@ export default function FyugAdmissionForm() {
           subtitle="Courses studied and honours programme preference"
           accent="blue"
         >
-          <div className="grid gap-6 md:grid-cols-2">
+          <div className="grid gap-5 md:grid-cols-2">
             <FyugSearchableSelect
-              label="Major Course Studied"
+              label="MAJOR Course Studied in UG Programme"
               required
               value={majorSubject}
               onChange={setMajorSubject}
@@ -650,7 +650,7 @@ export default function FyugAdmissionForm() {
               icon={<BookOpen className="h-[18px] w-[18px]" />}
             />
             <FyugSearchableSelect
-              label="Minor Course Studied"
+              label="MINOR Course Studied in UG Programme"
               required
               value={minorSubject}
               onChange={setMinorSubject}
@@ -668,7 +668,7 @@ export default function FyugAdmissionForm() {
             <FyugField
               label="CUET 2026 Score"
               icon={Award}
-              required
+              helper="Optional"
               type="number"
               min={0}
               step="any"
@@ -678,7 +678,7 @@ export default function FyugAdmissionForm() {
             <FyugField
               label="CGPA till Semester V"
               icon={GraduationCap}
-              required
+              helper="Optional"
               type="number"
               min={0}
               max={10}
@@ -732,7 +732,7 @@ export default function FyugAdmissionForm() {
           subtitle="Confirm accuracy and provide your signature"
           accent="green"
         >
-          <div className="space-y-6">
+          <div className={FYUG_FIELD_GAP}>
             <label className="flex cursor-pointer items-start gap-3 rounded-xl border border-[#DCE3EC] bg-slate-50/50 p-4 transition hover:border-[#2563EB]/40">
               <input
                 type="checkbox"

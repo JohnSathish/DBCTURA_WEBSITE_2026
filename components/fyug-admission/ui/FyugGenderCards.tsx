@@ -2,6 +2,7 @@
 
 import { cn } from "@/lib/utils"
 import { User, UserRound } from "lucide-react"
+import { FYUG_INPUT_HEIGHT, FYUG_LABEL_GAP } from "./fyug-theme"
 
 type Props = {
   value: string
@@ -16,11 +17,11 @@ export default function FyugGenderCards({ value, onChange, error }: Props) {
   ] as const
 
   return (
-    <div className="space-y-2">
-      <span className="block text-[15px] font-medium text-slate-700">
+    <div className={FYUG_LABEL_GAP}>
+      <span className="block text-sm font-medium text-slate-700">
         Gender <span className="text-[#EF4444]">*</span>
       </span>
-      <div className="grid grid-cols-2 gap-3" role="radiogroup" aria-label="Gender">
+      <div className="grid grid-cols-2 gap-2.5" role="radiogroup" aria-label="Gender">
         {options.map(({ id, label, icon: Icon, tint }) => {
           const selected = value === id
           return (
@@ -31,13 +32,14 @@ export default function FyugGenderCards({ value, onChange, error }: Props) {
               aria-checked={selected}
               onClick={() => onChange(id)}
               className={cn(
-                "flex h-[52px] items-center justify-center gap-2 rounded-xl border-2 text-base font-medium transition-all",
+                "flex items-center justify-center gap-1.5 rounded-lg border text-sm font-medium transition-all",
+                FYUG_INPUT_HEIGHT,
                 selected
-                  ? "border-[#2563EB] bg-blue-50 text-[#0F4C81] shadow-sm shadow-blue-500/10"
+                  ? "border-[#2563EB] bg-blue-50 text-[#0F4C81] shadow-sm"
                   : cn("border-[#DCE3EC] bg-white text-slate-600", tint)
               )}
             >
-              <Icon className={cn("h-5 w-5", selected ? "text-[#2563EB]" : "text-slate-400")} />
+              <Icon className={cn("h-4 w-4", selected ? "text-[#2563EB]" : "text-slate-400")} />
               {label}
             </button>
           )
