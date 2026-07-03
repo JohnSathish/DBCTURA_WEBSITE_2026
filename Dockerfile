@@ -35,6 +35,8 @@ COPY --from=builder /app/prisma ./prisma
 COPY --from=builder /app/lib/prisma-generated ./lib/prisma-generated
 COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
+# pdfkit standard fonts (Helvetica.afm etc.) — required for FYUG admission PDFs
+COPY --from=deps /app/node_modules/pdfkit ./node_modules/pdfkit
 COPY docker/entrypoint.sh /app/docker/entrypoint.sh
 
 RUN mkdir -p prisma public/uploads /app/data /app/.npm && \

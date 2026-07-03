@@ -3,6 +3,8 @@ import type { NextConfig } from "next"
 const nextConfig: NextConfig = {
   output: "standalone",
   poweredByHeader: false,
+  // pdfkit reads Helvetica.afm from disk — must not be bundled by Turbopack/webpack
+  serverExternalPackages: ["pdfkit", "fontkit", "linebreak", "png-js"],
   images: {
     // Next.js 16 requires localPatterns; a single /** allows all public/ assets
     // (logo.png, /uploads/**, /hero/**, etc.)

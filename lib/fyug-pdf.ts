@@ -1,5 +1,5 @@
 import type { FyugAdmissionApplication } from "@/lib/prisma-generated/client"
-import PDFDocument from "pdfkit"
+import { createRequire } from "node:module"
 import QRCode from "qrcode"
 import { createWriteStream } from "fs"
 import { mkdir, readFile } from "fs/promises"
@@ -7,6 +7,10 @@ import path from "path"
 import { absoluteUrl } from "@/lib/site"
 import { FYUG_PORTAL_PATH } from "./fyug-admission-constants"
 import { resolvePublicFilePath } from "./serve-public-file"
+
+const require = createRequire(import.meta.url)
+// Load via require so Next.js does not bundle pdfkit (needs js/data/*.afm on disk).
+const PDFDocument = require("pdfkit") as typeof import("pdfkit")
 
 function formatDate(d: Date | null | undefined): string {
   if (!d) return "—"
