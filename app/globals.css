@@ -430,3 +430,132 @@
   border-radius: 0.5rem;
 }
 
+/* FYUG admission popup (paste class="popup-fyug" in admin content) */
+.popup-content .popup-fyug {
+  margin-top: -0.25rem;
+  color: #334155;
+  line-height: 1.55;
+}
+
+.popup-content .popup-fyug * {
+  margin-block-start: 0;
+}
+
+.popup-content .popup-fyug-banner {
+  background: linear-gradient(135deg, #0f4c81 0%, #2563eb 100%);
+  border-radius: 12px;
+  padding: 1rem 1.125rem;
+  color: #fff;
+  text-align: center;
+  margin-bottom: 1.125rem;
+}
+
+.popup-content .popup-fyug-college {
+  margin: 0 0 0.35rem;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  opacity: 0.92;
+}
+
+.popup-content .popup-fyug-program {
+  margin: 0;
+  font-size: 1.0625rem;
+  font-weight: 700;
+  line-height: 1.35;
+}
+
+.popup-content .popup-fyug-session {
+  margin: 0.4rem 0 0;
+  font-size: 0.75rem;
+  opacity: 0.92;
+}
+
+.popup-content .popup-fyug-status {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  margin: 0 0 1rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #0f4c81;
+  text-align: center;
+}
+
+.popup-content .popup-fyug-status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #10b981;
+  flex-shrink: 0;
+}
+
+.popup-content .popup-fyug-eligibility {
+  background: #fffbeb;
+  border: 1px solid #fde68a;
+  border-radius: 10px;
+  padding: 0.875rem 1rem;
+  margin-bottom: 1.25rem;
+}
+
+.popup-content .popup-fyug-eligibility-title {
+  margin: 0 0 0.625rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #92400e;
+}
+
+.popup-content .popup-fyug-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.popup-content .popup-fyug-list li {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  margin: 0 0 0.5rem;
+  font-size: 0.8125rem;
+  color: #78350f;
+  line-height: 1.45;
+}
+
+.popup-content .popup-fyug-list li:last-child {
+  margin-bottom: 0;
+}
+
+.popup-content .popup-fyug-check {
+  color: #10b981;
+  font-weight: 700;
+  line-height: 1.45;
+}
+
+.popup-content .popup-fyug-cta {
+  text-align: center;
+}
+
+.popup-content .popup-fyug .popup-btn {
+  display: inline-block;
+  width: 100%;
+  max-width: 300px;
+  margin-top: 0;
+  padding: 0.75rem 1.5rem;
+  font-size: 0.9375rem;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #2563eb, #0f4c81) !important;
+  box-shadow: 0 4px 14px rgba(37, 99, 235, 0.35);
+}
+
+.popup-content .popup-fyug-footnote {
+  margin: 0.875rem 0 0;
+  text-align: center;
+  font-size: 0.6875rem;
+  color: #94a3b8;
+  line-height: 1.5;
+}
+

@@ -7,6 +7,31 @@ export type PopupTemplate = {
 
 export const POPUP_TEMPLATES: PopupTemplate[] = [
   {
+    id: "fyug-admission-2026",
+    name: "FYUG Admission 2026",
+    popupType: "admission",
+    content: `<div class="popup-fyug">
+<div class="popup-fyug-banner">
+<p class="popup-fyug-college">Don Bosco College, Tura</p>
+<p class="popup-fyug-program">Fourth-Year Undergraduate Honours Programme</p>
+<p class="popup-fyug-session">NEP 2020 · Academic Session 2026–2027</p>
+</div>
+<p class="popup-fyug-status"><span class="popup-fyug-status-dot" aria-hidden="true"></span> Registration is now open for eligible FYUP students</p>
+<div class="popup-fyug-eligibility">
+<p class="popup-fyug-eligibility-title">Eligibility</p>
+<ul class="popup-fyug-list">
+<li><span class="popup-fyug-check" aria-hidden="true">✓</span><span>Bona fide student of an NEHU-affiliated college</span></li>
+<li><span class="popup-fyug-check" aria-hidden="true">✓</span><span>Pursuing Four-Year Undergraduate Programme (FYUP) under NEP 2020</span></li>
+<li><span class="popup-fyug-check" aria-hidden="true">✓</span><span>Successfully completed <strong>Semester V</strong> with <strong>no back papers</strong></span></li>
+</ul>
+</div>
+<div class="popup-fyug-cta">
+<a href="/admissions/fyug-2026" class="popup-btn">Register Now</a>
+</div>
+<p class="popup-fyug-footnote">Affiliated to North Eastern Hill University (NEHU), Shillong<br>Re-accredited with &apos;B&apos; Grade by NAAC, Bangalore</p>
+</div>`,
+  },
+  {
     id: "admission-open",
     name: "Admission Open",
     popupType: "admission",
@@ -64,6 +89,7 @@ export const POPUP_TEMPLATES: PopupTemplate[] = [
 ]
 
 export const POPUP_CTA_BUTTONS = [
+  { label: "Register Now (FYUG)", html: '<a href="/admissions/fyug-2026" class="popup-btn">Register Now</a>' },
   { label: "Apply Now", html: '<a href="/question-papers" class="popup-btn">Apply Now</a>' },
   { label: "Read More", html: '<a href="/news" class="popup-btn popup-btn-secondary">Read More</a>' },
   { label: "Register", html: '<a href="/student-services" class="popup-btn">Register</a>' },

@@ -129,7 +129,9 @@ export default function PopupBanner() {
           <X className="h-5 w-5" />
         </Button>
         <div className="p-6">
-          <h2 className="mb-4 pr-10 text-2xl font-bold text-slate-900">{popup.title}</h2>
+          {popup.title?.trim() ? (
+            <h2 className="mb-4 pr-10 text-2xl font-bold text-slate-900">{popup.title}</h2>
+          ) : null}
           <div
             className="popup-content prose prose-lg max-w-none"
             onClick={onContentClick}
