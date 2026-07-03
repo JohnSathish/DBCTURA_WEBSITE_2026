@@ -1,42 +1,52 @@
 "use client"
 
-import { useCallback, useEffect, useState } from "react"
-import Image from "next/image"
+import { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { useRouter, useSearchParams } from "next/navigation"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
+import { motion, AnimatePresence } from "framer-motion"
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select"
+  Award,
+  BookOpen,
+  Calendar,
+  FileWarning,
+  GraduationCap,
+  Loader2,
+  Mail,
+  MapPin,
+  MessageCircle,
+  PenLine,
+  Phone,
+  School,
+  User,
+  Users,
+} from "lucide-react"
 import {
-  FYUG_ACADEMIC_SESSION,
+  FYUG_AFFILIATED_UNIVERSITIES,
   FYUG_BACK_PAPER_INELIGIBLE_MSG,
-  FYUG_GENDERS,
   FYUG_HONOURS_SUBJECTS,
   FYUG_MAJOR_MINOR_SUBJECTS,
   INDIAN_STATES,
 } from "@/lib/fyug-admission-constants"
 import SignaturePad from "./SignaturePad"
 import FyugPreviewModal from "./FyugPreviewModal"
-import { Loader2 } from "lucide-react"
+import FyugPortalHeader from "./ui/FyugPortalHeader"
+import FyugEligibilityNotice from "./ui/FyugEligibilityNotice"
+import FyugTrackButton from "./ui/FyugTrackButton"
+import FyugProgressStepper, { type FyugStepId } from "./ui/FyugProgressStepper"
+import FyugSectionCard from "./ui/FyugSectionCard"
+import FyugField from "./ui/FyugField"
+import FyugGenderCards from "./ui/FyugGenderCards"
+import FyugPhotoUpload from "./ui/FyugPhotoUpload"
+import FyugSearchableSelect from "./ui/FyugSearchableSelect"
+import FyugSegmentedControl from "./ui/FyugSegmentedControl"
+import { cn } from "@/lib/utils"
 
 const DRAFT_KEY = "fyug_admission_draft_token"
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
-function Section({ title, children }: { title: string; children: React.ReactNode }) {
-  return (
-    <section className="rounded-2xl border border-slate-200 bg-white p-5 sm:p-6 shadow-sm">
-      <h2 className="font-heading text-lg font-bold text-brand-text border-b border-brand-gold/40 pb-2 mb-4">
-        {title}
-      </h2>
-      <div className="space-y-4">{children}</div>
-    </section>
-  )
-}
+const stateOptions = INDIAN_STATES.map((s) => ({ value: s, label: s }))
+const subjectOptions = FYUG_MAJOR_MINOR_SUBJECTS.map((s) => ({ value: s, label: s }))
+const honoursOptions = FYUG_HONOURS_SUBJECTS.map((s) => ({ value: s, label: s }))
+const universityOptions = FYUG_AFFILIATED_UNIVERSITIES.map((u) => ({ value: u.value, label: u.label }))
 
 async function uploadFile(file: File, kind: "photo" | "signature"): Promise<string> {
   const fd = new FormData()
@@ -55,14 +65,21 @@ async function uploadDataUrl(dataUrl: string, kind: "signature"): Promise<string
   return uploadFile(file, kind)
 }
 
+function isMobileValid(v: string) {
+  return /^\d{10}$/.test(v)
+}
+
 export default function FyugAdmissionForm() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const [loading, setLoading] = useState(false)
+  const [autoSaving, setAutoSaving] = useState(false)
   const [message, setMessage] = useState<{ type: "ok" | "err"; text: string } | null>(null)
   const [previewOpen, setPreviewOpen] = useState(false)
   const [recordId, setRecordId] = useState<string | undefined>()
   const [draftToken, setDraftToken] = useState<string | undefined>()
+  const [activeStep, setActiveStep] = useState<FyugStepId>("personal")
+  const [touched, setTouched] = useState<Record<string, boolean>>({})
 
   const [fullName, setFullName] = useState("")
   const [gender, setGender] = useState("")
@@ -74,6 +91,8 @@ export default function FyugAdmissionForm() {
   const [state, setState] = useState("")
   const [photoUrl, setPhotoUrl] = useState("")
   const [photoPreview, setPhotoPreview] = useState("")
+  const [photoFile, setPhotoFile] = useState<File | null>(null)
+  const [photoUploading, setPhotoUploading] = useState(false)
 
   const [fatherName, setFatherName] = useState("")
   const [fatherMobile, setFatherMobile] = useState("")
@@ -91,12 +110,20 @@ export default function FyugAdmissionForm() {
   const [cgpa, setCgpa] = useState("")
   const [percentage, setPercentage] = useState("")
 
-  const [hasBackPaper, setHasBackPaper] = useState<"yes" | "no" | "">("")
+  const [hasBackPaper, setHasBackPaper] = useState<boolean | null>(null)
   const [signatureDataUrl, setSignatureDataUrl] = useState<string | null>(null)
   const [signatureUrl, setSignatureUrl] = useState("")
   const [signatureTypedName, setSignatureTypedName] = useState("")
   const [useTypedSignature, setUseTypedSignature] = useState(false)
   const [declarationAccepted, setDeclarationAccepted] = useState(false)
+
+  const sectionRefs = {
+    personal: useRef<HTMLElement>(null),
+    parents: useRef<HTMLElement>(null),
+    college: useRef<HTMLElement>(null),
+    academic: useRef<HTMLElement>(null),
+    declaration: useRef<HTMLElement>(null),
+  }
 
   const loadDraft = useCallback(async (token: string) => {
     try {
@@ -128,7 +155,8 @@ export default function FyugAdmissionForm() {
       setCuetScore(d.cuetScore != null ? String(d.cuetScore) : "")
       setCgpa(d.cgpa != null ? String(d.cgpa) : "")
       setPercentage(d.percentage != null ? String(d.percentage) : "")
-      setHasBackPaper(d.hasBackPaper ? "yes" : d.hasBackPaper === false && d.fullName ? "no" : "")
+      if (d.hasBackPaper === true) setHasBackPaper(true)
+      else if (d.hasBackPaper === false && d.fullName) setHasBackPaper(false)
       setSignatureUrl(d.signatureUrl || "")
       setSignatureTypedName(d.signatureTypedName || "")
       setDeclarationAccepted(!!d.declarationAccepted)
@@ -143,6 +171,60 @@ export default function FyugAdmissionForm() {
     const token = q || stored
     if (token) loadDraft(token)
   }, [searchParams, loadDraft])
+
+  const completedSteps = useMemo(() => {
+    const done = new Set<FyugStepId>()
+    if (fullName && gender && dob && mobile && email && state && photoUrl) done.add("personal")
+    if (fatherName && fatherMobile && motherName && motherMobile) done.add("parents")
+    if (collegeName && affiliatedUniversity && (affiliatedUniversity !== "OTHER" || otherUniversityName))
+      done.add("college")
+    if (majorSubject && minorSubject && honoursSubject && cuetScore && cgpa) done.add("academic")
+    if (hasBackPaper === false && declarationAccepted) done.add("declaration")
+    return done
+  }, [
+    fullName,
+    gender,
+    dob,
+    mobile,
+    email,
+    state,
+    photoUrl,
+    fatherName,
+    fatherMobile,
+    motherName,
+    motherMobile,
+    collegeName,
+    affiliatedUniversity,
+    otherUniversityName,
+    majorSubject,
+    minorSubject,
+    honoursSubject,
+    cuetScore,
+    cgpa,
+    hasBackPaper,
+    declarationAccepted,
+  ])
+
+  useEffect(() => {
+    const observers: IntersectionObserver[] = []
+    const stepIds = Object.keys(sectionRefs) as FyugStepId[]
+
+    stepIds.forEach((id) => {
+      const el = sectionRefs[id].current
+      if (!el) return
+      const obs = new IntersectionObserver(
+        ([entry]) => {
+          if (entry.isIntersecting) setActiveStep(id)
+        },
+        { rootMargin: "-20% 0px -55% 0px", threshold: 0 }
+      )
+      obs.observe(el)
+      observers.push(obs)
+    })
+
+    return () => observers.forEach((o) => o.disconnect())
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   function buildPayload(extra?: { signatureUrl?: string }) {
     return {
@@ -169,51 +251,106 @@ export default function FyugAdmissionForm() {
       cuetScore: cuetScore ? Number(cuetScore) : undefined,
       cgpa: cgpa ? Number(cgpa) : undefined,
       percentage: percentage ? Number(percentage) : undefined,
-      hasBackPaper: hasBackPaper === "yes",
+      hasBackPaper: hasBackPaper === true,
       signatureUrl: extra?.signatureUrl ?? (signatureUrl || undefined),
       signatureTypedName: useTypedSignature ? signatureTypedName : undefined,
       declarationAccepted,
     }
   }
 
-  async function handlePhotoChange(e: React.ChangeEvent<HTMLInputElement>) {
-    const file = e.target.files?.[0]
-    if (!file) return
+  async function handlePhotoChange(file: File | null) {
+    setPhotoFile(file)
+    if (!file) {
+      setPhotoUrl("")
+      setPhotoPreview("")
+      return
+    }
     setMessage(null)
+    setPhotoUploading(true)
     try {
       const url = await uploadFile(file, "photo")
       setPhotoUrl(url)
       setPhotoPreview(url)
     } catch (err: unknown) {
       setMessage({ type: "err", text: err instanceof Error ? err.message : "Photo upload failed" })
+      setPhotoFile(null)
+    } finally {
+      setPhotoUploading(false)
     }
   }
 
-  async function saveDraft() {
-    setLoading(true)
-    setMessage(null)
-    try {
-      const res = await fetch("/api/fyug-admissions/draft", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(buildPayload()),
-      })
-      const data = await res.json()
-      if (!res.ok) throw new Error(data.error || "Failed to save draft")
-      setRecordId(data.id)
-      setDraftToken(data.draftToken)
-      localStorage.setItem(DRAFT_KEY, data.draftToken)
-      setMessage({ type: "ok", text: "Draft saved. You can return later to complete your application." })
-    } catch (err: unknown) {
-      setMessage({ type: "err", text: err instanceof Error ? err.message : "Save draft failed" })
-    } finally {
-      setLoading(false)
-    }
-  }
+  const saveDraft = useCallback(
+    async (silent = false) => {
+      if (!silent) setLoading(true)
+      else setAutoSaving(true)
+      if (!silent) setMessage(null)
+      try {
+        const res = await fetch("/api/fyug-admissions/draft", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(buildPayload()),
+        })
+        const data = await res.json()
+        if (!res.ok) throw new Error(data.error || "Failed to save draft")
+        setRecordId(data.id)
+        setDraftToken(data.draftToken)
+        localStorage.setItem(DRAFT_KEY, data.draftToken)
+        if (!silent) {
+          setMessage({ type: "ok", text: "Draft saved. You can return later to complete your application." })
+        }
+      } catch (err: unknown) {
+        if (!silent) {
+          setMessage({ type: "err", text: err instanceof Error ? err.message : "Save draft failed" })
+        }
+      } finally {
+        if (!silent) setLoading(false)
+        else setAutoSaving(false)
+      }
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [
+      recordId,
+      draftToken,
+      fullName,
+      gender,
+      dob,
+      mobile,
+      whatsappSame,
+      whatsapp,
+      email,
+      state,
+      photoUrl,
+      fatherName,
+      fatherMobile,
+      motherName,
+      motherMobile,
+      collegeName,
+      affiliatedUniversity,
+      otherUniversityName,
+      majorSubject,
+      minorSubject,
+      honoursSubject,
+      cuetScore,
+      cgpa,
+      percentage,
+      hasBackPaper,
+      signatureUrl,
+      useTypedSignature,
+      signatureTypedName,
+      declarationAccepted,
+    ]
+  )
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      if (fullName || email || mobile) saveDraft(true)
+    }, 30_000)
+    return () => clearInterval(interval)
+  }, [saveDraft, fullName, email, mobile])
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
-    if (hasBackPaper === "yes") {
+    if (hasBackPaper === true) {
       setMessage({ type: "err", text: FYUG_BACK_PAPER_INELIGIBLE_MSG })
       return
     }
@@ -249,288 +386,433 @@ export default function FyugAdmissionForm() {
     }
   }
 
-  const ineligible = hasBackPaper === "yes"
+  function scrollToStep(id: FyugStepId) {
+    sectionRefs[id].current?.scrollIntoView({ behavior: "smooth", block: "start" })
+  }
+
+  const emailError = touched.email && email && !EMAIL_RE.test(email) ? "Enter a valid email address" : undefined
+  const mobileError = touched.mobile && mobile && !isMobileValid(mobile) ? "Enter a valid 10-digit mobile number" : undefined
+  const ineligible = hasBackPaper === true
 
   return (
-    <>
-      <form onSubmit={handleSubmit} className="space-y-6 max-w-4xl mx-auto">
-        {message && (
-          <div
-            className={`rounded-lg px-4 py-3 text-sm ${
-              message.type === "ok" ? "bg-green-50 text-green-800" : "bg-red-50 text-red-800"
-            }`}
-          >
-            {message.text}
-          </div>
+    <div className="mx-auto max-w-4xl space-y-10 px-4 py-10 sm:px-6 md:px-[60px] md:py-[60px]">
+      <FyugPortalHeader />
+
+      <div className="space-y-6">
+        <FyugEligibilityNotice />
+        <FyugTrackButton />
+      </div>
+
+      <FyugProgressStepper
+        activeStep={activeStep}
+        completedSteps={completedSteps}
+        onStepClick={scrollToStep}
+      />
+
+      <form onSubmit={handleSubmit} className="space-y-10">
+        <AnimatePresence>
+          {message && (
+            <motion.div
+              initial={{ opacity: 0, y: -8 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -8 }}
+              className={cn(
+                "rounded-xl px-5 py-4 text-sm font-medium shadow-sm",
+                message.type === "ok"
+                  ? "border border-emerald-200 bg-emerald-50 text-emerald-800"
+                  : "border border-red-200 bg-red-50 text-red-800"
+              )}
+              role="status"
+            >
+              {message.text}
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        {autoSaving && (
+          <p className="text-center text-xs text-slate-400" aria-live="polite">
+            Auto-saving draft…
+          </p>
         )}
 
-        <Section title="SECTION A — Personal Information">
-          <div>
-            <Label htmlFor="fullName">Full Name (Block Letters) *</Label>
-            <Input
-              id="fullName"
+        <FyugSectionCard
+          id="section-personal"
+          ref={sectionRefs.personal}
+          icon={User}
+          title="Personal Information"
+          subtitle="Basic details of the applicant"
+          accent="blue"
+        >
+          <div className="space-y-6">
+            <FyugField
+              label="Full Name (Block Letters)"
+              icon={User}
+              required
+              name="fullName"
               value={fullName}
               onChange={(e) => setFullName(e.target.value.toUpperCase())}
               className="uppercase"
-              required
+              placeholder="JOHN WILLIAM SMITH"
             />
-          </div>
-          <div>
-            <Label>Applicant Photograph * (JPG/PNG, max 2MB)</Label>
-            <Input type="file" accept="image/jpeg,image/png" onChange={handlePhotoChange} />
-            {photoPreview && (
-              <img src={photoPreview} alt="Preview" className="mt-2 h-24 w-24 object-cover rounded border" />
-            )}
-          </div>
-          <div>
-            <Label>Gender *</Label>
-            <div className="flex gap-4 mt-2">
-              {FYUG_GENDERS.map((g) => (
-                <label key={g} className="flex items-center gap-2 text-sm">
-                  <input
-                    type="radio"
-                    name="gender"
-                    value={g}
-                    checked={gender === g}
-                    onChange={() => setGender(g)}
-                    required
-                  />
-                  {g}
-                </label>
-              ))}
+
+            <div className="grid gap-6 md:grid-cols-2">
+              <div className="relative">
+                <FyugPhotoUpload
+                  value={photoFile}
+                  previewUrl={photoPreview || null}
+                  onChange={handlePhotoChange}
+                  error={touched.photo && !photoUrl ? "Photograph is required" : undefined}
+                />
+                {photoUploading && (
+                  <div className="absolute inset-0 flex items-center justify-center rounded-xl bg-white/70">
+                    <Loader2 className="h-6 w-6 animate-spin text-[#2563EB]" />
+                  </div>
+                )}
+              </div>
+              <FyugGenderCards
+                value={gender}
+                onChange={setGender}
+                error={touched.gender && !gender ? "Please select gender" : undefined}
+              />
             </div>
-          </div>
-          <div>
-            <Label htmlFor="dob">Date of Birth *</Label>
-            <Input id="dob" type="date" value={dob} onChange={(e) => setDob(e.target.value)} required />
-          </div>
-          <div className="grid sm:grid-cols-2 gap-4">
-            <div>
-              <Label htmlFor="mobile">Mobile Number *</Label>
-              <Input
-                id="mobile"
+
+            <FyugField
+              label="Date of Birth"
+              icon={Calendar}
+              required
+              type="date"
+              name="dob"
+              value={dob}
+              onChange={(e) => setDob(e.target.value)}
+            />
+
+            <div className="grid gap-6 md:grid-cols-2">
+              <FyugField
+                label="Mobile Number"
+                icon={Phone}
+                required
                 inputMode="numeric"
                 maxLength={10}
+                name="mobile"
                 value={mobile}
                 onChange={(e) => setMobile(e.target.value.replace(/\D/g, "").slice(0, 10))}
-                required
+                onBlur={() => setTouched((t) => ({ ...t, mobile: true }))}
+                error={mobileError}
+                valid={isMobileValid(mobile)}
+                placeholder="9876543210"
               />
-            </div>
-            <div>
-              <Label htmlFor="whatsapp">WhatsApp Number</Label>
-              <Input
-                id="whatsapp"
-                inputMode="numeric"
-                maxLength={10}
-                value={whatsappSame ? mobile : whatsapp}
-                onChange={(e) => setWhatsapp(e.target.value.replace(/\D/g, "").slice(0, 10))}
-                disabled={whatsappSame}
-              />
-              <label className="flex items-center gap-2 mt-2 text-sm">
-                <input
-                  type="checkbox"
-                  checked={whatsappSame}
-                  onChange={(e) => setWhatsappSame(e.target.checked)}
+              <div>
+                <FyugField
+                  label="WhatsApp Number"
+                  icon={MessageCircle}
+                  inputMode="numeric"
+                  maxLength={10}
+                  name="whatsapp"
+                  value={whatsappSame ? mobile : whatsapp}
+                  onChange={(e) => setWhatsapp(e.target.value.replace(/\D/g, "").slice(0, 10))}
+                  disabled={whatsappSame}
+                  placeholder="9876543210"
                 />
-                Same as Mobile
-              </label>
+                <label className="mt-3 flex cursor-pointer items-center gap-2 text-[13px] text-slate-600">
+                  <input
+                    type="checkbox"
+                    checked={whatsappSame}
+                    onChange={(e) => setWhatsappSame(e.target.checked)}
+                    className="h-4 w-4 rounded border-[#DCE3EC] text-[#2563EB] focus:ring-[#2563EB]/20"
+                  />
+                  Same as Mobile Number
+                </label>
+              </div>
             </div>
-          </div>
-          <div className="grid sm:grid-cols-2 gap-4">
-            <div>
-              <Label htmlFor="email">Email Address *</Label>
-              <Input id="email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
-            </div>
-            <div>
-              <Label>State *</Label>
-              <Select value={state} onValueChange={setState} required>
-                <SelectTrigger><SelectValue placeholder="Select state" /></SelectTrigger>
-                <SelectContent>
-                  {INDIAN_STATES.map((s) => (
-                    <SelectItem key={s} value={s}>{s}</SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-          </div>
-        </Section>
 
-        <Section title="SECTION B — Parent Details">
-          <div className="grid sm:grid-cols-2 gap-4">
-            <div>
-              <Label>Father&apos;s Name *</Label>
-              <Input value={fatherName} onChange={(e) => setFatherName(e.target.value)} required />
-            </div>
-            <div>
-              <Label>Father&apos;s Mobile *</Label>
-              <Input
-                inputMode="numeric"
-                maxLength={10}
-                value={fatherMobile}
-                onChange={(e) => setFatherMobile(e.target.value.replace(/\D/g, "").slice(0, 10))}
+            <div className="grid gap-6 md:grid-cols-2">
+              <FyugField
+                label="Email Address"
+                icon={Mail}
                 required
+                type="email"
+                name="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                onBlur={() => setTouched((t) => ({ ...t, email: true }))}
+                error={emailError}
+                valid={!!email && EMAIL_RE.test(email)}
+                placeholder="you@example.com"
               />
-            </div>
-            <div>
-              <Label>Mother&apos;s Name *</Label>
-              <Input value={motherName} onChange={(e) => setMotherName(e.target.value)} required />
-            </div>
-            <div>
-              <Label>Mother&apos;s Mobile *</Label>
-              <Input
-                inputMode="numeric"
-                maxLength={10}
-                value={motherMobile}
-                onChange={(e) => setMotherMobile(e.target.value.replace(/\D/g, "").slice(0, 10))}
+              <FyugSearchableSelect
+                label="State"
                 required
+                value={state}
+                onChange={setState}
+                options={stateOptions}
+                placeholder="Select state"
+                icon={<MapPin className="h-[18px] w-[18px]" />}
               />
             </div>
           </div>
-        </Section>
+        </FyugSectionCard>
 
-        <Section title="SECTION C — Previous College Details">
-          <div>
-            <Label>Name of College Last Attended *</Label>
-            <Input value={collegeName} onChange={(e) => setCollegeName(e.target.value)} required />
-          </div>
-          <div>
-            <Label>Affiliated University *</Label>
-            <Select value={affiliatedUniversity} onValueChange={setAffiliatedUniversity}>
-              <SelectTrigger><SelectValue placeholder="Select" /></SelectTrigger>
-              <SelectContent>
-                <SelectItem value="NEHU">NEHU, Shillong</SelectItem>
-                <SelectItem value="OTHER">Other</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-          {affiliatedUniversity === "OTHER" && (
-            <div>
-              <Label>University Name *</Label>
-              <Input value={otherUniversityName} onChange={(e) => setOtherUniversityName(e.target.value)} required />
-            </div>
-          )}
-        </Section>
-
-        <Section title="SECTION D — Academic Information">
-          <div className="grid sm:grid-cols-2 gap-4">
-            <div>
-              <Label>Major Course Studied *</Label>
-              <Select value={majorSubject} onValueChange={setMajorSubject}>
-                <SelectTrigger><SelectValue placeholder="Select major" /></SelectTrigger>
-                <SelectContent>
-                  {FYUG_MAJOR_MINOR_SUBJECTS.map((s) => (
-                    <SelectItem key={s} value={s}>{s}</SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-            <div>
-              <Label>Minor Course Studied *</Label>
-              <Select value={minorSubject} onValueChange={setMinorSubject}>
-                <SelectTrigger><SelectValue placeholder="Select minor" /></SelectTrigger>
-                <SelectContent>
-                  {FYUG_MAJOR_MINOR_SUBJECTS.map((s) => (
-                    <SelectItem key={s} value={s}>{s}</SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-            <div>
-              <Label>Applying for Fourth-Year Honours in *</Label>
-              <Select value={honoursSubject} onValueChange={setHonoursSubject}>
-                <SelectTrigger><SelectValue placeholder="Select honours" /></SelectTrigger>
-                <SelectContent>
-                  {FYUG_HONOURS_SUBJECTS.map((s) => (
-                    <SelectItem key={s} value={s}>{s}</SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-            <div>
-              <Label>CUET 2026 Score *</Label>
-              <Input type="number" min={0} step="any" value={cuetScore} onChange={(e) => setCuetScore(e.target.value)} required />
-            </div>
-            <div>
-              <Label>CGPA till Semester V *</Label>
-              <Input type="number" min={0} max={10} step="0.01" value={cgpa} onChange={(e) => setCgpa(e.target.value)} required placeholder="e.g. 7.85" />
-            </div>
-            <div>
-              <Label>Percentage till Semester V (optional)</Label>
-              <Input type="number" min={0} max={100} step="0.01" value={percentage} onChange={(e) => setPercentage(e.target.value)} />
-            </div>
-          </div>
-        </Section>
-
-        <Section title="SECTION E — Back Papers">
-          <Label>Do you have any Back Papers from Semester I to Semester V? *</Label>
-          <div className="flex gap-6 mt-2">
-            {(["no", "yes"] as const).map((v) => (
-              <label key={v} className="flex items-center gap-2 text-sm capitalize">
-                <input
-                  type="radio"
-                  name="backPaper"
-                  value={v}
-                  checked={hasBackPaper === v}
-                  onChange={() => setHasBackPaper(v)}
-                  required
-                />
-                {v === "yes" ? "Yes" : "No"}
-              </label>
-            ))}
-          </div>
-          {ineligible && (
-            <p className="text-red-700 bg-red-50 border border-red-200 rounded-lg p-3 text-sm mt-2">
-              {FYUG_BACK_PAPER_INELIGIBLE_MSG}
-            </p>
-          )}
-        </Section>
-
-        <Section title="SECTION F — Declaration">
-          <label className="flex items-start gap-3 text-sm">
-            <input
-              type="checkbox"
-              className="mt-1"
-              checked={declarationAccepted}
-              onChange={(e) => setDeclarationAccepted(e.target.checked)}
+        <FyugSectionCard
+          id="section-parents"
+          ref={sectionRefs.parents}
+          icon={Users}
+          title="Parent Details"
+          subtitle="Contact information of parents or guardians"
+          accent="green"
+        >
+          <div className="grid gap-6 md:grid-cols-2">
+            <FyugField
+              label="Father's Name"
+              icon={User}
               required
+              value={fatherName}
+              onChange={(e) => setFatherName(e.target.value)}
             />
-            <span>
-              I hereby declare that the information furnished above is true and correct to the best of my knowledge.
-              I understand that if any information is found false, my application is liable to be cancelled.
-            </span>
-          </label>
-          <div className="mt-4">
-            <Label>Signature *</Label>
-            <label className="flex items-center gap-2 text-sm mb-2">
-              <input
-                type="checkbox"
-                checked={useTypedSignature}
-                onChange={(e) => setUseTypedSignature(e.target.checked)}
+            <FyugField
+              label="Father's Mobile"
+              icon={Phone}
+              required
+              inputMode="numeric"
+              maxLength={10}
+              value={fatherMobile}
+              onChange={(e) => setFatherMobile(e.target.value.replace(/\D/g, "").slice(0, 10))}
+            />
+            <FyugField
+              label="Mother's Name"
+              icon={User}
+              required
+              value={motherName}
+              onChange={(e) => setMotherName(e.target.value)}
+            />
+            <FyugField
+              label="Mother's Mobile"
+              icon={Phone}
+              required
+              inputMode="numeric"
+              maxLength={10}
+              value={motherMobile}
+              onChange={(e) => setMotherMobile(e.target.value.replace(/\D/g, "").slice(0, 10))}
+            />
+          </div>
+        </FyugSectionCard>
+
+        <FyugSectionCard
+          id="section-college"
+          ref={sectionRefs.college}
+          icon={School}
+          title="Previous College Details"
+          subtitle="Institution where you completed Semester V"
+          accent="violet"
+        >
+          <div className="space-y-6">
+            <FyugField
+              label="Name of College Last Attended"
+              icon={School}
+              required
+              value={collegeName}
+              onChange={(e) => setCollegeName(e.target.value)}
+            />
+            <FyugSearchableSelect
+              label="Affiliated University"
+              required
+              value={affiliatedUniversity}
+              onChange={setAffiliatedUniversity}
+              options={universityOptions}
+              searchable={false}
+            />
+            {affiliatedUniversity === "OTHER" && (
+              <FyugField
+                label="University Name"
+                icon={GraduationCap}
+                required
+                value={otherUniversityName}
+                onChange={(e) => setOtherUniversityName(e.target.value)}
               />
-              Type name instead of drawing
-            </label>
-            {useTypedSignature ? (
-              <Input
-                value={signatureTypedName}
-                onChange={(e) => setSignatureTypedName(e.target.value)}
-                placeholder="Type your full name as signature"
-              />
-            ) : (
-              <SignaturePad onChange={setSignatureDataUrl} />
             )}
           </div>
-        </Section>
+        </FyugSectionCard>
 
-        <div className="flex flex-wrap gap-3 justify-center pb-8">
-          <Button type="button" variant="outline" onClick={saveDraft} disabled={loading}>
-            Save Draft
-          </Button>
-          <Button type="button" variant="secondary" onClick={() => setPreviewOpen(true)}>
-            Preview
-          </Button>
-          <Button type="submit" disabled={loading || ineligible || !declarationAccepted} className="bg-brand-gold text-slate-900">
-            {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : "Submit Application"}
-          </Button>
+        <FyugSectionCard
+          id="section-academic"
+          ref={sectionRefs.academic}
+          icon={GraduationCap}
+          title="Academic Information"
+          subtitle="Courses studied and honours programme preference"
+          accent="blue"
+        >
+          <div className="grid gap-6 md:grid-cols-2">
+            <FyugSearchableSelect
+              label="Major Course Studied"
+              required
+              value={majorSubject}
+              onChange={setMajorSubject}
+              options={subjectOptions}
+              icon={<BookOpen className="h-[18px] w-[18px]" />}
+            />
+            <FyugSearchableSelect
+              label="Minor Course Studied"
+              required
+              value={minorSubject}
+              onChange={setMinorSubject}
+              options={subjectOptions}
+              icon={<BookOpen className="h-[18px] w-[18px]" />}
+            />
+            <FyugSearchableSelect
+              label="Applying for Fourth-Year Honours in"
+              required
+              value={honoursSubject}
+              onChange={setHonoursSubject}
+              options={honoursOptions}
+              icon={<GraduationCap className="h-[18px] w-[18px]" />}
+            />
+            <FyugField
+              label="CUET 2026 Score"
+              icon={Award}
+              required
+              type="number"
+              min={0}
+              step="any"
+              value={cuetScore}
+              onChange={(e) => setCuetScore(e.target.value)}
+            />
+            <FyugField
+              label="CGPA till Semester V"
+              icon={GraduationCap}
+              required
+              type="number"
+              min={0}
+              max={10}
+              step="0.01"
+              value={cgpa}
+              onChange={(e) => setCgpa(e.target.value)}
+              placeholder="e.g. 7.85"
+            />
+            <FyugField
+              label="Percentage till Semester V"
+              helper="Optional"
+              type="number"
+              min={0}
+              max={100}
+              step="0.01"
+              value={percentage}
+              onChange={(e) => setPercentage(e.target.value)}
+            />
+          </div>
+        </FyugSectionCard>
+
+        <FyugSectionCard
+          icon={FileWarning}
+          title="Back Papers"
+          subtitle="Eligibility confirmation for Semester I–V"
+          accent="amber"
+        >
+          <FyugSegmentedControl
+            label="Do you have any Back Papers from Semester I to Semester V?"
+            required
+            value={hasBackPaper}
+            onChange={setHasBackPaper}
+          />
+          {ineligible && (
+            <motion.p
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: "auto" }}
+              className="mt-4 rounded-xl border border-red-200 bg-red-50 p-4 text-sm text-red-800"
+              role="alert"
+            >
+              {FYUG_BACK_PAPER_INELIGIBLE_MSG}
+            </motion.p>
+          )}
+        </FyugSectionCard>
+
+        <FyugSectionCard
+          id="section-declaration"
+          ref={sectionRefs.declaration}
+          icon={PenLine}
+          title="Declaration & Signature"
+          subtitle="Confirm accuracy and provide your signature"
+          accent="green"
+        >
+          <div className="space-y-6">
+            <label className="flex cursor-pointer items-start gap-3 rounded-xl border border-[#DCE3EC] bg-slate-50/50 p-4 transition hover:border-[#2563EB]/40">
+              <input
+                type="checkbox"
+                className="mt-1 h-4 w-4 rounded border-[#DCE3EC] text-[#2563EB] focus:ring-[#2563EB]/20"
+                checked={declarationAccepted}
+                onChange={(e) => setDeclarationAccepted(e.target.checked)}
+                required
+              />
+              <span className="text-sm leading-relaxed text-slate-700">
+                I hereby declare that the information furnished above is true and correct to the best of my
+                knowledge. I understand that if any information is found false, my application is liable to be
+                cancelled.
+              </span>
+            </label>
+
+            <div>
+              <span className="mb-3 block text-[15px] font-medium text-slate-700">
+                Signature <span className="text-[#EF4444]">*</span>
+              </span>
+              <label className="mb-4 flex cursor-pointer items-center gap-2 text-[13px] text-slate-600">
+                <input
+                  type="checkbox"
+                  checked={useTypedSignature}
+                  onChange={(e) => setUseTypedSignature(e.target.checked)}
+                  className="h-4 w-4 rounded border-[#DCE3EC] text-[#2563EB]"
+                />
+                Type name instead of drawing
+              </label>
+              {useTypedSignature ? (
+                <FyugField
+                  label="Typed Signature"
+                  icon={PenLine}
+                  value={signatureTypedName}
+                  onChange={(e) => setSignatureTypedName(e.target.value)}
+                  placeholder="Type your full name as signature"
+                />
+              ) : (
+                <div className="overflow-hidden rounded-xl border border-[#DCE3EC]">
+                  <SignaturePad onChange={setSignatureDataUrl} />
+                </div>
+              )}
+            </div>
+          </div>
+        </FyugSectionCard>
+
+        <div className="space-y-4 pb-12">
+          <div className="flex flex-col gap-3 sm:flex-row sm:justify-center">
+            <button
+              type="button"
+              onClick={() => saveDraft(false)}
+              disabled={loading}
+              className="h-12 rounded-xl border-2 border-[#DCE3EC] bg-white px-8 text-[15px] font-semibold text-slate-700 transition hover:border-[#2563EB]/40 hover:bg-slate-50 disabled:opacity-50"
+            >
+              Save Draft
+            </button>
+            <button
+              type="button"
+              onClick={() => setPreviewOpen(true)}
+              className="h-12 rounded-xl border-2 border-[#2563EB]/30 bg-blue-50 px-8 text-[15px] font-semibold text-[#2563EB] transition hover:bg-blue-100"
+            >
+              Preview Application
+            </button>
+          </div>
+
+          <motion.button
+            type="submit"
+            disabled={loading || ineligible || !declarationAccepted}
+            whileHover={{ y: loading ? 0 : -2 }}
+            whileTap={{ scale: 0.99 }}
+            className="flex h-14 w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-[#2563EB] to-[#0F4C81] text-base font-semibold text-white shadow-lg shadow-blue-500/25 transition disabled:cursor-not-allowed disabled:opacity-50"
+          >
+            {loading ? (
+              <>
+                <Loader2 className="h-5 w-5 animate-spin" aria-hidden />
+                Submitting…
+              </>
+            ) : (
+              "Submit Application"
+            )}
+          </motion.button>
         </div>
       </form>
 
@@ -539,6 +821,6 @@ export default function FyugAdmissionForm() {
         onOpenChange={setPreviewOpen}
         data={buildPayload() as Record<string, string | number | boolean | null | undefined>}
       />
-    </>
+    </div>
   )
 }
