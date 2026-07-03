@@ -16,8 +16,34 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { defaultNavigation, type NavigationItem } from "@/lib/navigation"
+import {
+  ADMISSION_LINKS_DEFAULTS,
+  isExternalHref,
+  type AdmissionLinksConfig,
+} from "@/lib/admission-links-settings"
 
-const DEFAULT_ADMISSION_URL = "https://admissionsdbctura.com/register"
+function HeaderCtaLink({
+  href,
+  className,
+  children,
+}: {
+  href: string
+  className?: string
+  children: React.ReactNode
+}) {
+  if (isExternalHref(href)) {
+    return (
+      <a href={href} target="_blank" rel="noreferrer" className={className}>
+        {children}
+      </a>
+    )
+  }
+  return (
+    <Link href={href} className={className}>
+      {children}
+    </Link>
+  )
+}
 
 function DesktopNavDropdown({ item }: { item: NavigationItem }) {
   const [open, setOpen] = useState(false)
@@ -178,7 +204,7 @@ export default function Header({ navigationItems }: HeaderProps) {
   const [scrolled, setScrolled] = useState(false)
   const [navStuck, setNavStuck] = useState(false)
   const [navHeight, setNavHeight] = useState(0)
-  const [onlineAdmissionUrl, setOnlineAdmissionUrl] = useState(DEFAULT_ADMISSION_URL)
+  const [admissionConfig, setAdmissionConfig] = useState<AdmissionLinksConfig>(ADMISSION_LINKS_DEFAULTS)
   const navRef = useRef<HTMLDivElement | null>(null)
   const navSentinelRef = useRef<HTMLDivElement | null>(null)
   const items = navigationItems && navigationItems.length > 0 ? navigationItems : defaultNavigation
@@ -189,8 +215,14 @@ export default function Header({ navigationItems }: HeaderProps) {
       .then((r) => r.json())
       .then((j) => {
         if (cancelled) return
-        const url = String(j?.onlineAdmissionUrl || "").trim()
-        setOnlineAdmissionUrl(url || DEFAULT_ADMISSION_URL)
+        setAdmissionConfig({
+          applyNowUrl: String(j?.applyNowUrl || ADMISSION_LINKS_DEFAULTS.applyNowUrl),
+          onlineAdmissionUrl: String(j?.onlineAdmissionUrl || ADMISSION_LINKS_DEFAULTS.onlineAdmissionUrl),
+          prospectusUrl: String(j?.prospectusUrl || ADMISSION_LINKS_DEFAULTS.prospectusUrl),
+          headerCtaMode: j?.headerCtaMode === "dual" ? "dual" : "fyug",
+          fyugAdmissionUrl: String(j?.fyugAdmissionUrl || ADMISSION_LINKS_DEFAULTS.fyugAdmissionUrl),
+          fyugAdmissionLabel: String(j?.fyugAdmissionLabel || ADMISSION_LINKS_DEFAULTS.fyugAdmissionLabel),
+        })
       })
       .catch(() => {
         // ignore
@@ -274,23 +306,37 @@ export default function Header({ navigationItems }: HeaderProps) {
                 </p>
               </div>
               <div className="flex flex-wrap items-center justify-center lg:justify-end gap-2 w-full lg:w-auto">
-                <Button
-                  asChild
-                  size="sm"
-                  className="shrink-0 rounded-md bg-amber-400 px-4 py-2 text-sm font-semibold text-slate-900 shadow-md shadow-black/15 hover:bg-amber-300 focus-visible:ring-amber-400/40 border-0"
-                >
-                  <Link href={onlineAdmissionUrl} target="_blank" rel="noreferrer">
-                    Online Admission
-                  </Link>
-                </Button>
-                <Button
-                  asChild
-                  variant="outline"
-                  size="sm"
-                  className="shrink-0 rounded-md border-2 border-white/80 bg-white px-4 py-2 text-sm font-semibold text-brand-navy shadow-sm hover:bg-white/90 focus-visible:ring-white/40"
-                >
-                  <Link href="/downloads">Prospectus 2026</Link>
-                </Button>
+                {admissionConfig.headerCtaMode === "fyug" ? (
+                  <Button
+                    asChild
+                    size="sm"
+                    className="shrink-0 rounded-md bg-amber-400 px-4 py-2 text-sm font-semibold text-slate-900 shadow-md shadow-black/15 hover:bg-amber-300 focus-visible:ring-amber-400/40 border-0"
+                  >
+                    <HeaderCtaLink href={admissionConfig.fyugAdmissionUrl}>
+                      {admissionConfig.fyugAdmissionLabel}
+                    </HeaderCtaLink>
+                  </Button>
+                ) : (
+                  <>
+                    <Button
+                      asChild
+                      size="sm"
+                      className="shrink-0 rounded-md bg-amber-400 px-4 py-2 text-sm font-semibold text-slate-900 shadow-md shadow-black/15 hover:bg-amber-300 focus-visible:ring-amber-400/40 border-0"
+                    >
+                      <HeaderCtaLink href={admissionConfig.onlineAdmissionUrl}>
+                        Online Admission
+                      </HeaderCtaLink>
+                    </Button>
+                    <Button
+                      asChild
+                      variant="outline"
+                      size="sm"
+                      className="shrink-0 rounded-md border-2 border-white/80 bg-white px-4 py-2 text-sm font-semibold text-brand-navy shadow-sm hover:bg-white/90 focus-visible:ring-white/40"
+                    >
+                      <HeaderCtaLink href={admissionConfig.prospectusUrl}>Prospectus 2026</HeaderCtaLink>
+                    </Button>
+                  </>
+                )}
               </div>
             </div>
           </div>

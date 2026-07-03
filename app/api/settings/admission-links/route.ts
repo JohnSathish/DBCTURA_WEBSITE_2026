@@ -1,34 +1,29 @@
 import { NextRequest, NextResponse } from "next/server"
 import { getServerSession } from "next-auth"
+import {
+  ADMISSION_LINKS_DEFAULTS,
+  ADMISSION_SETTING_KEYS,
+  normalizeAdmissionUrl,
+  normalizeHeaderCtaMode,
+  type HeaderCtaMode,
+} from "@/lib/admission-links-settings"
+import { getAdmissionLinksConfig } from "@/lib/get-admission-links-config"
 import { authOptions } from "@/lib/auth"
 import { prisma } from "@/lib/prisma"
 
-const DEFAULT_URL = "https://admissionsdbctura.com/register"
-
-const KEYS = {
-  applyNow: "admission_apply_now_url",
-  onlineAdmission: "admission_online_admission_url",
-} as const
-
-function normalizeUrl(value: unknown) {
-  const s = String(value ?? "").trim()
-  if (!s) return ""
-  return s
+async function upsertSetting(key: string, value: string) {
+  return prisma.setting.upsert({
+    where: { key },
+    update: { value },
+    create: { key, value },
+  })
 }
 
 export async function GET() {
   try {
-    const [applyNow, onlineAdmission] = await Promise.all([
-      prisma.setting.findUnique({ where: { key: KEYS.applyNow } }),
-      prisma.setting.findUnique({ where: { key: KEYS.onlineAdmission } }),
-    ])
-
-    return NextResponse.json({
-      applyNowUrl: applyNow?.value || DEFAULT_URL,
-      onlineAdmissionUrl: onlineAdmission?.value || DEFAULT_URL,
-      defaults: { url: DEFAULT_URL },
-    })
-  } catch (error) {
+    const config = await getAdmissionLinksConfig()
+    return NextResponse.json({ ...config, defaults: ADMISSION_LINKS_DEFAULTS })
+  } catch {
     return NextResponse.json({ error: "Failed to fetch admission links" }, { status: 500 })
   }
 }
@@ -39,31 +34,38 @@ export async function POST(request: NextRequest) {
 
   try {
     const body = await request.json()
-    const applyNowUrl = normalizeUrl(body?.applyNowUrl) || DEFAULT_URL
-    const onlineAdmissionUrl = normalizeUrl(body?.onlineAdmissionUrl) || DEFAULT_URL
+    const headerCtaMode: HeaderCtaMode = normalizeHeaderCtaMode(body?.headerCtaMode)
 
-    const [applyNow, onlineAdmission] = await Promise.all([
-      prisma.setting.upsert({
-        where: { key: KEYS.applyNow },
-        update: { value: applyNowUrl },
-        create: { key: KEYS.applyNow, value: applyNowUrl },
-      }),
-      prisma.setting.upsert({
-        where: { key: KEYS.onlineAdmission },
-        update: { value: onlineAdmissionUrl },
-        create: { key: KEYS.onlineAdmission, value: onlineAdmissionUrl },
-      }),
-    ])
+    const values = {
+      [ADMISSION_SETTING_KEYS.applyNow]: normalizeAdmissionUrl(
+        body?.applyNowUrl,
+        ADMISSION_LINKS_DEFAULTS.applyNowUrl
+      ),
+      [ADMISSION_SETTING_KEYS.onlineAdmission]: normalizeAdmissionUrl(
+        body?.onlineAdmissionUrl,
+        ADMISSION_LINKS_DEFAULTS.onlineAdmissionUrl
+      ),
+      [ADMISSION_SETTING_KEYS.prospectus]: normalizeAdmissionUrl(
+        body?.prospectusUrl,
+        ADMISSION_LINKS_DEFAULTS.prospectusUrl
+      ),
+      [ADMISSION_SETTING_KEYS.headerCtaMode]: headerCtaMode,
+      [ADMISSION_SETTING_KEYS.fyugUrl]: normalizeAdmissionUrl(
+        body?.fyugAdmissionUrl,
+        ADMISSION_LINKS_DEFAULTS.fyugAdmissionUrl
+      ),
+      [ADMISSION_SETTING_KEYS.fyugLabel]: normalizeAdmissionUrl(
+        body?.fyugAdmissionLabel,
+        ADMISSION_LINKS_DEFAULTS.fyugAdmissionLabel
+      ),
+    }
 
-    return NextResponse.json({
-      applyNowUrl: applyNow.value,
-      onlineAdmissionUrl: onlineAdmission.value,
-    })
-  } catch (error: any) {
-    return NextResponse.json(
-      { error: error.message || "Failed to update admission links" },
-      { status: 400 }
-    )
+    await Promise.all(Object.entries(values).map(([key, value]) => upsertSetting(key, value)))
+
+    const config = await getAdmissionLinksConfig()
+    return NextResponse.json(config)
+  } catch (error: unknown) {
+    const msg = error instanceof Error ? error.message : "Failed to update admission links"
+    return NextResponse.json({ error: msg }, { status: 400 })
   }
 }
-
