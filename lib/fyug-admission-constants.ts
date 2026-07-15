@@ -34,6 +34,7 @@ export const FYUG_HONOURS_SUBJECTS = [
   "Political Science",
   "Education",
   "Sociology",
+  "History",
   "Mathematics",
   "Botany",
   "Zoology",
