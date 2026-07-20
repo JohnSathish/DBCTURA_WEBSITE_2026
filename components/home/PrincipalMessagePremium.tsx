@@ -40,7 +40,7 @@ export default async function PrincipalMessagePremium() {
                   <div className="relative overflow-hidden rounded-2xl ring-4 ring-white/30 shadow-xl">
                     <Image
                       src={photoSrc}
-                      alt="Fr Januarius S Sangma SDB, Principal"
+                      alt="Dr. Fr. Jogesh B. Sangma, SDB, Principal"
                       width={220}
                       height={290}
                       className="object-cover"
@@ -49,7 +49,7 @@ export default async function PrincipalMessagePremium() {
                     />
                   </div>
                 </div>
-                <p className="mt-6 font-heading text-sm font-semibold text-white">Fr Januarius S Sangma SDB</p>
+                <p className="mt-6 font-heading text-sm font-semibold text-white">Dr. Fr. Jogesh B. Sangma, SDB</p>
                 <p className="text-sm text-white/85">Principal</p>
               </div>
             </div>
@@ -62,33 +62,34 @@ export default async function PrincipalMessagePremium() {
               <h2 className="font-heading text-2xl font-bold text-slate-900 md:text-3xl">A word from the Principal</h2>
 
               <blockquote className="mt-6 border-l-4 border-amber-500 pl-5 text-slate-700">
-                <p className="font-medium text-slate-800">My dear Staff and Students,</p>
+                <p className="font-medium text-slate-800">Dear Staff and Students,</p>
                 {preview ? (
                   <p className="mt-3 leading-relaxed">{preview}</p>
                 ) : (
                   <>
                     <p className="mt-3 leading-relaxed">
-                      Greetings with love! I thank God for this blessed opportunity to be at Don Bosco College, Tura, and to
-                      contribute to the quality education of thousands of young minds at our esteemed institution.
+                      Warm greetings from Don Bosco College, Tura. True to its motto, &ldquo;In Pursuit of Excellence,&rdquo;
+                      Don Bosco College has been striving relentlessly for the last 39 years to prepare competent and
+                      socially committed young people so that they can take &ldquo;their rightful place in society.&rdquo;
                     </p>
                     <p className="mt-3 leading-relaxed">
-                      Together, as a unified community, we can achieve remarkable things. Remember, as Nelson Mandela said,{" "}
+                      With the introduction of the NEP Curriculum, seize every opportunity to enter the library and lecture
+                      hall, and engage in serious research, analytical thinking, dialogue, and debate. Remember what
+                      Aristotle said:{" "}
                       <span className="italic text-slate-900">
-                        &ldquo;Education is the most powerful weapon which you can use to change the world.&rdquo;
+                        &ldquo;The roots of education are bitter, but the fruit is sweet.&rdquo;
                       </span>
                     </p>
-                    <p className="mt-3 leading-relaxed">
-                      Let us work together to make this academic journey enriching and memorable. Blessings and best wishes.
-                    </p>
+                    <p className="mt-3 leading-relaxed">The ball is in your court.</p>
                   </>
                 )}
               </blockquote>
 
               <div className="mt-6 flex flex-wrap items-center justify-between gap-4">
                 <p className="text-sm font-semibold text-slate-900">
-                  Yours sincerely,
+                  <span className="font-normal">Dr. Fr. Jogesh B. Sangma, SDB</span>
                   <br />
-                  <span className="font-normal">Fr Januarius S Sangma SDB</span>
+                  Principal
                 </p>
 
                 <Link

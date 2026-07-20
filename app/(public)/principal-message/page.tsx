@@ -10,33 +10,39 @@ import {
 } from "@/lib/principal-message"
 
 const FALLBACK_HTML = `
-  <p><strong>My dear Staff and Students,</strong></p>
-  <p>Greetings with love!</p>
+  <p><strong>Dear Staff and Students,</strong></p>
+  <p>Warm greetings from Don Bosco College, Tura.</p>
   <p>
-    I thank God for this blessed opportunity to be at Don Bosco College, Tura, and to contribute to the quality education
-    of thousands of young minds at our esteemed institution. It is with great joy and anticipation that I invite you all
-    to collaborate in creating a nurturing, family-like atmosphere within this revered temple of learning.
+    True to its motto, &ldquo;In Pursuit of Excellence,&rdquo; Don Bosco College has been striving relentlessly for the last
+    39 years to prepare competent and socially committed young people so that they can take &ldquo;their rightful place
+    in society.&rdquo; No doubt, higher education is the engine of human civilization. It drives societal progress, powers
+    the global economy through research and innovation, and instils critical thinking and cultural awareness needed to
+    navigate a complex world.
   </p>
   <p>
-    Together, as a unified community, we can achieve remarkable, nay impossible things. While the management and staff are
-    dedicated to giving their best, we also expect the same relentless commitment and focus from our students, which is not
-    impossible. Your ladder to success in education depends on your daily decisions and actions both at home and in college.
-    This involves regular attendance, attentiveness in class, daily study, and embracing extra reading. Remember, as Nelson
-    Mandela said, “Education is the most powerful weapon which you can use to change the world.” By taking your studies
-    seriously now, you lay the foundation for a future where you can live fulfilling lives and contribute significantly to
-    nation-building.
+    My dear students, today you are in the lap of such a higher educational institution, and with the introduction of the
+    NEP Curriculum, you are being given a greater opportunity to equip yourselves with the knowledge and skills required
+    to face the challenges of the world. Hence, seize every opportunity to enter the library and lecture hall, and engage
+    in serious research, analytical thinking, dialogue, and debate. However, such academic pursuits require hard work,
+    sacrifice, discipline, serious thinking, and reflection. It is a struggle indeed. But remember what the Greek
+    philosopher Aristotle said: &ldquo;The roots of education are bitter, but the fruit is sweet.&rdquo;
   </p>
   <p>
-    Furthermore, I urge you to avoid all harmful habits and to always strive to maintain a positive and supportive atmosphere
-    within the college, your second home. Never hesitate to seek help in times of need, and actively participate in all college
-    programs. As Albert Einstein wisely noted, “The only source of knowledge is experience.”
+    Once you are engaged in such an academic pursuit with honesty and sincerity, why should you not clear competitive
+    examinations such as CUET, CAT, SSC, CGL, IIT JAM, UPSC, MPSC, ACS, Banking, and other related examinations? After the
+    completion of your studies, why should you not be a preferred candidate for employment or for higher studies?
   </p>
+  <p>The ball is in your court. Therefore,</p>
   <p>
-    Let us work together to make this academic journey enriching and memorable. With God’s grace and our combined efforts,
-    we can create a thriving community of learners and leaders.
+    <em>
+      &ldquo;Study while others are sleeping;<br />
+      work while others are loafing;<br />
+      prepare while others are playing;<br />
+      and dream while others are wishing.&rdquo;
+    </em>
   </p>
-  <p><strong>Blessings and best wishes,</strong></p>
-  <p><strong>Yours sincerely,</strong><br />Fr Januarius S Sangma SDB<br /><strong>Principal</strong></p>
+  <p>(William Arthur Ward).</p>
+  <p><strong>Dr. Fr. Jogesh B. Sangma, SDB</strong><br /><strong>Principal</strong></p>
 `
 
 export default async function PrincipalMessagePage() {
@@ -69,7 +75,7 @@ export default async function PrincipalMessagePage() {
                     />
                   </div>
                 </div>
-                <p className="mt-6 font-heading text-sm font-semibold text-white">Fr Januarius S Sangma SDB</p>
+                <p className="mt-6 font-heading text-sm font-semibold text-white">Dr. Fr. Jogesh B. Sangma, SDB</p>
                 <p className="text-sm text-white/85">Principal</p>
               </div>
             </div>
