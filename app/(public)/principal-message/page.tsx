@@ -93,22 +93,19 @@ export default async function PrincipalMessagePage() {
 
         <section aria-label="Principal's complete message" className="mt-10">
           <div
-            className="max-w-none text-[18px] leading-[2] tracking-[0.2px] text-[#374151]
-              [&_p]:mb-7 [&_p]:[hyphens:auto] [&_p]:[text-align:justify]
-              [&_p:first-child]:font-semibold [&_p:first-child]:text-slate-950
-              [&_p:first-child]:first-letter:float-left [&_p:first-child]:first-letter:mr-2
-              [&_p:first-child]:first-letter:mt-1 [&_p:first-child]:first-letter:text-6xl
-              [&_p:first-child]:first-letter:font-bold [&_p:first-child]:first-letter:leading-[0.8]
-              [&_strong]:font-semibold [&_strong]:text-slate-950
-              [&_blockquote]:my-9 [&_blockquote]:border-l-4 [&_blockquote]:border-amber-500
-              [&_blockquote]:bg-amber-50/70 [&_blockquote]:px-6 [&_blockquote]:py-5
-              [&_blockquote]:italic [&_blockquote]:text-slate-800
-              [&_blockquote_p]:mb-0
-              [&_p:has(em)]:my-9 [&_p:has(em)]:border-l-4 [&_p:has(em)]:border-amber-500
-              [&_p:has(em)]:bg-amber-50/70 [&_p:has(em)]:px-6 [&_p:has(em)]:py-5
-              [&_em]:font-medium [&_em]:italic [&_em]:text-slate-800
-              [&_p:last-child]:mb-0 [&_p:last-child]:border-t [&_p:last-child]:border-slate-200
-              [&_p:last-child]:pt-7 [&_p:last-child]:[text-align:left]"
+            className="max-w-none font-serif text-[18px] leading-[1.9] tracking-[0.1px] text-[#1f2937]
+              [&_p]:mb-6 [&_p]:[hyphens:auto] [&_p]:[text-align:justify]
+              [&_p:first-child]:font-bold [&_p:first-child]:text-slate-950
+              [&_strong]:font-bold [&_strong]:text-slate-950
+              [&_blockquote]:my-7 [&_blockquote]:px-8 [&_blockquote]:text-center
+              [&_blockquote]:font-semibold [&_blockquote]:text-slate-950
+              [&_blockquote_p]:mb-0 [&_blockquote_p]:[text-align:center]
+              [&_p:has(em)]:mx-auto [&_p:has(em)]:my-7 [&_p:has(em)]:max-w-xl
+              [&_p:has(em)]:font-semibold [&_p:has(em)]:text-slate-950
+              [&_p:has(em)]:[text-align:center] [&_em]:font-semibold [&_em]:not-italic
+              [&_p:has(em)+p]:mt-[-1rem] [&_p:has(em)+p]:[text-align:center]
+              [&_p:last-child]:mb-0 [&_p:last-child]:pt-5 [&_p:last-child]:font-bold
+              [&_p:last-child]:text-slate-950 [&_p:last-child]:[text-align:left]"
             dangerouslySetInnerHTML={{ __html: content }}
             suppressHydrationWarning
           />

@@ -102,8 +102,8 @@ export default async function PrincipalMessagePremium() {
                 </h2>
               </header>
 
-              <div className="mt-7 text-[17px] leading-[1.9] text-[#374151] lg:text-[18px]">
-                <p className="mb-6 font-semibold text-slate-900">Dear Staff and Students,</p>
+              <div className="mt-7 font-serif text-[17px] leading-[1.9] text-[#1f2937] lg:text-[18px]">
+                <p className="mb-6 font-bold text-slate-950">Dear Staff and Students,</p>
                 <p className="mb-6 [hyphens:auto] [text-align:justify]">{greeting}</p>
                 <p className="[hyphens:auto] [text-align:justify]">{keepMottoTogether(introduction)}</p>
               </div>
