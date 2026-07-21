@@ -53,43 +53,69 @@ export default async function PrincipalMessagePage() {
   const photoSrc = principalPhotoSrc(page)
 
   return (
-    <div className="bg-brand-surface min-h-screen">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="overflow-hidden rounded-3xl border border-white/60 bg-white/80 shadow-2xl shadow-[#1e3a8a]/10 ring-1 ring-slate-200/80 backdrop-blur-md">
+    <main className="relative min-h-screen overflow-hidden bg-slate-50">
+      <div className="pointer-events-none absolute inset-x-0 top-0 h-80 bg-gradient-to-b from-blue-50 to-transparent" />
+      <div className="pointer-events-none absolute -left-32 top-36 h-72 w-72 rounded-full bg-blue-200/30 blur-3xl" />
+      <div className="pointer-events-none absolute -right-32 bottom-20 h-80 w-80 rounded-full bg-amber-200/30 blur-3xl" />
+
+      <div className="relative mx-auto max-w-7xl px-4 py-8 sm:px-6 sm:py-12 lg:px-8 lg:py-16">
+        <div className="overflow-hidden rounded-[2rem] border border-white bg-white shadow-[0_24px_70px_-20px_rgba(30,58,138,0.25)] ring-1 ring-slate-200/70">
           <div className="grid grid-cols-1 gap-0 lg:grid-cols-12">
-            <div className="relative bg-gradient-to-br from-[#1E3A8A] to-[#2563EB] lg:col-span-4">
-              <div className="absolute inset-0 opacity-30 bg-[radial-gradient(circle_at_30%_20%,white,transparent_55%)]" />
-              <div className="relative flex h-full flex-col items-center justify-center p-10 text-center">
-                <div className="relative">
-                  <div className="absolute -inset-1 rounded-3xl bg-white/20 blur-md" />
-                  <div className="relative overflow-hidden rounded-2xl ring-4 ring-white/30 shadow-xl">
+            <aside className="relative overflow-hidden bg-gradient-to-br from-[#172f72] via-[#1E3A8A] to-[#2563EB] lg:col-span-4">
+              <div className="absolute inset-0 bg-[radial-gradient(circle_at_15%_15%,rgba(255,255,255,0.25),transparent_42%)]" />
+              <div className="absolute -bottom-24 -right-20 h-64 w-64 rounded-full border-[42px] border-white/5" />
+              <Quote className="absolute right-8 top-8 h-20 w-20 text-white/10" aria-hidden />
+
+              <div className="relative flex h-full min-h-[470px] flex-col items-center justify-center px-8 py-12 text-center lg:sticky lg:top-8 lg:min-h-[680px] lg:px-10">
+                <p className="mb-7 text-xs font-semibold uppercase tracking-[0.28em] text-amber-300">
+                  Office of the Principal
+                </p>
+
+                <div className="relative w-full max-w-[300px]">
+                  <div className="absolute -inset-3 rounded-[1.75rem] bg-white/15 blur-xl" />
+                  <div className="relative overflow-hidden rounded-[1.5rem] border border-white/40 bg-white/10 p-1.5 shadow-2xl">
                     <Image
                       src={photoSrc}
-                      alt="Principal"
-                      width={240}
-                      height={320}
-                      className="object-cover"
-                      style={{ height: "auto" }}
+                      alt="Dr. Fr. Jogesh B. Sangma, SDB, Principal"
+                      width={317}
+                      height={378}
+                      className="aspect-[317/378] w-full rounded-[1.15rem] object-cover"
                       priority
                       unoptimized={principalPhotoNeedsUnoptimized(photoSrc)}
                     />
                   </div>
                 </div>
-                <p className="mt-6 font-heading text-sm font-semibold text-white">Dr. Fr. Jogesh B. Sangma, SDB</p>
-                <p className="text-sm text-white/85">Principal</p>
-              </div>
-            </div>
 
-            <article className="relative p-8 sm:p-10 lg:col-span-8">
-              <div className="mb-4 inline-flex items-center gap-2 rounded-full bg-amber-500/15 px-3 py-1 text-xs font-semibold uppercase tracking-wider text-amber-800 ring-1 ring-amber-500/25">
-                <Quote className="h-3.5 w-3.5" aria-hidden />
+                <div className="mt-8">
+                  <p className="font-heading text-lg font-bold leading-snug text-white">
+                    Dr. Fr. Jogesh B. Sangma, SDB
+                  </p>
+                  <div className="mx-auto my-3 h-px w-12 bg-amber-300/80" />
+                  <p className="text-sm font-medium uppercase tracking-[0.2em] text-blue-100">Principal</p>
+                </div>
+
+                <p className="mt-8 max-w-xs text-sm italic leading-relaxed text-blue-100/90">
+                  “In Pursuit of Excellence”
+                </p>
+              </div>
+            </aside>
+
+            <article className="relative p-6 sm:p-10 lg:col-span-8 lg:p-14 xl:p-16">
+              <div className="inline-flex items-center gap-2 rounded-full bg-amber-50 px-3.5 py-1.5 text-xs font-bold uppercase tracking-[0.16em] text-amber-800 ring-1 ring-amber-200">
+                <Quote className="h-4 w-4" aria-hidden />
                 Principal&apos;s Message
               </div>
 
-              <h1 className="font-heading text-2xl font-bold text-slate-900 md:text-3xl">{title}</h1>
+              <h1 className="mt-5 font-heading text-3xl font-bold tracking-tight text-slate-950 sm:text-4xl">
+                {title}
+              </h1>
+              <div className="mt-5 flex items-center gap-3" aria-hidden>
+                <span className="h-1 w-12 rounded-full bg-amber-500" />
+                <span className="h-1 w-5 rounded-full bg-blue-700" />
+              </div>
 
               {!page?.published ? (
-                <div className="mt-4 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900">
+                <div className="mt-6 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900">
                   This page is showing default content. To update it, create/publish a page in Admin → Pages with slug{" "}
                   <span className="font-mono">principal-message</span>. Set <strong>Featured image</strong> there to
                   change the portrait photo.
@@ -97,17 +123,25 @@ export default async function PrincipalMessagePage() {
               ) : null}
 
               {session && page?.id ? (
-                <div className="mt-4 rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-700">
+                <div className="mt-6 flex flex-wrap items-center justify-between gap-2 rounded-xl border border-blue-100 bg-blue-50/70 px-4 py-3 text-sm text-slate-700">
                   <span className="font-medium text-slate-800">Admin:</span> update the message and principal photo in{" "}
-                  <Link href={`/admin/pages/${page.id}`} className="font-semibold text-[#1E3A8A] underline-offset-2 hover:underline">
+                  <Link
+                    href={`/admin/pages/${page.id}`}
+                    className="font-semibold text-[#1E3A8A] underline-offset-2 hover:underline"
+                  >
                     Edit this page
                   </Link>
-                  .
                 </div>
               ) : null}
 
               <div
-                className="prose prose-slate mt-6 max-w-none prose-headings:font-heading prose-p:leading-relaxed"
+                className="mt-8 max-w-none text-[1.02rem] text-slate-700
+                  [&_p]:mb-5 [&_p]:leading-8
+                  [&_p:first-child]:mb-2 [&_p:first-child]:font-heading [&_p:first-child]:text-xl [&_p:first-child]:font-bold [&_p:first-child]:text-slate-950
+                  [&_p:nth-child(2)]:font-medium [&_p:nth-child(2)]:text-[#1E3A8A]
+                  [&_strong]:font-semibold [&_strong]:text-slate-950
+                  [&_em]:font-heading [&_em]:text-lg [&_em]:font-semibold [&_em]:leading-8 [&_em]:text-[#1E3A8A]
+                  [&_p:last-child]:mt-10 [&_p:last-child]:mb-0 [&_p:last-child]:border-t [&_p:last-child]:border-slate-200 [&_p:last-child]:pt-6"
                 dangerouslySetInnerHTML={{ __html: content }}
                 suppressHydrationWarning
               />
@@ -115,7 +149,7 @@ export default async function PrincipalMessagePage() {
           </div>
         </div>
       </div>
-    </div>
+    </main>
   )
 }
 
