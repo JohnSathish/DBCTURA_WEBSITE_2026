@@ -1,6 +1,5 @@
 import Image from "next/image"
 import { getServerSession } from "next-auth"
-import { Quote } from "lucide-react"
 import { AdminEditNotice } from "@/components/principal-message/AdminEditNotice"
 import { authOptions } from "@/lib/auth"
 import {
@@ -53,94 +52,68 @@ export default async function PrincipalMessagePage() {
   const photoSrc = principalPhotoSrc(page)
 
   return (
-    <main className="relative min-h-screen overflow-hidden bg-slate-50">
-      <div className="pointer-events-none absolute inset-x-0 top-0 h-80 bg-gradient-to-b from-blue-50 to-transparent" />
-      <div className="pointer-events-none absolute -left-32 top-36 h-72 w-72 rounded-full bg-blue-200/30 blur-3xl" />
-      <div className="pointer-events-none absolute -right-32 bottom-20 h-80 w-80 rounded-full bg-amber-200/30 blur-3xl" />
-
-      <div className="relative mx-auto max-w-7xl px-4 py-8 sm:px-6 sm:py-12 lg:px-8 lg:py-16">
-        <div className="overflow-hidden rounded-[2rem] border border-white bg-white shadow-[0_24px_70px_-20px_rgba(30,58,138,0.25)] ring-1 ring-slate-200/70">
-          <div className="grid grid-cols-1 gap-0 lg:grid-cols-12">
-            <aside className="relative overflow-hidden bg-gradient-to-br from-[#172f72] via-[#1E3A8A] to-[#2563EB] lg:col-span-4">
-              <div className="absolute inset-0 bg-[radial-gradient(circle_at_15%_15%,rgba(255,255,255,0.25),transparent_42%)]" />
-              <div className="absolute -bottom-24 -right-20 h-64 w-64 rounded-full border-[42px] border-white/5" />
-              <Quote className="absolute right-8 top-8 h-20 w-20 text-white/10" aria-hidden />
-
-              <div className="relative flex h-full min-h-[470px] flex-col items-center justify-center px-8 py-12 text-center lg:sticky lg:top-8 lg:min-h-[680px] lg:px-10">
-                <p className="mb-7 text-xs font-semibold uppercase tracking-[0.28em] text-amber-300">
-                  Office of the Principal
-                </p>
-
-                <div className="relative w-full max-w-[300px]">
-                  <div className="absolute -inset-3 rounded-[1.75rem] bg-white/15 blur-xl" />
-                  <div className="relative overflow-hidden rounded-[1.5rem] border border-white/40 bg-white/10 p-1.5 shadow-2xl">
-                    <Image
-                      src={photoSrc}
-                      alt="Dr. Fr. Jogesh B. Sangma, SDB, Principal"
-                      width={317}
-                      height={378}
-                      className="aspect-[317/378] w-full rounded-[1.15rem] object-cover"
-                      priority
-                      unoptimized={principalPhotoNeedsUnoptimized(photoSrc)}
-                    />
-                  </div>
-                </div>
-
-                <div className="mt-8">
-                  <p className="font-heading text-lg font-bold leading-snug text-white">
-                    Dr. Fr. Jogesh B. Sangma, SDB
-                  </p>
-                  <div className="mx-auto my-3 h-px w-12 bg-amber-300/80" />
-                  <p className="text-sm font-medium uppercase tracking-[0.2em] text-blue-100">Principal</p>
-                </div>
-
-                <p className="mt-8 max-w-xs text-sm italic leading-relaxed text-blue-100/90">
-                  “In Pursuit of Excellence”
-                </p>
-              </div>
-            </aside>
-
-            <article className="relative p-6 sm:p-10 lg:col-span-8 lg:p-14 xl:p-16">
-              <div className="inline-flex items-center gap-2 rounded-full bg-amber-50 px-3.5 py-1.5 text-xs font-bold uppercase tracking-[0.16em] text-amber-800 ring-1 ring-amber-200">
-                <Quote className="h-4 w-4" aria-hidden />
-                Principal&apos;s Message
-              </div>
-
-              <h1 className="mt-5 font-heading text-3xl font-bold tracking-tight text-slate-950 sm:text-4xl">
-                {title}
-              </h1>
-              <div className="mt-5 flex items-center gap-3" aria-hidden>
-                <span className="h-1 w-12 rounded-full bg-amber-500" />
-                <span className="h-1 w-5 rounded-full bg-blue-700" />
-              </div>
-
-              {!page?.published ? (
-                <div className="mt-6 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900">
-                  This page is showing default content. To update it, create/publish a page in Admin → Pages with slug{" "}
-                  <span className="font-mono">principal-message</span>. Set <strong>Featured image</strong> there to
-                  change the portrait photo.
-                </div>
-              ) : null}
-
-              {session && page?.id ? (
-                <AdminEditNotice pageId={page.id} email={session.user?.email} />
-              ) : null}
-
-              <div
-                className="mt-6 max-w-none text-[1.02rem] text-slate-700
-                  [&_p]:mb-2.5 [&_p]:leading-7
-                  [&_p:first-child]:mb-2 [&_p:first-child]:font-heading [&_p:first-child]:text-xl [&_p:first-child]:font-bold [&_p:first-child]:text-slate-950
-                  [&_p:nth-child(2)]:font-medium [&_p:nth-child(2)]:text-[#1E3A8A]
-                  [&_strong]:font-semibold [&_strong]:text-slate-950
-                  [&_em]:font-heading [&_em]:text-lg [&_em]:font-semibold [&_em]:leading-8 [&_em]:text-[#1E3A8A]
-                  [&_p:last-child]:mt-7 [&_p:last-child]:mb-0 [&_p:last-child]:border-t [&_p:last-child]:border-slate-200 [&_p:last-child]:pt-5"
-                dangerouslySetInnerHTML={{ __html: content }}
-                suppressHydrationWarning
+    <main className="min-h-screen bg-slate-50">
+      <article className="animate-in fade-in slide-in-from-bottom-4 mx-auto max-w-[900px] px-5 py-12 duration-700 sm:px-8 sm:py-16 lg:px-0 lg:py-20">
+        <header className="grid items-center gap-9 border-b border-slate-200 pb-10 md:grid-cols-[1fr_260px] md:gap-14">
+          <figure className="order-first mx-auto md:order-last">
+            <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white p-1.5 shadow-[0_14px_35px_-18px_rgba(15,23,42,0.45)]">
+              <Image
+                src={photoSrc}
+                alt="Dr. Fr. Jogesh B. Sangma, SDB, Principal"
+                width={260}
+                height={320}
+                className="aspect-[13/16] w-[230px] rounded-xl object-cover md:w-[260px]"
+                priority
+                unoptimized={principalPhotoNeedsUnoptimized(photoSrc)}
               />
-            </article>
+            </div>
+            <figcaption className="sr-only">Dr. Fr. Jogesh B. Sangma, SDB, Principal</figcaption>
+          </figure>
+
+          <div className="text-center md:text-left">
+            <p className="text-xs font-bold uppercase tracking-[0.2em] text-[#1E3A8A]">Office of the Principal</p>
+            <h1 className="mt-4 font-heading text-4xl font-bold leading-tight tracking-tight text-[#111827] sm:text-5xl">
+              {title}
+            </h1>
+            <div className="mx-auto mt-6 h-1 w-14 rounded-full bg-amber-500 md:mx-0" aria-hidden />
+            <p className="mt-6 text-lg font-semibold text-slate-900">Dr. Fr. Jogesh B. Sangma, SDB</p>
+            <p className="mt-1 text-base text-slate-600">Principal</p>
           </div>
-        </div>
-      </div>
+        </header>
+
+        {!page?.published ? (
+          <div className="mt-8 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900">
+            This page is showing default content. To update it, create/publish a page in Admin → Pages with slug{" "}
+            <span className="font-mono">principal-message</span>. Set <strong>Featured image</strong> there to change the
+            portrait photo.
+          </div>
+        ) : null}
+
+        {session && page?.id ? <AdminEditNotice pageId={page.id} email={session.user?.email} /> : null}
+
+        <section aria-label="Principal's complete message" className="mt-10">
+          <div
+            className="max-w-none text-[18px] leading-[2] tracking-[0.2px] text-[#374151]
+              [&_p]:mb-7 [&_p]:[hyphens:auto] [&_p]:[text-align:justify]
+              [&_p:first-child]:font-semibold [&_p:first-child]:text-slate-950
+              [&_p:first-child]:first-letter:float-left [&_p:first-child]:first-letter:mr-2
+              [&_p:first-child]:first-letter:mt-1 [&_p:first-child]:first-letter:text-6xl
+              [&_p:first-child]:first-letter:font-bold [&_p:first-child]:first-letter:leading-[0.8]
+              [&_strong]:font-semibold [&_strong]:text-slate-950
+              [&_blockquote]:my-9 [&_blockquote]:border-l-4 [&_blockquote]:border-amber-500
+              [&_blockquote]:bg-amber-50/70 [&_blockquote]:px-6 [&_blockquote]:py-5
+              [&_blockquote]:italic [&_blockquote]:text-slate-800
+              [&_blockquote_p]:mb-0
+              [&_p:has(em)]:my-9 [&_p:has(em)]:border-l-4 [&_p:has(em)]:border-amber-500
+              [&_p:has(em)]:bg-amber-50/70 [&_p:has(em)]:px-6 [&_p:has(em)]:py-5
+              [&_em]:font-medium [&_em]:italic [&_em]:text-slate-800
+              [&_p:last-child]:mb-0 [&_p:last-child]:border-t [&_p:last-child]:border-slate-200
+              [&_p:last-child]:pt-7 [&_p:last-child]:[text-align:left]"
+            dangerouslySetInnerHTML={{ __html: content }}
+            suppressHydrationWarning
+          />
+        </section>
+      </article>
     </main>
   )
 }
