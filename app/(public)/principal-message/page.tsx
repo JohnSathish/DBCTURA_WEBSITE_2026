@@ -1,7 +1,7 @@
 import Image from "next/image"
-import Link from "next/link"
 import { getServerSession } from "next-auth"
 import { Quote } from "lucide-react"
+import { AdminEditNotice } from "@/components/principal-message/AdminEditNotice"
 import { authOptions } from "@/lib/auth"
 import {
   getPrincipalMessagePage,
@@ -123,25 +123,17 @@ export default async function PrincipalMessagePage() {
               ) : null}
 
               {session && page?.id ? (
-                <div className="mt-6 flex flex-wrap items-center justify-between gap-2 rounded-xl border border-blue-100 bg-blue-50/70 px-4 py-3 text-sm text-slate-700">
-                  <span className="font-medium text-slate-800">Admin:</span> update the message and principal photo in{" "}
-                  <Link
-                    href={`/admin/pages/${page.id}`}
-                    className="font-semibold text-[#1E3A8A] underline-offset-2 hover:underline"
-                  >
-                    Edit this page
-                  </Link>
-                </div>
+                <AdminEditNotice pageId={page.id} email={session.user?.email} />
               ) : null}
 
               <div
-                className="mt-8 max-w-none text-[1.02rem] text-slate-700
-                  [&_p]:mb-5 [&_p]:leading-8
+                className="mt-6 max-w-none text-[1.02rem] text-slate-700
+                  [&_p]:mb-2.5 [&_p]:leading-7
                   [&_p:first-child]:mb-2 [&_p:first-child]:font-heading [&_p:first-child]:text-xl [&_p:first-child]:font-bold [&_p:first-child]:text-slate-950
                   [&_p:nth-child(2)]:font-medium [&_p:nth-child(2)]:text-[#1E3A8A]
                   [&_strong]:font-semibold [&_strong]:text-slate-950
                   [&_em]:font-heading [&_em]:text-lg [&_em]:font-semibold [&_em]:leading-8 [&_em]:text-[#1E3A8A]
-                  [&_p:last-child]:mt-10 [&_p:last-child]:mb-0 [&_p:last-child]:border-t [&_p:last-child]:border-slate-200 [&_p:last-child]:pt-6"
+                  [&_p:last-child]:mt-7 [&_p:last-child]:mb-0 [&_p:last-child]:border-t [&_p:last-child]:border-slate-200 [&_p:last-child]:pt-5"
                 dangerouslySetInnerHTML={{ __html: content }}
                 suppressHydrationWarning
               />
