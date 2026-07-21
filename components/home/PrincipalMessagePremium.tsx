@@ -16,6 +16,18 @@ function htmlToText(html: string) {
     .trim()
 }
 
+function keepMottoTogether(text: string) {
+  return text.split(/([“"]In Pursuit of Excellence,[”"])/).map((part, index) =>
+    /In Pursuit of Excellence/.test(part) ? (
+      <span key={index} className="whitespace-nowrap">
+        {part}
+      </span>
+    ) : (
+      part
+    ),
+  )
+}
+
 export default async function PrincipalMessagePremium() {
   const page = await getPrincipalMessagePage()
 
@@ -64,13 +76,14 @@ export default async function PrincipalMessagePremium() {
               <blockquote className="mt-6 border-l-4 border-amber-500 pl-5 text-slate-700">
                 <p className="font-medium text-slate-800">Dear Staff and Students,</p>
                 {preview ? (
-                  <p className="mt-3 leading-relaxed">{preview}</p>
+                  <p className="mt-3 leading-relaxed">{keepMottoTogether(preview)}</p>
                 ) : (
                   <>
                     <p className="mt-3 leading-relaxed">
-                      Warm greetings from Don Bosco College, Tura. True to its motto, &ldquo;In Pursuit of Excellence,&rdquo;
-                      Don Bosco College has been striving relentlessly for the last 39 years to prepare competent and
-                      socially committed young people so that they can take &ldquo;their rightful place in society.&rdquo;
+                      Warm greetings from Don Bosco College, Tura. True to its motto,{" "}
+                      <span className="whitespace-nowrap">&ldquo;In Pursuit of Excellence,&rdquo;</span> Don Bosco College has
+                      been striving relentlessly for the last 39 years to prepare competent and socially committed young
+                      people so that they can take &ldquo;their rightful place in society.&rdquo;
                     </p>
                     <p className="mt-3 leading-relaxed">
                       With the introduction of the NEP Curriculum, seize every opportunity to enter the library and lecture
